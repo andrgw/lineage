@@ -1,7 +1,7 @@
 /* Pure graph operations, shared by the viewer and local verification. */
 (function (root) {
   'use strict';
-  const CARD_W = 220, CARD_H = 72, ROW = 132, GAP = 260;
+  const CARD_W = 220, CARD_H = 72, ROW = 144, GAP = 260;
 
   function normalize(raw) {
     if (!raw || !Array.isArray(raw.nodes) || !raw.nodes.length || !Array.isArray(raw.edges)) throw Error('Choose a graph JSON containing nodes and edges.');
@@ -50,22 +50,18 @@
     return {byId, parents, children, family};
   }
 
-  function layout(nodes, compact = false) {
+  function layout(nodes) {
     const rows = new Map();
     nodes.forEach(n => { if (!rows.has(n.rank)) rows.set(n.rank, []); rows.get(n.rank).push(n); });
-    let unit = GAP;
-    for (const row of rows.values()) {
-      row.sort((a, b) => a.x - b.x || a.id - b.id);
-      for (let i = 1; i < row.length; i++) {
-        const diff = row[i].x - row[i - 1].x;
-        if (diff > 0) unit = Math.max(unit, GAP / diff);
-      }
-    }
-    const points = new Map(), width = Math.max(...[...rows.values()].map(r => r.length)) * GAP + 380;
+    const points = new Map(), unit = 195;
     for (const [rank, row] of rows) {
+      row.sort((a, b) => a.x - b.x || a.id - b.id);
       let previous = -Infinity;
-      row.forEach((n, i) => {
-        let x = compact ? width / 2 + (i - (row.length - 1) / 2) * GAP : 200 + n.x * unit;
+      row.forEach(n => {
+        // Keep the same horizontal family corridors in isolated mode. Only
+        // resolve collisions within a class; re-centering each row independently
+        // can send a multi-generation edge through an unrelated member card.
+        let x = 200 + n.x * unit;
         x = Math.max(x, previous + GAP); previous = x;
         points.set(n.id, {x, y: 90 + n.rank * ROW});
       });

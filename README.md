@@ -30,7 +30,11 @@ it stops if that graph's relationships differ from the workbook reconciliation.
 Members are identified by roster number, never name. Viewer edges point from Big Bro
 (`source`) to Little (`target`). The supplied graph's `Layout_X` values preserve the
 historical diagram and newer family corridors; spacing is scaled to prevent card
-overlap. Isolated mode compacts each class while keeping class rows fixed.
+overlap. Isolated mode keeps those same horizontal family corridors while hiding
+unrelated members, avoiding the crossings caused by independently centering each row.
+Long edges are fanned at shared card ports and routed around intermediate cards; in
+the densest cases, they use an outside gutter. Historian-review edges are dashed,
+highlighted, and filterable.
 
 Selecting a member traces ancestors and descendants separately, so it does not
 accidentally include siblings and cousins. Missing Big Bro records remain unknown.

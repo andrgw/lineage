@@ -35,3 +35,9 @@ test('layout preserves class rows, original order, and minimum card spacing', ()
     assert.ok(points.get(3).x-points.get(2).x>=L.CARD_W+39);
   }
 });
+test('isolated layout preserves horizontal family corridors across pledge classes', () => {
+  const nodes=[node(1,0,2),node(2,1,12),node(3,2,2)];
+  const points=L.layout(nodes,true);
+  assert.equal(points.get(1).x,points.get(3).x);
+  assert.notEqual(points.get(1).x,points.get(2).x);
+});

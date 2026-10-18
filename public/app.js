@@ -15,7 +15,7 @@ function svgEl(tag, attrs = {}, text) {
   return node;
 }
 const canvas = $('canvas'), world = $('world');
-let graph, index, points = new Map(), selected = null, isolated = false, activeClass = null;
+let graph, index, points = new Map(), selected = null, isolated = false, activeClass = null, reviewIds = new Set();
 let family = null, visibleIds = new Set(), nodeElements = new Map(), edgeElements = [];
 let camera = {x: 0, y: 0, scale: 0.85}, miniBounds, miniWindow;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -23,6 +23,7 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 function load(raw) {
   const parsed = Lineage.normalize(raw); // Validate before replacing a working graph.
   graph = parsed; index = Lineage.model(graph);
+  reviewIds = new Set(graph.edges.filter(edge => edge.review_required).flatMap(edge => [edge.source, edge.target]));
   ['search','overview','recent','role','clear','zoom-out','zoom-level','zoom-in','fit','feedback-open'].forEach(id => { $(id).disabled = false; });
   selected = null; isolated = false; family = null; activeClass = null;
   $('role').value = 'all'; $('search').value = ''; $('results').hidden = true;
@@ -46,7 +47,7 @@ function load(raw) {
 function render() {
   visibleIds = isolated && family ? family.all : new Set(graph.nodes.map(n => n.id));
   const visible = graph.nodes.filter(n => visibleIds.has(n.id));
-  points = Lineage.layout(visible, isolated);
+  points = Lineage.layout(visible);
   world.replaceChildren(); nodeElements = new Map(); edgeElements = [];
   const defs = svgEl('defs'), grad = svgEl('linearGradient', {id:'both'});
   grad.append(svgEl('stop', {offset:'50%', 'stop-color':'#466ec3'}), svgEl('stop', {offset:'50%', 'stop-color':'#bf6470'})); defs.append(grad); world.append(defs);
@@ -55,16 +56,15 @@ function render() {
   for (const [rank, name] of rows) {
     const y = 90 + rank * Lineage.ROW;
     if (rank % 2 === 0) world.append(svgEl('rect', {x:0,y:y-Lineage.ROW/2,width:bounds.x+bounds.w+60,height:Lineage.ROW,class:'band'}));
-    // Labels repeat across the poster, so a class remains identifiable while panning.
+    // Repeat class labels across wide rows so a class remains identifiable while panning.
     for (let x = 30; x < bounds.x + bounds.w; x += 1100) world.append(svgEl('text', {x,y:y-49,class:'class-label'}, name.toUpperCase()));
   }
   const edgeLayer=svgEl('g'), nodeLayer=svgEl('g'); world.append(edgeLayer,nodeLayer);
   for (const edge of graph.edges) {
     const a=points.get(edge.source), b=points.get(edge.target);
     if(!a || !b) continue;
-    const y1=a.y+Lineage.CARD_H/2, y2=b.y-Lineage.CARD_H/2;
-    const middle=(y1+y2)/2;
-    const path=svgEl('path', {d:`M${a.x},${y1} C${a.x},${middle} ${b.x},${middle} ${b.x},${y2}`,class:`edge ${edge.era==='post-2019'?'recent':''} ${edge.review_required?'review':''}`, 'data-source':edge.source,'data-target':edge.target});
+    const path=svgEl('path', {d:routeEdge(edge,a,b),class:`edge ${edge.era==='post-2019'?'recent':''} ${edge.review_required?'review':''}`, 'data-source':edge.source,'data-target':edge.target});
+    if(edge.review_required) path.append(svgEl('title',{},'Historian review: the source screenshot skips a column.'));
     edgeLayer.append(path); edgeElements.push({edge,path});
   }
   for (const n of visible) {
@@ -88,9 +88,50 @@ function render() {
   buildMini(); updateStyles(); transform();
 }
 
+function routeEdge(edge, a, b) {
+  const source=index.byId.get(edge.source), target=index.byId.get(edge.target);
+  const outgoing=index.children.get(edge.source), incoming=index.parents.get(edge.target);
+  const port=(neighbors,id)=>neighbors.length>1?(neighbors.indexOf(id)-(neighbors.length-1)/2)*14:0;
+  const x1=a.x+port(outgoing,edge.target), x2=b.x+port(incoming,edge.source);
+  const y1=a.y+Lineage.CARD_H/2, y2=b.y-Lineage.CARD_H/2, middle=(y1+y2)/2;
+  const obstacles=source.rank+1<target.rank?graph.nodes.filter(n=>n.rank>source.rank&&n.rank<target.rank&&points.has(n.id)).map(n=>points.get(n.id)):[];
+  const pathFor=bow=>`M${x1},${y1} C${x1+bow},${middle} ${x2+bow},${middle} ${x2},${y2}`;
+  if(!obstacles.length) return pathFor(0);
+  const collisionCount=bow=>{
+    let hits=0;
+    for(let step=1;step<48;step++) {
+      const t=step/48, mt=1-t;
+      const x=mt**3*x1+3*mt**2*t*(x1+bow)+3*mt*t**2*(x2+bow)+t**3*x2;
+      const y=mt**3*y1+3*mt**2*t*middle+3*mt*t**2*middle+t**3*y2;
+      if(obstacles.some(p=>Math.abs(x-p.x)<Lineage.CARD_W/2+8&&Math.abs(y-p.y)<Lineage.CARD_H/2+5)) hits++;
+    }
+    return hits;
+  };
+  if(!collisionCount(0)) return pathFor(0);
+  // Search both sides of the corridor, preferring the smallest clear detour.
+  let bestBow=0,bestHits=Infinity;
+  for(let offset=90;offset<=900;offset+=45) {
+    for(const bow of [offset,-offset]) {
+      const hits=collisionCount(bow);
+      if(hits<bestHits){bestHits=hits;bestBow=bow;}
+      if(!hits) return pathFor(bow);
+    }
+  }
+  // Dense intermediate rows can leave no clear single-cubic corridor. Route
+  // through the row gaps and use an outside gutter so the edge cannot cross a card.
+  if(bestHits>0) {
+    const left=Math.min(...obstacles.map(p=>p.x))-Lineage.CARD_W/2-24;
+    const right=Math.max(...obstacles.map(p=>p.x))+Lineage.CARD_W/2+24;
+    const gutter=Math.abs(x1-left)+Math.abs(x2-left)<Math.abs(x1-right)+Math.abs(x2-right)?left:right;
+    const gapTop=y1+Lineage.ROW/2-12, gapBottom=y2-Lineage.ROW/2+12;
+    return `M${x1},${y1} C${x1},${gapTop} ${gutter},${gapTop} ${gutter},${gapTop} L${gutter},${gapBottom} C${gutter},${gapBottom} ${x2},${gapBottom} ${x2},${y2}`;
+  }
+  return pathFor(bestBow);
+}
+
 function roleMatch(n) {
   const role=$('role').value;
-  return role==='all' || (role==='missing' ? n.rank>=31&&!index.parents.get(n.id).length : n.roles.includes(role));
+  return role==='all' || (role==='missing' ? n.rank>=31&&!index.parents.get(n.id).length : role==='review' ? reviewIds.has(n.id) : n.roles.includes(role));
 }
 function updateStyles() {
   const query=$('search').value.trim();
@@ -142,7 +183,7 @@ function profile(n) {
     box.append(section);
   }
   links(index.parents.get(n.id),'Big Bros');links(index.children.get(n.id),'Littles');
-  if(graph.edges.some(e=>e.target===n.id&&e.review_required)) box.append(el('p',{class:'warning'},'The screenshot skips a column before this connection. A historian should confirm whether this is a direct Big/Little relationship. The dashed edge marks that uncertainty.'));
+  if(graph.edges.some(e=>e.review_required&&(e.target===n.id||e.source===n.id))) box.append(el('p',{class:'warning'},'The screenshot skips a column before this connection. A historian should confirm whether this is a direct Big/Little relationship. The dashed edge marks that uncertainty.'));
   if(n.rank>1&&!index.parents.get(n.id).length) box.append(el('p',{class:'warning'},'No Big Bro is recorded for this member. This is a gap in the sources, not a confirmed founding ancestor.'));
   links([...family.ancestors].sort((a,b)=>a-b),'All ancestors',true);
   links([...family.descendants].sort((a,b)=>a-b),'All descendants',true);
@@ -189,6 +230,7 @@ function zoom(scale,x=canvas.clientWidth/2,y=canvas.clientHeight/2) {
 }
 function transform() {
   world.setAttribute('transform',`translate(${camera.x},${camera.y}) scale(${camera.scale})`);
+  world.classList.toggle('zoom-far',camera.scale<.45);
   $('zoom-level').textContent=Math.round(camera.scale*100)+'%';
   if(miniWindow) {
     miniWindow.setAttribute('x',-camera.x/camera.scale);miniWindow.setAttribute('y',-camera.y/camera.scale);
