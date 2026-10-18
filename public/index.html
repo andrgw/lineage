@@ -10,7 +10,9 @@
   <header>
     <a class="brand" href="index.html"><span class="crest">ΛΦΕ</span><span>Stanford Lambdas<small>THETA CHAPTER / LINEAGE EXPLORER</small></span></a>
     <div class="search-wrap"><label class="sr-only" for="search">Find a member</label><span class="search-icon" aria-hidden="true">⌕</span><input id="search" type="search" autocomplete="off" placeholder="Find a name or roster number…" aria-controls="results" disabled><div id="results" class="results" hidden></div></div>
-    <label class="import-button">Open local graph<input id="import" type="file" accept=".json,application/json" class="sr-only"></label><span class="local-tag">PRIVATE BY DESIGN</span>
+    <label class="import-button">Open local graph<input id="import" type="file" accept=".json,application/json" class="sr-only"></label>
+    <button id="feedback-open" class="feedback-open" disabled>Suggest a correction</button>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" title="Switch to light mode">☼ <span>Light mode</span></button>
   </header>
   <div class="workspace">
     <aside class="browse">
@@ -46,6 +48,23 @@
     </main>
     <aside id="details" hidden aria-label="Member details"><div id="profile"></div></aside>
   </div>
+  <dialog id="feedback-dialog" aria-labelledby="feedback-title">
+    <form id="feedback-form">
+      <div class="dialog-heading"><div><span class="eyebrow">LOCAL REVIEW NOTE</span><h2 id="feedback-title">Suggest a correction</h2></div><button id="feedback-close" type="button" class="dialog-close" aria-label="Close">×</button></div>
+      <p class="dialog-intro">Record a proposed change or critique for a lineage curator. This creates a file on your device; it does not edit the graph or send anything online.</p>
+      <label for="feedback-type">What needs review?</label>
+      <select id="feedback-type"><option value="relationship">Big–Little relationship</option><option value="member">Member name or pledge class</option><option value="role">Leadership role</option><option value="source">Source or historical interpretation</option><option value="other">Other critique</option></select>
+      <label for="feedback-member">Member in question</label>
+      <select id="feedback-member" required></select>
+      <label for="feedback-related">Related member <span>(optional)</span></label>
+      <select id="feedback-related"><option value="">Not applicable</option></select>
+      <label for="feedback-note">Proposed correction or critique</label>
+      <textarea id="feedback-note" rows="4" required placeholder="Describe what you believe should change, or what is uncertain."></textarea>
+      <label for="feedback-source">Source or context <span>(optional)</span></label>
+      <input id="feedback-source" type="text" placeholder="For example: yearbook, chapter record, first-hand confirmation">
+      <div class="dialog-actions"><button id="feedback-cancel" type="button">Cancel</button><button class="primary-button" type="submit">Download review note</button></div>
+    </form>
+  </dialog>
   <script src="data/graph.js"></script>
   <script src="lineage.js"></script>
   <script src="app.js"></script>

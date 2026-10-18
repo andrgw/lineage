@@ -37,6 +37,21 @@ accidentally include siblings and cousins. Missing Big Bro records remain unknow
 The screenshot's skipped-column relationships still require historian confirmation;
 recorded edges are not proof that those gaps imply a direct relationship.
 
+## Review or propose a lineage update
+
+After loading a local graph, select **Suggest a correction**. Choose the member and
+review category, optionally identify a related member, and include the proposed
+change plus its source or context. The viewer downloads a `lineage-review-*.json`
+note to your device. It does not change the graph or send the note anywhere; share
+it with a chapter historian through an agreed private channel. Treat the downloaded
+note as member data and do not commit it to this repository.
+
+A historian should verify each proposal against its cited source before changing the
+private reconciliation inputs under ignored `data/private/` (or the authoritative
+source workbook/TikZ file). Rebuild and review the graph locally before distributing
+an updated graph file. The deployed site intentionally has no write endpoint or
+member data, so it cannot accept edits directly.
+
 The previous local root commit included screenshot names in the builder. Current
 source moves them into ignored local configuration. Do not publish repository history
 without removing that historical data first. No remote is configured.

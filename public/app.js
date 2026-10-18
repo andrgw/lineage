@@ -23,12 +23,15 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 function load(raw) {
   const parsed = Lineage.normalize(raw); // Validate before replacing a working graph.
   graph = parsed; index = Lineage.model(graph);
-  ['search','overview','recent','role','clear','zoom-out','zoom-level','zoom-in','fit'].forEach(id => { $(id).disabled = false; });
+  ['search','overview','recent','role','clear','zoom-out','zoom-level','zoom-in','fit','feedback-open'].forEach(id => { $(id).disabled = false; });
   selected = null; isolated = false; family = null; activeClass = null;
   $('role').value = 'all'; $('search').value = ''; $('results').hidden = true;
   $('details').hidden = true; $('close-details').hidden = true; $('empty').hidden = true;
   $('summary').textContent = `${graph.nodes.length} brothers · ${new Set(graph.nodes.map(n => n.rank)).size} pledge classes`;
   $('classes').replaceChildren();
+  const memberOptions = [el('option', {value:''}, 'Choose a member…'), ...graph.nodes.map(n => el('option', {value:n.id}, `#${n.id} · ${n.display_name} · ${n.class_name}`))];
+  $('feedback-member').replaceChildren(...memberOptions);
+  $('feedback-related').replaceChildren(el('option', {value:''}, 'Not applicable'), ...graph.nodes.map(n => el('option', {value:n.id}, `#${n.id} · ${n.display_name} · ${n.class_name}`)));
   const classes = [...new Map(graph.nodes.map(n => [n.rank, n.class_name])).entries()].sort((a,b) => a[0]-b[0]);
   for (const [rank, label] of classes) {
     const button = el('button', {'data-rank': rank});
@@ -264,5 +267,40 @@ $('zoom-level').addEventListener('click',()=>zoom(1));
 $('fit').addEventListener('click',()=>fit());
 $('import').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{load(JSON.parse(await file.text()));}catch(error){$('status').textContent=error.message;}finally{e.target.value='';}});
  $('empty-import').addEventListener('click',()=>$('import').click());
+function setTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  const light = theme === 'light';
+  $('theme-toggle').setAttribute('aria-pressed', String(light));
+  $('theme-toggle').title = `Switch to ${light ? 'dark' : 'light'} mode`;
+  $('theme-toggle').innerHTML = `${light ? '◐' : '☼'} <span>${light ? 'Dark mode' : 'Light mode'}</span>`;
+}
+$('theme-toggle').addEventListener('click',()=>setTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'));
+$('feedback-open').addEventListener('click',()=>{
+  if(selected !== null) $('feedback-member').value = String(selected);
+  $('feedback-dialog').showModal();
+});
+$('feedback-close').addEventListener('click',()=>$('feedback-dialog').close());
+$('feedback-cancel').addEventListener('click',()=>$('feedback-dialog').close());
+$('feedback-form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const member = index.byId.get(Number($('feedback-member').value));
+  const relatedId = Number($('feedback-related').value);
+  const related = relatedId ? index.byId.get(relatedId) : null;
+  const note = {
+    schema_version: 1,
+    created_at: new Date().toISOString(),
+    kind: $('feedback-type').value,
+    member: {id: member.id, name: member.name, pledge_class: member.class_name},
+    related_member: related ? {id: related.id, name: related.name, pledge_class: related.class_name} : null,
+    proposal: $('feedback-note').value.trim(),
+    source_or_context: $('feedback-source').value.trim() || null,
+    status: 'needs_historian_review'
+  };
+  const blob = new Blob([JSON.stringify(note, null, 2) + '\n'], {type:'application/json'});
+  const url = URL.createObjectURL(blob), link = el('a', {href:url, download:`lineage-review-${new Date().toISOString().slice(0,10)}.json`});
+  document.body.append(link); link.click(); link.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+  $('feedback-dialog').close();
+  $('status').textContent = `Review note downloaded for #${member.id} · it has not changed the lineage.`;
+});
 try {if(globalThis.LINEAGE_DATA)load(globalThis.LINEAGE_DATA);else{$('empty').hidden=false;$('status').textContent='No graph loaded · your data stays on this device.';}}
 catch(error){$('empty').hidden=false;$('status').textContent=error.message;}
