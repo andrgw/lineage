@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+/data/
+/public/data/
+/dist/
+/LINEAGE_AUDIT.md
+
