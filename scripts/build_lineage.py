@@ -14,35 +14,16 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 DOWNLOADS = Path.home() / "Downloads"
+LOCAL_CONFIG = ROOT / "data/private/reconciliation.json"
+CONFIG = json.loads(LOCAL_CONFIG.read_text()) if LOCAL_CONFIG.exists() else {}
+SCREENSHOT_ROWS = CONFIG.get("SCREENSHOT_ROWS", [])
+SCREENSHOT_ROSTER_OVERRIDES = {tuple(map(int, key.split(","))): value for key, value in CONFIG.get("SCREENSHOT_ROSTER_OVERRIDES", {}).items()}
+ALIASES = CONFIG.get("ALIASES", {})
 
 # Screenshot cells, transcribed row-by-row. The leftmost name is newest; every
 # populated cell is a little brother of the next populated cell to its right.
-SCREENSHOT_ROWS = [
-    ["Karl Songcuan", "Yoshi Nakachi", "Everett Lee", "John Altankhuyag", "Thomas Jiang", "Gerry Meixiong"],
-    ["Ethan Kim", "Ethan Kim", "Jeewoo Choi", "Leon Bi"],
-    ["William Aung", "Willy Chan", "Gerwin Mateo", "Andrew Franco", "Kevin Duan", "Daniel Classon"],
-    ["Dylan Reyes", "Ryan Da", "Zachary Lin", "Alex Kwon"],
-    ["Austin Lieu", "Jason Shih", "Alfred Yu", "Richard Cheung", None, "Charles Tsao"],
-    ["Peter Vu", "Andrew Bui", "Ryan Da", "Zachary Lin", "Alex Kwon"],
-    ["Kyle Roh", "Sunstone Shi", "Anthony Qin", "Taran Kota", "Michael Chang"],
-    ["Alan Huang", "Neev Seedani", "Sean Huang", "Anton Lok"],
-    ["Sid Bellam", "Zihan Wang", "Ian Song", "Terrance Yang", "Nathan Hu"],
-    ["Sydney Zhang", "Khoa Trinh", "Nash Young", "David Zhou", None, "Alex Lee", "Alec Deng"],
-    ["Jiashu Zhou", "Steven Wan", "Sunstone Shi", "Anthony Qin", "Taran Kota", "Michael Chang"],
-    ["Bill Giang", "Luke Zhao", "Jimming He", "Minh Vu"],
-    [None, "John Ou", "Nathan Tan"],
-    [None, "Vincent Yip", "William Li", "Jerry Wei"],
-]
-# Screenshot coordinates that cannot be resolved by name alone (two Ethan Kims).
-SCREENSHOT_ROSTER_OVERRIDES = {(2, 1): 309, (2, 2): 299}
+# Screenshot coordinates disambiguate repeated names.
 
-ALIASES = {
-    "everett lee": "everrett lee", "sid bellam": "siddharth bellam",
-    "will hsu": "will hsu", "dro hsieh": "dro hsieh",
-    "dave liu": "david liu", "kenny chang": "kenneth chang",
-    "kevin li": "kevin q li", "mike lai": "michael lai",
-    "john altankhuyag": "john t altankhuyag", "jimming he": "jimming he",
-}
 
 NODE_RE = re.compile(r"\\node\[(?P<style>bro|pledge|sensei|president|president_and_sensei)\]\s+at\s+\((?P<x>[^,]+),\s*(?P<y>[^)]+)\)\s+\((?P<key>[^)]+)\)\s*\{(?P<name>[^}]+)\}")
 CLASS_RE = re.compile(r"\\node\[(?:class|pledge_class)\]\s+at\s+\(0,\s*(?P<y>[^)]+)\)\s*\{(?P<name>[^}]+)\}")
@@ -119,6 +100,8 @@ def split_big_bros(value: str) -> list[str]:
 
 
 def main():
+    if not LOCAL_CONFIG.exists():
+        raise SystemExit('Local reconciliation data is missing. Use scripts/prepare_viewer.py --graph-path <local graph.json> to import an existing graph.')
     parser = argparse.ArgumentParser()
     parser.add_argument("--stanford-path", type=Path, default=DOWNLOADS / "LFE - Stanford Lambdas Database.xlsx")
     parser.add_argument("--member-path", type=Path, default=DOWNLOADS / "LFE - Member Database.xlsx")
@@ -151,8 +134,7 @@ def main():
             if column not in merged or not merged[column]:
                 merged[column] = clean(value)
         canonical_name = clean(row["Full Name"]) or clean(older.get("ic"))
-        if roster == 20:
-            canonical_name = "John Chang"
+        canonical_name = CONFIG.get("canonical_name_overrides", {}).get(str(roster), canonical_name)
         merged.update({
             "node_id": f"member-{roster}", "roster_number": roster,
             "full_name": canonical_name, "historical_name": clean(older.get("ic")),
@@ -173,13 +155,8 @@ def main():
     resolve = resolver(members)
     tex_nodes, tex_raw_edges = parse_tex(args.tex_path)
     tex_node_ids, unresolved = {}, []
-    # Four Epsilon labels are nicknames rather than legal names. These verified
-    # roster mappings prevent a fuzzy match from swapping them.
-    tex_overrides = {
-        "e_dh": 57, "e_ah": 58, "e_wh": 59, "e_wl": 61,
-        # Historical nickname labels confirmed against the alumni workbook.
-        "p_kk": 136, "f_tj": 183,
-    }
+    # Historian-verified mappings are local data, not framework source.
+    tex_overrides = CONFIG.get("tex_overrides", {})
     members_by_roster = {member["roster_number"]: member for member in members}
     tex_assigned = set()
     for key, node in tex_nodes.items():
@@ -187,22 +164,22 @@ def main():
         if matched:
             tex_node_ids[key] = matched["node_id"]
             tex_assigned.add(matched["node_id"])
-            matched["roles"] = sorted(set(matched.get("roles", []) + {
-                "president": ["president", "president_and_sensei"],
-                "sensei": ["sensei", "president_and_sensei"],
-            }.get(node["style"], [])))
+            matched["roles"] = {
+                "president": ["president"], "sensei": ["sensei"],
+                "president_and_sensei": ["president", "sensei"],
+            }.get(node["style"], [])
         else:
             unresolved.append({"source": "tex_node", "name": node["name"], "reason": method})
 
     edges, edge_keys = [], set()
-    def add_edge(parent, child, source, note=""):
+    def add_edge(parent, child, source, note="", review_required=False):
         if not parent or not child or parent == child:
             return
         key = (parent, child)
         if key in edge_keys:
             return
         edge_keys.add(key)
-        edges.append({"big_bro_id": parent, "little_bro_id": child, "source": source, "note": note})
+        edges.append({"big_bro_id": parent, "little_bro_id": child, "source": source, "note": note, "review_required": review_required})
 
     for parent_key, child_key in tex_raw_edges:
         if parent_key in tex_node_ids and child_key in tex_node_ids:
@@ -223,12 +200,12 @@ def main():
             override = SCREENSHOT_ROSTER_OVERRIDES.get((row_number, column_number))
             member, method = (members_by_roster[override], "verified_override") if override else resolve(name)
             if member:
-                resolved_row.append(member)
+                resolved_row.append((member, column_number))
             else:
                 unresolved.append({"source": "screenshot", "name": name, "row": row_number, "reason": method})
-        for little, big in zip(resolved_row, resolved_row[1:]):
+        for (little, little_column), (big, big_column) in zip(resolved_row, resolved_row[1:]):
             if big["class_rank"] < little["class_rank"]:
-                add_edge(big["node_id"], little["node_id"], "screenshot_2026", f"screenshot row {row_number}")
+                add_edge(big["node_id"], little["node_id"], "screenshot_2026", f"screenshot row {row_number}", big_column - little_column > 1)
             else:
                 unresolved.append({"source": "screenshot", "row": row_number, "name": f"{big['full_name']} -> {little['full_name']}", "reason": "non-chronological"})
 
@@ -261,6 +238,9 @@ def main():
     (ROOT / "LINEAGE_AUDIT.md").write_text("\n".join(report) + "\n")
     print(f"Built {len(public_members)} members and {len(edges)} lineage edges.")
     print(f"Follow-ups: {len(missing)} post-2019 members have no incoming lineage edge.")
+    from prepare_viewer import DEFAULT_SOURCE, prepare
+    if DEFAULT_SOURCE.exists():
+        prepare()
 
 
 if __name__ == "__main__":
