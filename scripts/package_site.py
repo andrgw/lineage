@@ -1,4 +1,4 @@
-"""Create a data-free static site bundle suitable for Cloudflare Pages."""
+"""Create a data-free static site bundle suitable for Cloudflare hosting."""
 from pathlib import Path
 import tempfile
 
@@ -15,7 +15,7 @@ def package():
         if name == 'index.html':
             text = text.replace('  <script src="data/graph.js"></script>\n', '')
         (target / name).write_text(text)
-    print(f'Data-free Cloudflare Pages folder: {target}')
+    print(f'Data-free Cloudflare site folder: {target}')
     return target
 
 

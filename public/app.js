@@ -23,6 +23,7 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 function load(raw) {
   const parsed = Lineage.normalize(raw); // Validate before replacing a working graph.
   graph = parsed; index = Lineage.model(graph);
+  ['search','overview','recent','role','clear','zoom-out','zoom-level','zoom-in','fit'].forEach(id => { $(id).disabled = false; });
   selected = null; isolated = false; family = null; activeClass = null;
   $('role').value = 'all'; $('search').value = ''; $('results').hidden = true;
   $('details').hidden = true; $('close-details').hidden = true; $('empty').hidden = true;
@@ -262,5 +263,6 @@ $('zoom-out').addEventListener('click',()=>zoom(camera.scale/1.25));
 $('zoom-level').addEventListener('click',()=>zoom(1));
 $('fit').addEventListener('click',()=>fit());
 $('import').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{load(JSON.parse(await file.text()));}catch(error){$('status').textContent=error.message;}finally{e.target.value='';}});
-try {if(globalThis.LINEAGE_DATA)load(globalThis.LINEAGE_DATA);else{$('empty').hidden=false;$('status').textContent='Choose a local graph to begin.';}}
+ $('empty-import').addEventListener('click',()=>$('import').click());
+try {if(globalThis.LINEAGE_DATA)load(globalThis.LINEAGE_DATA);else{$('empty').hidden=false;$('status').textContent='No graph loaded · your data stays on this device.';}}
 catch(error){$('empty').hidden=false;$('status').textContent=error.message;}

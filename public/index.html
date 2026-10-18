@@ -9,15 +9,15 @@
 <body>
   <header>
     <a class="brand" href="index.html"><span class="crest">ΛΦΕ</span><span>Stanford Lambdas<small>THETA CHAPTER / LINEAGE EXPLORER</small></span></a>
-    <div class="search-wrap"><label class="sr-only" for="search">Find a member</label><span class="search-icon" aria-hidden="true">⌕</span><input id="search" type="search" autocomplete="off" placeholder="Find a name or roster number…" aria-controls="results"><div id="results" class="results" hidden></div></div>
-    <label class="import-button">Open local graph<input id="import" type="file" accept=".json,application/json" class="sr-only"></label><span class="local-tag">LOCAL DATA</span>
+    <div class="search-wrap"><label class="sr-only" for="search">Find a member</label><span class="search-icon" aria-hidden="true">⌕</span><input id="search" type="search" autocomplete="off" placeholder="Find a name or roster number…" aria-controls="results" disabled><div id="results" class="results" hidden></div></div>
+    <label class="import-button">Open local graph<input id="import" type="file" accept=".json,application/json" class="sr-only"></label><span class="local-tag">PRIVATE BY DESIGN</span>
   </header>
   <div class="workspace">
     <aside class="browse">
       <div class="browse-heading"><span class="eyebrow">THE BROTHERHOOD</span><h1>A shared lineage.</h1><p id="summary">Open a local graph to explore.</p></div>
-      <div class="view-buttons"><button id="overview">↗ Full overview</button><button id="recent">↓ Recent generations</button></div>
-      <div class="filter-wrap"><label for="role">Show members</label><select id="role"><option value="all">Everyone</option><option value="president">Presidents</option><option value="sensei">Senseis</option><option value="missing">Missing Big Bro · recent</option></select></div>
-      <div class="class-heading"><span class="eyebrow">PLEDGE CLASSES</span><button id="clear" class="text-button">Reset</button></div>
+      <div class="view-buttons"><button id="overview" disabled>↗ Full overview</button><button id="recent" disabled>↓ Recent generations</button></div>
+      <div class="filter-wrap"><label for="role">Show members</label><select id="role" disabled><option value="all">Everyone</option><option value="president">Presidents</option><option value="sensei">Senseis</option><option value="missing">Missing Big Bro · recent</option></select></div>
+      <div class="class-heading"><span class="eyebrow">PLEDGE CLASSES</span><button id="clear" class="text-button" disabled>Reset</button></div>
       <nav id="classes" aria-label="Pledge classes"></nav>
       <div class="legend"><span><i class="president"></i>President</span><span><i class="sensei"></i>Sensei</span><span><i class="both"></i>Both roles</span><span><i class="missing"></i>Big Bro unknown</span></div>
     </aside>
@@ -25,8 +25,21 @@
       <div class="map-header"><div><span class="eyebrow">LINEAGE MAP</span><h2 id="view-title">Explore the connections</h2></div><div class="view-actions"><button id="isolate" disabled aria-pressed="false">Isolate lineage</button><button id="fit-selection" disabled>Fit lineage</button><button id="close-details" hidden aria-label="Close member details">✕</button></div></div>
       <div id="canvas" tabindex="0" aria-label="Interactive lineage map. Drag to pan. Use plus and minus to zoom, or arrow keys to pan.">
         <svg id="graph" aria-label="Member lineage graph"><g id="world"></g></svg>
-        <div id="empty" hidden><h2>Bring your lineage into view.</h2><p>Open a local graph JSON above. It stays in this browser session.</p><p>Or run the local data builder, then reopen this page.</p></div>
-        <div class="map-tools"><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-level" title="Return to readable size">100%</button><button id="zoom-in" aria-label="Zoom in">+</button><span></span><button id="fit" title="Fit visible members">Fit view</button></div>
+        <div id="empty" hidden>
+          <div class="empty-content">
+            <svg class="lineage-mark" viewBox="0 0 420 180" aria-hidden="true">
+              <path d="M85 42 C85 78 145 65 145 105 M210 42 C210 78 145 65 145 105 M145 105 C145 137 210 128 210 154 M335 42 C335 85 270 72 270 112 M270 112 C270 140 210 128 210 154" />
+              <g><rect x="45" y="22" width="80" height="38" rx="10"/><rect x="170" y="22" width="80" height="38" rx="10"/><rect x="295" y="22" width="80" height="38" rx="10"/><rect x="105" y="87" width="80" height="38" rx="10"/><rect x="230" y="94" width="80" height="38" rx="10"/><rect x="170" y="136" width="80" height="38" rx="10"/></g>
+              <circle cx="85" cy="41" r="4"/><circle cx="210" cy="41" r="4"/><circle cx="335" cy="41" r="4"/><circle cx="145" cy="106" r="4"/><circle cx="270" cy="113" r="4"/><circle cx="210" cy="155" r="4"/>
+            </svg>
+            <span class="eyebrow">THETA CHAPTER · LINEAGE EXPLORER</span>
+            <h2>Your lineage, thoughtfully connected.</h2>
+            <p>Open a graph file from your device to explore pledge classes, Big–Little relationships, and family lines.</p>
+            <button id="empty-import" class="primary-button">Choose a local graph <span aria-hidden="true">↗</span></button>
+            <div class="privacy-note"><span aria-hidden="true">◈</span><span><strong>Your data stays on your device.</strong><br>The graph is read in this browser session and is never uploaded or saved.</span></div>
+          </div>
+        </div>
+        <div class="map-tools"><button id="zoom-out" aria-label="Zoom out" disabled>−</button><button id="zoom-level" title="Return to readable size" disabled>100%</button><button id="zoom-in" aria-label="Zoom in" disabled>+</button><span></span><button id="fit" title="Fit visible members" disabled>Fit view</button></div>
         <div class="minimap"><span>YOU ARE HERE</span><svg id="mini" viewBox="0 0 200 150" role="button" tabindex="0" aria-label="Overview map. Click to navigate; press Enter to fit the map."></svg></div>
       </div>
       <footer><span id="status" role="status" aria-live="polite">Loading local graph…</span><span>Drag to pan · Scroll to move · Ctrl/⌘ + scroll to zoom</span></footer>
