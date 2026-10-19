@@ -48,7 +48,7 @@ function mountEditor() {
       onChange(updatedSource) {
         editorSource = updatedSource;
         globalThis.LINEAGE_SOURCE = updatedSource;
-        load(graphFromSource(updatedSource));
+        updateGraph(graphFromSource(updatedSource));
       },
     });
     editorMounted = true;
@@ -77,6 +77,14 @@ function load(raw) {
   render();
   // Start with readable recent cards; the minimap provides context for the full map.
   recent();
+}
+
+// Editor changes only add members or change relationships, so keep the camera, selection and isolate mode.
+function updateGraph(raw) {
+  graph = Lineage.normalize(raw); index = Lineage.model(graph);
+  if (selected !== null) family = index.family(selected);
+  render();
+  if (selected !== null) renderDetails(index.byId.get(selected));
 }
 
 function render() {

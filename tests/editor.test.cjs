@@ -48,3 +48,9 @@ test('search returns name/class matches without changing source', () => {
   assert.deepEqual(Editor.searchMembers(data, 'founding'), [data.members[0]]);
   assert.deepEqual(Editor.searchMembers(data, ''), []);
 });
+
+test('viewer keeps the map view when the editor changes the graph', () => {
+  const app = require('node:fs').readFileSync('public/app.js', 'utf8');
+  assert.match(app, /onChange\(updatedSource\) \{[^}]*updateGraph\(graphFromSource\(updatedSource\)\)/);
+  assert.doesNotMatch(app.match(/function updateGraph[\s\S]*?\n\}/)[0], /recent\(\)|reset\(\)|center\(|fit\(/);
+});
