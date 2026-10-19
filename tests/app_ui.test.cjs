@@ -22,3 +22,15 @@ test('lineage sidebar does not render roster identifiers or directory fields', (
   assert.doesNotMatch(app, /Roster_Number|Primary_Email|Current_Location|LinkedIn|Phone/);
   assert.doesNotMatch(html, /suggestion|correction/i);
 });
+
+test('camera updates run once per frame as a CSS transform on the map', () => {
+  assert.match(app, /requestAnimationFrame\(applyCamera\)/);
+  assert.match(app, /graphSvg\.style\.transform=/);
+  assert.doesNotMatch(app, /world\.setAttribute\('transform'/);
+});
+
+test('map cards avoid per-node filters and group opacity', () => {
+  const css = fs.readFileSync('public/styles.css', 'utf8');
+  assert.doesNotMatch(css, /\.card[^}]*filter:/);
+  assert.doesNotMatch(css, /\.node\.dim\s*\{[^}]*\bopacity:/);
+});
