@@ -278,7 +278,9 @@ function renderDetails(member) {
 
   const addSection = (title, ids, emptyText) => {
     const section = el('section', {class:'lineage-section'});
-    section.append(el('h3', {}, `${title} (${ids.length})`));
+    const heading = el('h3', {}, title);
+    heading.append(el('span', {class:'count'}, ` (${ids.length})`));
+    section.append(heading);
     if (!ids.length) section.append(el('p', {class:'lineage-empty'}, emptyText));
     for (const id of ids) {
       const related = index.byId.get(id);
