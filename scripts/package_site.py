@@ -26,7 +26,7 @@ def package():
     (static / 'data').mkdir(parents=True)
     (static / 'data' / 'graph.js').write_text(graph_script.read_text())
     (static / 'data' / 'source.js').write_text(source_script.read_text())
-    for name in ('styles.css', 'lineage.js', 'app.js', 'editor.js'):
+    for name in ('styles.css', 'lineage.js', 'app.js', 'editor.js', 'favicon.svg', 'favicon.png', 'apple-touch-icon.png', 'og-image.png'):
         shutil.copy2(ROOT / 'public' / name, static / name)
     shutil.copy2(ROOT / 'public' / '_headers', static / '_headers')
     shutil.copytree(ROOT / 'cloudflare', target, dirs_exist_ok=True)
