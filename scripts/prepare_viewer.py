@@ -1,78 +1,114 @@
-"""Prepare local viewer data from the reconciled graph; never copy directory fields."""
+#!/usr/bin/env python3
+"""Validate the public lineage source and write ignored viewer assets."""
+from __future__ import annotations
+
 import argparse
 import json
 import math
 from pathlib import Path
+from uuid import UUID
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SOURCE = Path.home() / 'Downloads/lfe_stanford_lineage_graph.json'
+DEFAULT_SOURCE = ROOT / "source/lineage.json"
+ROOT_FIELDS = {"schema_version", "chapters", "members", "edges"}
+MEMBER_FIELDS = {"id", "name", "chapter", "roles", "layout_x"}
+EDGE_FIELDS = {"source", "target"}
+ALLOWED_ROLES = {"president", "sensei"}
 
 
-def prepare(source=DEFAULT_SOURCE):
-    raw = json.loads(Path(source).read_text())
-    nodes = []
-    source_to_viewer_id = {}
-    for index, record in enumerate(raw['nodes'], start=1):
-        source_to_viewer_id[int(record['Roster_Number'])] = index
-        nodes.append({
-            # Public-viewer IDs are temporary array positions, not roster numbers.
-            'id': index,
-            'display_name': str(record['Display_Name']),
-            'class_name': str(record['Class']).strip(),
-            'rank': int(record['Class_Order']) - 1,
-            'x': float(record['Layout_X']),
-            'roles': [role for role, field in [('president', 'Is_President'), ('sensei', 'Is_Sensei')] if record[field]],
+def build_graph(raw: object) -> dict:
+    """Validate the contributor-facing schema and return viewer-safe data."""
+    if not isinstance(raw, dict) or set(raw) != ROOT_FIELDS:
+        raise ValueError("Source must contain only schema_version, chapters, members, and edges.")
+    if type(raw["schema_version"]) is not int or raw["schema_version"] != 1:
+        raise ValueError("Unsupported lineage source schema_version.")
+    chapters = raw["chapters"]
+    members = raw["members"]
+    edges = raw["edges"]
+    if not isinstance(chapters, list) or not chapters or any(not isinstance(c, str) or not c.strip() for c in chapters):
+        raise ValueError("chapters must be a non-empty ordered list of names.")
+    if len(set(chapters)) != len(chapters):
+        raise ValueError("Chapter names must be unique.")
+    if not isinstance(members, list) or not members:
+        raise ValueError("members must be a non-empty list.")
+    if not isinstance(edges, list):
+        raise ValueError("edges must be a list.")
+
+    chapter_rank = {chapter: rank for rank, chapter in enumerate(chapters)}
+    ids: set[str] = set()
+    viewer_nodes = []
+    for member in members:
+        if not isinstance(member, dict) or set(member) != MEMBER_FIELDS:
+            raise ValueError("Each member must contain only id, name, chapter, roles, and layout_x.")
+        member_id = member["id"]
+        try:
+            parsed_id = UUID(member_id)
+        except (ValueError, TypeError, AttributeError) as error:
+            raise ValueError("Member IDs must be stable UUIDs.") from error
+        if str(parsed_id) != member_id or parsed_id.version != 4:
+            raise ValueError("Member IDs must be canonical lowercase UUIDv4 values.")
+        if member_id in ids:
+            raise ValueError("Member IDs must be unique.")
+        ids.add(member_id)
+        name = member["name"]
+        chapter = member["chapter"]
+        roles = member["roles"]
+        layout_x = member["layout_x"]
+        if not isinstance(name, str) or not name.strip():
+            raise ValueError("Every member needs a display name.")
+        if not isinstance(chapter, str) or chapter not in chapter_rank:
+            raise ValueError(f"Unknown chapter for member {name!r}.")
+        if (not isinstance(roles, list) or any(not isinstance(role, str) or role not in ALLOWED_ROLES for role in roles)
+                or len(set(roles)) != len(roles)):
+            raise ValueError(f"Roles for {name!r} must be unique values from president/sensei.")
+        if isinstance(layout_x, bool) or not isinstance(layout_x, (int, float)) or not math.isfinite(layout_x):
+            raise ValueError(f"layout_x for {name!r} must be a finite number.")
+        viewer_nodes.append({
+            "id": len(viewer_nodes) + 1,
+            "display_name": name.strip(),
+            "class_name": chapter.strip(),
+            "rank": chapter_rank[chapter],
+            "x": layout_x,
+            "roles": list(roles),
         })
-    by_id = {node['id']: node for node in nodes}
-    if len(by_id) != len(nodes):
-        raise ValueError('Duplicate roster IDs')
-    if any(not math.isfinite(n['x']) or n['rank'] < 0 for n in nodes):
-        raise ValueError('Invalid layout coordinates')
-    edges = []
-    source_pairs = set()
-    seen = set()
-    for record in raw['edges']:
-        source_id, target_id = int(record['source']), int(record['target'])
-        if source_id not in source_to_viewer_id or target_id not in source_to_viewer_id:
-            raise ValueError('Relationship references an unknown source member')
-        a, b = source_to_viewer_id[source_id], source_to_viewer_id[target_id]
-        if a not in by_id or b not in by_id or by_id[a]['rank'] >= by_id[b]['rank']:
-            raise ValueError('Invalid or non-chronological edge')
-        if (a, b) in seen:
-            continue
-        seen.add((a, b))
-        source_pairs.add((source_id, target_id))
-        edges.append({'source': a, 'target': b})
-    # Confirm that the supplied layout has not silently changed the existing graph.
-    previous = ROOT / 'public/data/lineage_edges.json'
-    if previous.exists():
-        old = json.loads(previous.read_text())
-        prior = {(int(e['big_bro_id'].split('-')[-1]), int(e['little_bro_id'].split('-')[-1])) for e in old}
-        if prior != source_pairs:
-            raise ValueError('Supplied graph differs from workbook reconciliation; review before importing')
-        review = {(int(e['big_bro_id'].split('-')[-1]), int(e['little_bro_id'].split('-')[-1])) for e in old if e.get('review_required')}
-        for edge in edges:
-            pair = (raw['nodes'][edge['source'] - 1]['Roster_Number'], raw['nodes'][edge['target'] - 1]['Roster_Number'])
-            if pair in review:
-                edge['review_required'] = True
-    graph = {'nodes': nodes, 'edges': edges}
-    public_graph = {
-        'nodes': [
-            {key: node[key] for key in ('id', 'display_name', 'class_name', 'rank', 'x', 'roles')}
-            for node in nodes
-        ],
-        'edges': [{'source': edge['source'], 'target': edge['target']} for edge in edges],
-    }
-    target = ROOT / 'public/data'
+
+    rank_by_id = {member["id"]: chapter_rank[member["chapter"]] for member in members}
+    viewer_id_by_source_id = {member["id"]: index + 1 for index, member in enumerate(members)}
+    seen_edges: set[tuple[str, str]] = set()
+    viewer_edges = []
+    for edge in edges:
+        if not isinstance(edge, dict) or set(edge) != EDGE_FIELDS:
+            raise ValueError("Each edge must contain only source and target member IDs.")
+        source, target = edge["source"], edge["target"]
+        if not isinstance(source, str) or not isinstance(target, str):
+            raise ValueError("Relationship endpoints must be member IDs.")
+        if source not in ids or target not in ids:
+            raise ValueError("Relationship references an unknown member ID.")
+        if source == target:
+            raise ValueError("A member cannot be their own Big Bro.")
+        if rank_by_id[source] >= rank_by_id[target]:
+            raise ValueError("Relationships must point from an earlier to a later chapter.")
+        pair = (source, target)
+        if pair in seen_edges:
+            raise ValueError("Duplicate Big–Little relationships are not allowed.")
+        seen_edges.add(pair)
+        viewer_edges.append({"source": viewer_id_by_source_id[source], "target": viewer_id_by_source_id[target]})
+    return {"nodes": viewer_nodes, "edges": viewer_edges}
+
+
+def prepare(source: Path = DEFAULT_SOURCE) -> dict:
+    raw = json.loads(Path(source).read_text(encoding="utf-8"))
+    graph = build_graph(raw)
+    target = ROOT / "public/data"
     target.mkdir(parents=True, exist_ok=True)
-    payload = json.dumps(graph, ensure_ascii=True)
-    (target / 'graph.json').write_text(payload + '\n')
-    public_payload = json.dumps(public_graph, ensure_ascii=True)
-    (target / 'graph.js').write_text('globalThis.LINEAGE_DATA = ' + public_payload + ';\n')
-    print(f'Prepared local viewer: {len(nodes)} members, {len(edges)} relationships.')
+    payload = json.dumps(graph, ensure_ascii=True, separators=(",", ":"))
+    (target / "graph.json").write_text(payload + "\n", encoding="utf-8")
+    (target / "graph.js").write_text("globalThis.LINEAGE_DATA = " + payload + ";\n", encoding="utf-8")
+    print(f"Prepared local viewer: {len(graph['nodes'])} members, {len(graph['edges'])} relationships.")
+    return graph
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--graph-path', type=Path, default=DEFAULT_SOURCE)
+    parser.add_argument("--graph-path", type=Path, default=DEFAULT_SOURCE)
     prepare(parser.parse_args().graph_path)
