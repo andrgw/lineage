@@ -27,7 +27,7 @@ class LineageSourceTests(unittest.TestCase):
         source = json.loads(Path("source/lineage.json").read_text(encoding="utf-8"))
         graph = build_graph(source)
         self.assertEqual(len(source["members"]), 317)
-        self.assertEqual(len(source["edges"]), 290)
+        self.assertEqual(len(source["edges"]), 291)
         self.assertEqual(set(source), {"schema_version", "classes", "members", "edges"})
         self.assertTrue(all(set(member) == {"id", "name", "class", "roles", "layout_x"} for member in source["members"]))
         self.assertEqual(len(graph["nodes"]), len(source["members"]))
