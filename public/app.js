@@ -311,9 +311,11 @@ function recent() {
   const nodes=graph.nodes.filter(n=>n.rank>=maxRank-3).sort((a,b)=>a.x-b.x);
   const mid=nodes[Math.floor(nodes.length/2)];
   camera.scale=.85;camera.x=canvas.clientWidth/2-points.get(mid.id).x*camera.scale;
-  camera.y=canvas.clientHeight/2-(90+(maxRank-2)*Lineage.ROW)*camera.scale;
+  // Put the newest class just above the bottom edge, so taller screens show more recent classes.
+  camera.y=canvas.clientHeight-96-(90+maxRank*Lineage.ROW+Lineage.CARD_H/2)*camera.scale;
   $('view-title').textContent='Recent Generations'; transform();
-  const last=$('classes').lastElementChild;if(last)last.scrollIntoView({block:'nearest'});
+  // Show the newest classes in the list. Only the list scrolls, so short screens keep the sidebar title in view.
+  $('classes').scrollTop=$('classes').scrollHeight;
 }
 function center(id,scale=camera.scale) {
   const p=points.get(id);if(!p)return;
@@ -418,6 +420,12 @@ $('member-search').addEventListener('keydown',e=>{
   }
 });
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('.search-wrap'))closeSearch();});
+// On phones the class list is a drawer over the map. Picking anything in it, tapping the map or pressing Escape closes it.
+function setBrowse(open){$('browse').classList.toggle('open',open);$('browse-toggle').setAttribute('aria-expanded',String(open));if(open)$('overview').focus({preventScroll:true});}
+$('browse-toggle').addEventListener('click',()=>setBrowse(!$('browse').classList.contains('open')));
+$('browse').addEventListener('click',e=>{if(e.target.closest('button'))setBrowse(false);});
+canvas.addEventListener('pointerdown',()=>setBrowse(false));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')setBrowse(false);});
 $('editor-toggle').addEventListener('click',()=>{
   const panel=$('editor-panel'), open=panel.hidden;
   if(open) mountEditor();

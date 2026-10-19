@@ -20,7 +20,7 @@
     <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" title="Switch to light mode"><svg class="icon icon-sun" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1"/></svg><svg class="icon icon-moon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7Z"/></svg><span>Light Mode</span></button>
   </header>
   <div class="workspace">
-    <aside class="browse">
+    <aside id="browse" class="browse">
       <div class="browse-heading"><h1>Theta Chapter Lineage</h1><p id="summary">Open a graph to explore its classes.</p></div>
       <div class="view-buttons"><button id="overview" disabled>Full Overview</button><button id="recent" disabled>Recent Classes</button></div>
       <div class="class-heading"><span class="eyebrow">Pledge Classes</span><button id="clear" class="text-button" disabled>Reset</button></div>
@@ -28,7 +28,7 @@
       <div class="legend"><span><i class="node-swatch"></i>Brother</span><span><i class="node-swatch president-swatch"></i>President</span><span><i class="node-swatch sensei-swatch"></i>Sensei</span><span><i class="node-swatch both-swatch"></i>President &amp; Sensei</span><span><i class="edge-swatch"></i>Big–Little Relationship</span></div>
     </aside>
     <main>
-      <div class="map-header"><div><span class="eyebrow">Lineage Map</span><h2 id="view-title">Explore the Connections</h2></div><div class="view-actions"><button id="isolate" disabled aria-pressed="false">Isolate Lineage</button><button id="fit-selection" disabled>Fit Lineage</button></div></div>
+      <div class="map-header"><div><span class="eyebrow">Lineage Map</span><h2 id="view-title">Explore the Connections</h2></div><div class="view-actions"><button id="browse-toggle" class="browse-toggle" type="button" aria-expanded="false" aria-controls="browse"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h10"/></svg>Pledge Classes</button><button id="isolate" disabled aria-pressed="false">Isolate Lineage</button><button id="fit-selection" disabled>Fit Lineage</button></div></div>
       <div id="canvas" tabindex="0" aria-label="Interactive lineage map. Drag to pan. Use plus and minus to zoom, or arrow keys to pan.">
         <svg id="graph" aria-label="Member relationship graph by pledge class"><g id="world"></g></svg>
         <div id="empty" hidden>
