@@ -54,3 +54,10 @@ test('viewer keeps the map view when the editor changes the graph', () => {
   assert.match(app, /onChange\(updatedSource\) \{[^}]*updateGraph\(graphFromSource\(updatedSource\)\)/);
   assert.doesNotMatch(app.match(/function updateGraph[\s\S]*?\n\}/)[0], /recent\(\)|reset\(\)|center\(|fit\(/);
 });
+
+test('Open graph accepts the source format the editor downloads', () => {
+  const app = require('node:fs').readFileSync('public/app.js', 'utf8');
+  assert.match(app, /function openGraph\(raw\)/);
+  assert.match(app, /assertCanonical\(raw\)/);
+  assert.match(app, /openGraph\(JSON\.parse\(await file\.text\(\)\)\)/);
+});

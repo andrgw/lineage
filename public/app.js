@@ -381,7 +381,16 @@ $('zoom-in').addEventListener('click',()=>zoom(camera.scale*1.25));
 $('zoom-out').addEventListener('click',()=>zoom(camera.scale/1.25));
 $('zoom-level').addEventListener('click',()=>zoom(1));
 $('fit').addEventListener('click',()=>fit());
-$('import').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{load(JSON.parse(await file.text()));}catch(error){$('status').textContent=error.message;}finally{e.target.value='';}});
+// "Open graph" also takes the contributor format (source/lineage.json or the editor's download).
+// The editor then edits that file instead of the preloaded one.
+function openGraph(raw) {
+  if (raw && raw.schema_version === undefined) return load(raw);
+  globalThis.LineageEditor?.assertCanonical(raw);
+  load(graphFromSource(raw));
+  editorSource = raw; globalThis.LINEAGE_SOURCE = raw; editorMounted = false;
+  if (!$('editor-panel').hidden) mountEditor();
+}
+$('import').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{openGraph(JSON.parse(await file.text()));}catch(error){$('status').textContent=error.message;}finally{e.target.value='';}});
 $('member-search').addEventListener('input',searchMembers);
 $('member-search').addEventListener('keydown',e=>{
   if(e.key==='Escape'){closeSearch();return;}
