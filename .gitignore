@@ -3,6 +3,8 @@ __pycache__/
 /data/
 /public/data/
 /dist/
-/.cloudflare/
+**/.cloudflare/
+/node_modules/
+/public/static/
 /LINEAGE_AUDIT.md
 

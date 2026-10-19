@@ -77,26 +77,25 @@ scroll to move, use Ctrl/Command + scroll or the buttons to zoom. **Full overvie
 fits the whole map; the percentage button returns to readable 100% size. The minimap
 can be clicked to navigate. Nodes and relationship buttons support keyboard selection.
 
-## Cloudflare hosting, with data kept local
+## Cloudflare Workers hosting, with source data kept local
 
 ```sh
+.venv/bin/python scripts/prepare_viewer.py
 .venv/bin/python scripts/package_site.py
+cd dist/deploy-*/stanford-lambdas-lineage
+npm install
+npm run deploy
 ```
 
-This creates a new `dist/deploy-*/stanford-lambdas-lineage` folder with the viewer and a sanitized copy of the
-ignored local graph. The public bundle contains names, class chapters, relationship
-edges, layout positions, and President/Sensei styling so the lineage preloads. It omits
-roster numbers, contact/profile fields, and workbook/TikZ sources. This curated lineage
-becomes public when the bundle is deployed. Upload the generated folder to Cloudflare
-Pages, not `public/` (which also contains private ignored working files).
-The deployed headers prohibit network connections from the application.
+This creates an isolated deploy folder with Cloudflare's Vite plugin and static assets.
+The preloaded graph is generated locally from ignored source data and contains only
+names, chapters, relationships, layout, and President/Sensei styling. Roster numbers,
+contact/profile fields, and workbook/TikZ sources are not included. The sanitized graph
+becomes public when deployed. Do not deploy the repository root or `data/private/`.
+Deployment response headers prohibit network connections from the application.
 
-Cloudflare Pages supports [static HTML](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/)
-and [direct uploads](https://developers.cloudflare.com/pages/get-started/direct-upload/).
-For a [custom domain](https://developers.cloudflare.com/pages/configuration/custom-domains/),
-first confirm the chapter still controls its registrar account. The apex domain needs
-a zone with Cloudflare nameservers; a subdomain can use a CNAME with the current DNS
-provider. No domain, DNS, account, or hosting changes are made by these scripts.
+The Worker is served on its `workers.dev` hostname. Custom-domain setup is separate;
+first confirm the chapter still controls its registrar account before changing DNS.
 
 ## Verification
 
