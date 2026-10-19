@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    text { fill: #000; font: 700 12.8px "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif; letter-spacing: -.4px; }
+    @media (prefers-color-scheme: dark) { text { fill: #fff; } }
+  </style>
+  <text x="16" y="20.5" text-anchor="middle">ΛΦΕ</text>
+</svg>
