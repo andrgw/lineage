@@ -18,7 +18,7 @@ const canvas = $('canvas'), world = $('world');
 let graph, index, points = new Map(), selected = null, isolated = false, activeClass = null;
 let family = null, visibleIds = new Set(), nodeElements = new Map(), edgeElements = [];
 let camera = {x: 0, y: 0, scale: 0.85}, miniBounds, miniWindow;
-let editorMounted = false, editorSource = globalThis.LINEAGE_SOURCE || null;
+let editorMounted = false, editorSource = globalThis.LINEAGE_SOURCE || null, editorBlocked = '';
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 function graphFromSource(source) {
@@ -36,7 +36,7 @@ function mountEditor() {
   const root = $('editor-root');
   if (editorMounted) return;
   if (!editorSource) {
-    root.replaceChildren(el('p', {class:'editor-unavailable'}, 'The local editor source is not preloaded. Run `python scripts/prepare_viewer.py` to create the sanitized local source, then reload this page.'));
+    root.replaceChildren(el('p', {class:'editor-unavailable'}, editorBlocked || 'The local editor source is not preloaded. Run `python scripts/prepare_viewer.py` to create the sanitized local source, then reload this page.'));
     return;
   }
   if (!globalThis.LineageEditor) {
@@ -384,10 +384,16 @@ $('fit').addEventListener('click',()=>fit());
 // "Open graph" also takes the contributor format (source/lineage.json or the editor's download).
 // The editor then edits that file instead of the preloaded one.
 function openGraph(raw) {
-  if (raw && raw.schema_version === undefined) return load(raw);
-  globalThis.LineageEditor?.assertCanonical(raw);
-  load(graphFromSource(raw));
-  editorSource = raw; globalThis.LINEAGE_SOURCE = raw; editorMounted = false;
+  if (raw && raw.schema_version === undefined) {
+    load(raw);
+    // The older format has no stable member IDs, so the editor can't change it.
+    editorSource = null; editorMounted = false;
+    editorBlocked = 'This file uses the older nodes-and-edges format, so it can\'t be edited here. Open source/lineage.json or a file downloaded from the editor instead.';
+  } else {
+    globalThis.LineageEditor?.assertCanonical(raw);
+    load(graphFromSource(raw));
+    editorSource = raw; globalThis.LINEAGE_SOURCE = raw; editorMounted = false; editorBlocked = '';
+  }
   if (!$('editor-panel').hidden) mountEditor();
 }
 $('import').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{openGraph(JSON.parse(await file.text()));}catch(error){$('status').textContent=error.message;}finally{e.target.value='';}});

@@ -61,3 +61,9 @@ test('Open graph accepts the source format the editor downloads', () => {
   assert.match(app, /assertCanonical\(raw\)/);
   assert.match(app, /openGraph\(JSON\.parse\(await file\.text\(\)\)\)/);
 });
+
+test('editor is disabled after opening an older-format graph', () => {
+  const app = require('node:fs').readFileSync('public/app.js', 'utf8');
+  const open = app.match(/function openGraph[\s\S]*?\n\}/)[0];
+  assert.match(open, /schema_version === undefined\) \{\s*load\(raw\);\s*[^]*?editorSource = null/);
+});
