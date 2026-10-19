@@ -35,12 +35,12 @@ test('map cards avoid per-node filters and group opacity', () => {
   assert.doesNotMatch(css, /\.node\.dim\s*\{[^}]*\bopacity:/);
 });
 
-test('legend entries and controls keep their names and order', () => {
+test('legend entries and controls keep their labels and order', () => {
   const legend = [...html.match(/<div class="legend">(.*?)<\/div>/)[1].matchAll(/<\/i>([^<]+)<\/span>/g)].map(m => m[1]);
-  assert.deepEqual(legend, ['Brother', 'President', 'Sensei', 'President &amp; Sensei', 'Big–Little relationship']);
-  const labels = ['Stanford Lambdas', 'THETA CHAPTER / LINEAGE EXPLORER', 'Edit lineage', 'Open graph', 'Light mode',
-    'THETA CHAPTER', 'Lineage.', 'Full overview', 'Recent classes', 'PLEDGE CLASSES', 'Reset', 'LINEAGE MAP',
-    'Isolate lineage', 'Fit lineage', 'Fit view', 'YOU ARE HERE', 'LINEAGE DETAILS', 'Explore a lineage'];
+  assert.deepEqual(legend, ['Brother', 'President', 'Sensei', 'President &amp; Sensei', 'Big–Little Relationship']);
+  const labels = ['Stanford Lambdas', 'Edit Lineage', 'Open Graph', 'Light Mode', 'Theta Chapter Lineage',
+    'Full Overview', 'Recent Classes', 'Pledge Classes', 'Reset', 'Lineage Map', 'Isolate Lineage', 'Fit Lineage',
+    'Fit View', 'You Are Here', 'Lineage Details', 'Explore a Lineage'];
   const positions = labels.map(label => html.indexOf(`>${label}<`));
   labels.forEach((label, i) => assert.ok(positions[i] > 0, `${label} is missing`));
   assert.deepEqual([...positions].sort((a, b) => a - b), positions);

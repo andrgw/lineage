@@ -72,7 +72,7 @@ function load(raw) {
   closeSearch();
   showEmptyDetails();
   $('empty').hidden = true;
-  $('summary').textContent = `${new Set(graph.nodes.map(n => n.rank)).size} pledge classes`;
+  $('summary').textContent = `${new Set(graph.nodes.map(n => n.rank)).size} Pledge Classes`;
   $('classes').replaceChildren();
   const classes = [...new Map(graph.nodes.map(n => [n.rank, n.class_name])).entries()].sort((a,b) => a[0]-b[0]);
   for (const [rank, label] of classes) {
@@ -101,7 +101,7 @@ function render() {
     const y = 90 + rank * Lineage.ROW;
     if (rank % 2 === 0) world.append(svgEl('rect', {x:0,y:y-Lineage.ROW/2,width:bounds.x+bounds.w+60,height:Lineage.ROW,class:'band'}));
     // Repeat class labels across wide rows so a class remains identifiable while panning.
-    for (let x = 30; x < bounds.x + bounds.w; x += 1100) world.append(svgEl('text', {x,y:y-49,class:'class-label'}, name.toUpperCase()));
+    for (let x = 30; x < bounds.x + bounds.w; x += 1100) world.append(svgEl('text', {x,y:y-49,class:'class-label'}, name));
   }
   const edgeLayer=svgEl('g'), nodeLayer=svgEl('g'); world.append(edgeLayer,nodeLayer);
   for (const edge of graph.edges) {
@@ -190,7 +190,7 @@ function updateStyles() {
   }
   $('isolate').disabled=selected===null; $('fit-selection').disabled=selected===null;
   $('isolate').setAttribute('aria-pressed',String(isolated));
-  $('isolate').textContent=isolated?'Show full map':'Isolate lineage';
+  $('isolate').textContent=isolated?'Show Full Map':'Isolate Lineage';
   document.querySelectorAll('#classes button').forEach(b=>{b.classList.toggle('active',Number(b.dataset.rank)===activeClass);b.setAttribute('aria-pressed',String(Number(b.dataset.rank)===activeClass));});
 }
 
@@ -198,7 +198,7 @@ function select(id) {
   selected=id; family=index.family(id); activeClass=null;
   if(isolated) render(); else updateStyles();
   const n=index.byId.get(id);
-  $('view-title').textContent=`${n.class_name} class · lineage highlighted`;
+  $('view-title').textContent=`${n.class_name} Class · Lineage Highlighted`;
   $('status').textContent='Connected relationships highlighted.';
   renderDetails(n);
   center(id,Math.max(camera.scale,.9));
@@ -207,8 +207,8 @@ function select(id) {
 function reset() {
   if(!graph)return;
   selected=null;family=null;isolated=false;activeClass=null;
-  $('view-title').textContent='Explore the connections';
-  $('status').textContent='Relationship map.';
+  $('view-title').textContent='Explore the Connections';
+  $('status').textContent='';
   showEmptyDetails();
   render();
 }
@@ -234,7 +234,7 @@ function searchMembers() {
   } else {
     for (const n of matches.slice(0, 30)) {
       const result = el('button', {class:'result', type:'button', role:'option'});
-      result.append(el('strong', {}, n.display_name), el('span', {}, `${n.class_name} class`));
+      result.append(el('strong', {}, n.display_name), el('span', {}, `${n.class_name} Class`));
       result.addEventListener('click', () => {
         closeSearch();
         select(n.id);
@@ -254,7 +254,7 @@ function showEmptyDetails() {
   aside.replaceChildren();
   aside.append(el('div', {class:'details-empty'}, ''));
   const content = aside.firstElementChild;
-  content.append(el('span', {class:'eyebrow'}, 'LINEAGE DETAILS'), el('h2', {}, 'Explore a lineage'),
+  content.append(el('span', {class:'eyebrow'}, 'Lineage Details'), el('h2', {}, 'Explore a Lineage'),
     el('p', {}, graph ? 'Search for a member or select a node to see their class, leadership role, Bigs, Littles, and connected lineage.' : 'Load the graph to explore member relationships.'));
 }
 
@@ -264,7 +264,7 @@ function renderDetails(member) {
   aside.replaceChildren();
   const heading = el('div', {class:'details-heading'});
   const title = el('div');
-  title.append(el('span', {class:'eyebrow'}, `${member.class_name.toUpperCase()} CLASS`), el('h2', {}, member.display_name));
+  title.append(el('span', {class:'eyebrow'}, `${member.class_name} Class`), el('h2', {}, member.display_name));
   const close = el('button', {class:'details-close icon-button', type:'button', 'aria-label':'Close member details'});
   close.append(closeIcon());
   close.addEventListener('click', () => aside.classList.remove('open'));
@@ -284,7 +284,7 @@ function renderDetails(member) {
       const related = index.byId.get(id);
       if (!related) continue;
       const button = el('button', {class:'member-link', type:'button'});
-      button.append(el('span', {}, related.display_name), el('small', {}, `${related.class_name} class`));
+      button.append(el('span', {}, related.display_name), el('small', {}, `${related.class_name} Class`));
       button.addEventListener('click', () => select(id));
       section.append(button);
     }
@@ -299,7 +299,7 @@ function renderDetails(member) {
 function jumpClass(rank) {
   reset();activeClass=rank;updateStyles();
   const group=graph.nodes.filter(n=>n.rank===rank).sort((a,b)=>a.x-b.x);
-  $('view-title').textContent=group[0].class_name+' class';
+  $('view-title').textContent=group[0].class_name+' Class';
   $('status').textContent='Class highlighted · select a member to trace their connections';
   center(group[Math.floor(group.length/2)].id,.85);
 }
@@ -310,7 +310,7 @@ function recent() {
   const mid=nodes[Math.floor(nodes.length/2)];
   camera.scale=.85;camera.x=canvas.clientWidth/2-points.get(mid.id).x*camera.scale;
   camera.y=canvas.clientHeight/2-(90+(maxRank-2)*Lineage.ROW)*camera.scale;
-  $('view-title').textContent='Recent generations'; transform();
+  $('view-title').textContent='Recent Generations'; transform();
   const last=$('classes').lastElementChild;if(last)last.scrollIntoView({block:'nearest'});
 }
 function center(id,scale=camera.scale) {
@@ -401,7 +401,7 @@ $('isolate').addEventListener('click',()=>{if(selected===null)return;isolated=!i
 $('fit-selection').addEventListener('click',()=>{if(family)fit(family.all);});
 $('clear').addEventListener('click',reset);
 $('recent').addEventListener('click',recent);
-$('overview').addEventListener('click',()=>{reset();fit();$('view-title').textContent='The full lineage';});
+$('overview').addEventListener('click',()=>{reset();fit();$('view-title').textContent='The Full Lineage';});
 $('zoom-in').addEventListener('click',()=>zoom(camera.scale*1.25));
 $('zoom-out').addEventListener('click',()=>zoom(camera.scale/1.25));
 $('zoom-level').addEventListener('click',()=>zoom(1));
@@ -434,7 +434,7 @@ function setTheme(theme) {
   const light = theme === 'light';
   $('theme-toggle').setAttribute('aria-pressed', String(light));
   $('theme-toggle').title = `Switch to ${light ? 'dark' : 'light'} mode`;
-  $('theme-toggle').querySelector('span').textContent = light ? 'Dark mode' : 'Light mode';
+  $('theme-toggle').querySelector('span').textContent = light ? 'Dark Mode' : 'Light Mode';
 }
 $('theme-toggle').addEventListener('click',()=>setTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'));
 try {if(globalThis.LINEAGE_DATA)load(globalThis.LINEAGE_DATA);else{$('empty').hidden=false;$('status').textContent='No graph loaded · your data stays on this device.';}}

@@ -37,7 +37,6 @@
   --text-lg: 15px;
   --text-xl: 24px;
   --text-2xl: 28px;
-  --tracking-label: .06em;
 
   --space-1: 4px;
   --space-2: 8px;
@@ -90,7 +89,7 @@ button, input, select { color: inherit; font: inherit; }
 :focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
 [hidden] { display: none !important; }
-.eyebrow { color: var(--text-faint); font-size: var(--text-xs); font-weight: 600; letter-spacing: var(--tracking-label); }
+.eyebrow { color: var(--text-faint); font-size: var(--text-sm); font-weight: 500; }
 .icon { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
 /* Buttons: default (bordered), quiet (borderless), primary (one per context). */
@@ -110,7 +109,6 @@ button[aria-pressed="true"] { background: var(--bg-active); border-color: var(--
 /* Header */
 header { display: flex; flex: none; align-items: center; gap: var(--space-3); min-height: var(--header-h); padding: 0 var(--space-4); border-bottom: 1px solid var(--border); background: var(--bg); }
 .brand { display: flex; align-items: center; gap: var(--space-3); color: var(--text); text-decoration: none; white-space: nowrap; font-weight: 600; }
-.brand small { display: block; color: var(--text-faint); font-size: var(--text-xs); font-weight: 500; letter-spacing: var(--tracking-label); }
 .crest { font: 500 20px/1 var(--font-serif); letter-spacing: .02em; }
 .search-wrap { position: relative; flex: 1; max-width: 420px; margin-left: auto; }
 .search-wrap input { width: 100%; height: var(--control-h); padding: 0 var(--space-3) 0 34px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); outline: none; background: var(--bg-canvas); transition: border-color var(--ease); }
@@ -132,7 +130,7 @@ header { display: flex; flex: none; align-items: center; gap: var(--space-3); mi
 .workspace { position: relative; display: flex; flex: 1; min-height: 0; }
 .browse { display: flex; flex: 0 0 248px; flex-direction: column; min-height: 0; border-right: 1px solid var(--border); background: var(--bg); }
 .browse-heading { padding: var(--space-5) var(--space-4) var(--space-3); }
-h1 { margin: var(--space-1) 0 2px; font: 500 var(--text-2xl)/1.15 var(--font-serif); }
+h1 { margin: 0 0 2px; font: 500 20px/1.25 var(--font-serif); }
 .browse-heading p { color: var(--text-muted); font-size: var(--text-sm); }
 .view-buttons { display: grid; gap: 2px; padding: 0 var(--space-2) var(--space-3); border-bottom: 1px solid var(--border); }
 .class-heading { display: flex; align-items: center; justify-content: space-between; padding: var(--space-4) var(--space-4) var(--space-1); }
@@ -157,7 +155,7 @@ h2 { font-size: var(--text-lg); font-weight: 600; }
 #canvas:focus-visible { outline-offset: -2px; }
 #graph { position: absolute; top: 0; left: 0; overflow: visible; transform-origin: 0 0; }
 .band { fill: var(--band); }
-.class-label { fill: var(--text-faint); font-size: var(--text-xs); font-weight: 600; letter-spacing: 1px; }
+.class-label { fill: var(--text-faint); font-size: var(--text-sm); font-weight: 600; }
 .edge { fill: none; stroke: var(--edge); stroke-width: 1.5; }
 .edge.active { stroke: var(--edge-active); stroke-width: 2; }
 .edge.dim { stroke-opacity: .12; }
@@ -199,7 +197,7 @@ h2 { font-size: var(--text-lg); font-weight: 600; }
 #zoom-level { min-width: 52px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
 .map-tools .divider { width: 1px; height: 16px; margin: 0 var(--space-1); background: var(--border-strong); }
 .minimap { right: var(--space-4); width: 176px; padding: var(--space-2); }
-.minimap span { display: block; margin: 0 0 6px 2px; color: var(--text-faint); font-size: 10px; font-weight: 600; letter-spacing: var(--tracking-label); }
+.minimap span { display: block; margin: 0 0 6px 2px; color: var(--text-faint); font-size: var(--text-xs); font-weight: 500; }
 .minimap svg { display: block; width: 158px; height: 112px; border-radius: var(--radius-sm); background: var(--bg-canvas); cursor: crosshair; }
 .mini-node { fill: var(--border-strong); }
 .mini-window { fill: var(--bg-active); fill-opacity: .5; stroke: var(--text); stroke-width: 1.5; pointer-events: none; }
@@ -220,7 +218,7 @@ footer #status { color: var(--text-muted); }
 .sensei-badge { color: var(--text); }
 .sensei-badge::before { background: var(--sensei); }
 .lineage-section { margin-top: var(--space-5); }
-.lineage-section h3 { margin: 0 0 var(--space-1); padding: 0 var(--space-2); color: var(--text-faint); font-size: var(--text-xs); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; }
+.lineage-section h3 { margin: 0 0 var(--space-1); padding: 0 var(--space-2); color: var(--text-faint); font-size: var(--text-sm); font-weight: 500; }
 .lineage-section .member-link { margin: 0 -2px; }
 .lineage-empty { padding: 0 var(--space-2); color: var(--text-muted); font-size: var(--text-sm); }
 
@@ -284,7 +282,7 @@ footer #status { color: var(--text-muted); }
   .theme-toggle span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
   .browse { flex-basis: 136px; }
   .browse-heading { padding: var(--space-3) var(--space-3) var(--space-2); }
-  h1 { font-size: 20px; }
+  h1 { font-size: 17px; }
   .view-buttons, #classes { padding-inline: var(--space-1); }
   .view-buttons button, #classes button { font-size: var(--text-sm); }
   .class-heading { padding-inline: var(--space-3); }
