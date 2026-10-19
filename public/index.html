@@ -24,7 +24,7 @@
     <main>
       <div class="map-header"><div><span class="eyebrow">LINEAGE MAP</span><h2 id="view-title">Explore the connections</h2></div><div class="view-actions"><button id="isolate" disabled aria-pressed="false">Isolate lineage</button><button id="fit-selection" disabled>Fit lineage</button></div></div>
       <div id="canvas" tabindex="0" aria-label="Interactive lineage map. Drag to pan. Use plus and minus to zoom, or arrow keys to pan.">
-        <svg id="graph" aria-label="Anonymous relationship graph by pledge-class chapter"><g id="world"></g></svg>
+        <svg id="graph" aria-label="Member relationship graph by pledge-class chapter"><g id="world"></g></svg>
         <div id="empty" hidden>
           <div class="empty-content">
             <svg class="lineage-mark" viewBox="0 0 420 180" aria-hidden="true">
@@ -34,9 +34,9 @@
             </svg>
             <span class="eyebrow">THETA CHAPTER · LINEAGE EXPLORER</span>
             <h2>Your lineage, thoughtfully connected.</h2>
-            <p>Open a graph file from your device to explore pledge-class chapters and Big–Little connections. Member names and profile details are not displayed.</p>
+            <p>Open a graph file from your device to explore member names, pledge-class chapters, and Big–Little connections. Profile details are not displayed.</p>
             <button id="empty-import" class="primary-button">Choose a local graph <span aria-hidden="true">↗</span></button>
-            <div class="privacy-note"><span aria-hidden="true">◈</span><span><strong>Your graph stays on your device.</strong><br>Only anonymous connections and chapter labels appear in the map.</span></div>
+            <div class="privacy-note"><span aria-hidden="true">◈</span><span><strong>Your graph stays on your device.</strong><br>Names, connections, and chapter labels appear; contact and profile details stay off the map.</span></div>
           </div>
         </div>
         <div class="map-tools"><button id="zoom-out" aria-label="Zoom out" disabled>−</button><button id="zoom-level" title="Return to readable size" disabled>100%</button><button id="zoom-in" aria-label="Zoom in" disabled>+</button><span></span><button id="fit" title="Fit visible members" disabled>Fit view</button></div>
@@ -48,12 +48,12 @@
   <dialog id="feedback-dialog" aria-labelledby="feedback-title">
     <form id="feedback-form">
       <div class="dialog-heading"><div><span class="eyebrow">LOCAL REVIEW NOTE</span><h2 id="feedback-title">Suggest a correction</h2></div><button id="feedback-close" type="button" class="dialog-close" aria-label="Close">×</button></div>
-      <p class="dialog-intro">Select an anonymous point on the map and describe the connection you think needs review. The note contains chapter and position references only; it is saved to your device and never submitted online.</p>
+      <p class="dialog-intro">Select a member and describe the connection you think needs review. The note contains names, chapter, and map position only—not roster numbers or profile details. It is saved to your device and never submitted online.</p>
       <label for="feedback-type">What needs review?</label>
       <select id="feedback-type"><option value="relationship">Big–Little relationship</option><option value="missing">Missing connection</option><option value="other">Other lineage critique</option></select>
-      <label for="feedback-member">Map point</label>
+      <label for="feedback-member">Member</label>
       <select id="feedback-member" required></select>
-      <label for="feedback-related">Related map point <span>(optional)</span></label>
+      <label for="feedback-related">Related member <span>(optional)</span></label>
       <select id="feedback-related"><option value="">Not applicable</option></select>
       <label for="feedback-note">What should be reviewed?</label>
       <textarea id="feedback-note" rows="4" required placeholder="Describe the connection or chapter placement to review."></textarea>

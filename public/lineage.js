@@ -13,13 +13,14 @@
       const source = 'Roster_Number' in n;
       return {
         id: index + 1,
+        display_name: String(source ? n.Display_Name : (n.display_name || n.name || '')).trim(),
         class_name: String(source ? n.Class : n.class_name).trim(),
         rank: Number(source ? n.Class_Order - 1 : n.rank),
         x: Number(source ? n.Layout_X : n.x),
       };
     });
     const byId = new Map(nodes.map(n => [n.id, n]));
-    if (nodes.some(n => !Number.isInteger(n.rank) || n.rank < 0 || !Number.isFinite(n.x))) throw Error('The graph contains invalid coordinates.');
+    if (nodes.some(n => !n.display_name || !Number.isInteger(n.rank) || n.rank < 0 || !Number.isFinite(n.x))) throw Error('The graph contains a missing name or invalid coordinates.');
     const unique = new Map();
     for (const e of raw.edges) {
       const a = idMap.get(Number(e.source)), b = idMap.get(Number(e.target));
@@ -75,13 +76,13 @@
     const y = Math.min(...ps.map(p => p.y)) - CARD_H / 2 - 45;
     return {x, y, w: Math.max(...ps.map(p => p.x)) + CARD_W / 2 + 40 - x, h: Math.max(...ps.map(p => p.y)) + CARD_H / 2 + 45 - y};
   }
-  function anonymousReference(nodes, id) {
+  function publicReference(nodes, id) {
     const node = nodes.find(candidate => candidate.id === id);
     if (!node) throw Error('Unknown map point.');
     const peers = nodes.filter(candidate => candidate.rank === node.rank).sort((a, b) => a.x - b.x || a.id - b.id);
-    return {chapter: node.class_name, point: peers.findIndex(candidate => candidate.id === id) + 1};
+    return {name: node.display_name, chapter: node.class_name, point: peers.findIndex(candidate => candidate.id === id) + 1};
   }
-  const api = {normalize, model, layout, bounds, anonymousReference, CARD_W, CARD_H, ROW};
+  const api = {normalize, model, layout, bounds, publicReference, CARD_W, CARD_H, ROW};
   if (typeof module !== 'undefined') module.exports = api;
   root.Lineage = api;
 })(globalThis);

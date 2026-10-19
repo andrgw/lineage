@@ -14,8 +14,8 @@ open public/index.html
 The importer reads `~/Downloads/lfe_stanford_lineage_graph.json`, or a path supplied
 with `--graph-path`. It retains only the fields needed to render the graph and discards
 contact details and other directory fields. Output is written to ignored `public/data/`.
-The viewer displays only anonymous points, relationship edges, and pledge-class
-chapters. Names, roster numbers, roles, counts, and profiles are not shown. Double-click
+The viewer displays member names, relationship edges, and pledge-class
+chapters. Roster numbers, roles, member counts, contact details, and profiles are not shown. Double-click
 `public/index.html`, or choose **Open graph** to read a graph into browser memory; the
 file is not uploaded or saved in browser storage.
 
@@ -28,7 +28,7 @@ it stops if that graph's relationships differ from the workbook reconciliation.
 
 ## Data model
 
-Members are identified by roster number, never name. Viewer edges point from Big Bro
+Members are matched by roster number internally, while the viewer displays names only. Viewer edges point from Big Bro
 (`source`) to Little (`target`). The supplied graph's `Layout_X` values preserve the
 historical diagram and newer family corridors; spacing is scaled to prevent card
 overlap. Isolated mode keeps those same horizontal family corridors while hiding
@@ -39,16 +39,16 @@ highlighted, and filterable.
 
 Selecting a point traces its connected ancestors and descendants separately, without
 including siblings and cousins. Use **Suggest a correction** to download a review note
-identified by chapter and left-to-right point only. It does not change the graph or
+identified by member name, chapter, and left-to-right point, without roster numbers. It does not change the graph or
 send the note anywhere; share it privately with a historian who can map the reference
 to source records.
 
 ## Review or propose a lineage update
 
-After loading a local graph, select **Suggest a correction**. Choose the anonymous map
-point(s) by chapter and left-to-right order, then describe the proposed change and its
+After loading a local graph, select **Suggest a correction**. Choose the member(s) by name,
+chapter, and left-to-right order, then describe the proposed change and its
 source or context. The viewer downloads a `lineage-review-*.json` note to your device.
-The app adds no member name or roster number to the note. It does not change the graph
+The app adds no roster number, role, contact, or profile details to the note. It does not change the graph
 or send the note anywhere; share it with a chapter historian through a private channel.
 
 A historian should verify each proposal against its cited source before changing the
@@ -69,7 +69,7 @@ Optional HTTP preview, bound to this computer only:
 .venv/bin/python -m http.server 8000 --bind 127.0.0.1 --directory public
 ```
 
-Then visit <http://127.0.0.1:8000>. Select an anonymous point to highlight its
+Then visit <http://127.0.0.1:8000>. Select a member to highlight their
 connections; **Isolate lineage** reduces the map to those ancestors and descendants. Drag to pan,
 scroll to move, use Ctrl/Command + scroll or the buttons to zoom. **Full overview**
 fits the whole map; the percentage button returns to readable 100% size. The minimap

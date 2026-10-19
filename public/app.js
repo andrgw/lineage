@@ -40,7 +40,7 @@ function load(raw) {
     members.forEach((n,i)=>{
       const token=`${rank}:${i+1}`;
       feedbackRefs.set(token,n.id); feedbackTokenByNode.set(n.id,token);
-      pointOptions.push(el('option',{value:token},`${label} · point ${String(i+1).padStart(2,'0')}`));
+      pointOptions.push(el('option',{value:token},`${n.display_name} · ${label} · point ${String(i+1).padStart(2,'0')}`));
     });
   }
   $('feedback-member').replaceChildren(...pointOptions);
@@ -74,8 +74,18 @@ function render() {
   }
   for (const n of visible) {
     const p=points.get(n.id);
-    const g=svgEl('g',{class:'node',transform:`translate(${p.x},${p.y})`,tabindex:'0',role:'button','aria-label':`Unlabeled point in ${n.class_name} chapter`});
-    g.append(svgEl('title',{},`Unlabeled point · ${n.class_name}`),svgEl('circle',{r:6,class:'point'}));
+    const g=svgEl('g',{class:'node',transform:`translate(${p.x},${p.y})`,tabindex:'0',role:'button','aria-label':`${n.display_name}, ${n.class_name} chapter`});
+    g.append(svgEl('title',{},`${n.display_name} · ${n.class_name}`),svgEl('rect',{x:-Lineage.CARD_W/2,y:-Lineage.CARD_H/2,width:Lineage.CARD_W,height:Lineage.CARD_H,class:'card'}));
+    const name=svgEl('text',{x:0,'text-anchor':'middle',class:'name'});
+    const lines=[];
+    for(const word of n.display_name.split(/\s+/)) {
+      const current=lines.length-1;
+      if(current<0 || `${lines[current]} ${word}`.trim().length>23) lines.push(word);
+      else lines[current]+=` ${word}`;
+    }
+    const startY=-(lines.length-1)*8+5;
+    lines.forEach((line,i)=>name.append(svgEl('tspan',{x:0,dy:i===0?startY:16},line)));
+    g.append(name);
     g.addEventListener('click',()=>{ if(!suppressClick) select(n.id); });
     g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();select(n.id);}});
     nodeLayer.append(g); nodeElements.set(n.id,g);
@@ -88,7 +98,7 @@ function routeEdge(edge, a, b) {
   const outgoing=index.children.get(edge.source), incoming=index.parents.get(edge.target);
   const port=(neighbors,id)=>neighbors.length>1?(neighbors.indexOf(id)-(neighbors.length-1)/2)*3:0;
   const x1=a.x+port(outgoing,edge.target), x2=b.x+port(incoming,edge.source);
-  const y1=a.y, y2=b.y, middle=(y1+y2)/2;
+  const y1=a.y+Lineage.CARD_H/2, y2=b.y-Lineage.CARD_H/2, middle=(y1+y2)/2;
   const obstacles=source.rank+1<target.rank?graph.nodes.filter(n=>n.rank>source.rank&&n.rank<target.rank&&points.has(n.id)).map(n=>points.get(n.id)):[];
   const pathFor=bow=>`M${x1},${y1} C${x1+bow},${middle} ${x2+bow},${middle} ${x2},${y2}`;
   if(!obstacles.length) return pathFor(0);
@@ -98,7 +108,7 @@ function routeEdge(edge, a, b) {
       const t=step/48, mt=1-t;
       const x=mt**3*x1+3*mt**2*t*(x1+bow)+3*mt*t**2*(x2+bow)+t**3*x2;
       const y=mt**3*y1+3*mt**2*t*middle+3*mt*t**2*middle+t**3*y2;
-      if(obstacles.some(p=>Math.abs(x-p.x)<10&&Math.abs(y-p.y)<10)) hits++;
+      if(obstacles.some(p=>Math.abs(x-p.x)<Lineage.CARD_W/2+8&&Math.abs(y-p.y)<Lineage.CARD_H/2+5)) hits++;
     }
     return hits;
   };
@@ -118,7 +128,7 @@ function routeEdge(edge, a, b) {
     const left=Math.min(...obstacles.map(p=>p.x))-Lineage.CARD_W/2-24;
     const right=Math.max(...obstacles.map(p=>p.x))+Lineage.CARD_W/2+24;
     const gutter=Math.abs(x1-left)+Math.abs(x2-left)<Math.abs(x1-right)+Math.abs(x2-right)?left:right;
-    const gapTop=y1+Lineage.ROW/2, gapBottom=y2-Lineage.ROW/2;
+    const gapTop=y1+Lineage.ROW/2-Lineage.CARD_H/2-12, gapBottom=y2-Lineage.ROW/2+Lineage.CARD_H/2+12;
     return `M${x1},${y1} C${x1},${gapTop} ${gutter},${gapTop} ${gutter},${gapTop} L${gutter},${gapBottom} C${gutter},${gapBottom} ${x2},${gapBottom} ${x2},${y2}`;
   }
   return pathFor(bestBow);
@@ -147,7 +157,7 @@ function select(id) {
   if(isolated) render(); else updateStyles();
   const n=index.byId.get(id);
   $('view-title').textContent=`${n.class_name} chapter · lineage highlighted`;
-  $('status').textContent='A connected lineage is highlighted; names and member details are hidden.';
+  $('status').textContent='Connected relationships highlighted · profile details are not shown.';
   center(id,Math.max(camera.scale,.9));
 }
 
@@ -155,14 +165,14 @@ function reset() {
   if(!graph)return;
   selected=null;family=null;isolated=false;activeClass=null;
   $('view-title').textContent='Explore the connections';
-  $('status').textContent='Relationship map · member details hidden';
+  $('status').textContent='Relationship map · profile details are not shown.';
   render();
 }
 function jumpClass(rank) {
   reset();activeClass=rank;updateStyles();
   const group=graph.nodes.filter(n=>n.rank===rank).sort((a,b)=>a.x-b.x);
   $('view-title').textContent=group[0].class_name+' class';
-  $('status').textContent='Chapter highlighted · select a point to trace its connections';
+  $('status').textContent='Chapter highlighted · select a member to trace their connections';
   center(group[Math.floor(group.length/2)].id,.85);
 }
 function recent() {
@@ -272,8 +282,8 @@ $('feedback-form').addEventListener('submit',e=>{
     schema_version: 1,
     created_at: new Date().toISOString(),
     kind: $('feedback-type').value,
-    point: Lineage.anonymousReference(graph.nodes,member.id),
-    related_point: related ? Lineage.anonymousReference(graph.nodes,related.id) : null,
+    point: Lineage.publicReference(graph.nodes,member.id),
+    related_point: related ? Lineage.publicReference(graph.nodes,related.id) : null,
     proposal: $('feedback-note').value.trim(),
     source_or_context: $('feedback-source').value.trim() || null,
     status: 'needs_historian_review'
@@ -282,7 +292,7 @@ $('feedback-form').addEventListener('submit',e=>{
   const url = URL.createObjectURL(blob), link = el('a', {href:url, download:`lineage-review-${new Date().toISOString().slice(0,10)}.json`});
   document.body.append(link); link.click(); link.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
   $('feedback-dialog').close();
-  $('status').textContent = 'Anonymous review note downloaded; it has not changed the lineage.';
+  $('status').textContent = 'Review note downloaded; it has not changed the lineage.';
 });
 try {if(globalThis.LINEAGE_DATA)load(globalThis.LINEAGE_DATA);else{$('empty').hidden=false;$('status').textContent='No graph loaded · your data stays on this device.';}}
 catch(error){$('empty').hidden=false;$('status').textContent=error.message;}
