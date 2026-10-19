@@ -45,31 +45,6 @@ test('isolated layout preserves horizontal family corridors across pledge classe
   assert.equal(points.get(1).x,points.get(3).x);
   assert.notEqual(points.get(1).x,points.get(2).x);
 });
-test('correction references include the name, chapter, and point but no source ID', () => {
-  const nodes=[node(41,2,4),node(42,2,1),node(43,2,9)];
-  assert.deepEqual(L.publicReference(nodes,41),{name:'Member 41',chapter:'Class 2',point:2});
-  assert.deepEqual(Object.keys(L.publicReference(nodes,42)).sort(),['chapter','name','point']);
-});
-test('correction notes can be built for download without IDs or profile metadata', () => {
-  const nodes=[node(41,2,4),node(42,2,1),node(43,2,9)];
-  const note=L.correctionNote(nodes,{memberId:41,relatedId:43,kind:'relationship',proposal:'  These two are reversed.  ',sourceOrContext:'  Chapter archive  '},'2026-10-18T12:00:00.000Z');
-  assert.deepEqual(note,{
-    schema_version:1,
-    created_at:'2026-10-18T12:00:00.000Z',
-    kind:'relationship',
-    point:{name:'Member 41',chapter:'Class 2',point:2},
-    related_point:{name:'Member 43',chapter:'Class 2',point:3},
-    proposal:'These two are reversed.',
-    source_or_context:'Chapter archive',
-    status:'needs_historian_review',
-  });
-  assert.doesNotMatch(JSON.stringify(note),/\b(?:id|email|phone|location|company)\b/i);
-});
-test('correction note validation rejects an empty proposal and unknown member', () => {
-  const nodes=[node(41,2,4)];
-  assert.throws(()=>L.correctionNote(nodes,{memberId:41,proposal:'  '}),/Describe what should be reviewed/);
-  assert.throws(()=>L.correctionNote(nodes,{memberId:999,proposal:'Review this'}),/Unknown map point/);
-});
 test('public viewer renders member names without roster IDs, roles, or profile UI', () => {
   const app=fs.readFileSync('public/app.js','utf8');
   const html=fs.readFileSync('public/index.html','utf8');

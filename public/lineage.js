@@ -80,27 +80,7 @@
     const y = Math.min(...ps.map(p => p.y)) - CARD_H / 2 - 45;
     return {x, y, w: Math.max(...ps.map(p => p.x)) + CARD_W / 2 + 40 - x, h: Math.max(...ps.map(p => p.y)) + CARD_H / 2 + 45 - y};
   }
-  function publicReference(nodes, id) {
-    const node = nodes.find(candidate => candidate.id === id);
-    if (!node) throw Error('Unknown map point.');
-    const peers = nodes.filter(candidate => candidate.rank === node.rank).sort((a, b) => a.x - b.x || a.id - b.id);
-    return {name: node.display_name, chapter: node.class_name, point: peers.findIndex(candidate => candidate.id === id) + 1};
-  }
-  function correctionNote(nodes, {memberId, relatedId = null, kind, proposal, sourceOrContext = ''}, createdAt = new Date().toISOString()) {
-    const note = String(proposal || '').trim();
-    if (!note) throw Error('Describe what should be reviewed.');
-    return {
-      schema_version: 1,
-      created_at: createdAt,
-      kind: String(kind || 'other'),
-      point: publicReference(nodes, memberId),
-      related_point: relatedId === null ? null : publicReference(nodes, relatedId),
-      proposal: note,
-      source_or_context: String(sourceOrContext || '').trim() || null,
-      status: 'needs_historian_review',
-    };
-  }
-  const api = {normalize, model, layout, bounds, publicReference, correctionNote, CARD_W, CARD_H, ROW};
+  const api = {normalize, model, layout, bounds, CARD_W, CARD_H, ROW};
   if (typeof module !== 'undefined') module.exports = api;
   root.Lineage = api;
 })(globalThis);

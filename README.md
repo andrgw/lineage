@@ -40,24 +40,7 @@ the densest cases, they use an outside gutter. Historian-review edges are dashed
 highlighted, and filterable.
 
 Selecting a point traces its connected ancestors and descendants separately, without
-including siblings and cousins. Use **Suggest a correction** to download a review note
-identified by member name, chapter, and left-to-right point, without roster numbers. It does not change the graph or
-send the note anywhere; share it privately with a historian who can map the reference
-to source records.
-
-## Review or propose a lineage update
-
-With the local graph loaded (automatically when prepared), select **Suggest a correction**. Choose the member(s) by name,
-chapter, and left-to-right order, then describe the proposed change and its
-source or context. The viewer downloads a `lineage-review-*.json` note to your device.
-The app adds no roster number, role, contact, or profile details to the note. It does not change the graph
-or send the note anywhere; share it with a chapter historian through a private channel.
-
-A historian should verify each proposal against its cited source before changing the
-private reconciliation inputs under ignored `data/private/` (or the authoritative
-source workbook/TikZ file). Rebuild and review the graph locally before distributing
-an updated graph file. The deployed site intentionally has no write endpoint or
-member data, so it cannot accept edits directly.
+including siblings and cousins.
 
 The previous local root commit included screenshot names in the builder. Current
 source moves them into ignored local configuration. Do not publish repository history
