@@ -56,11 +56,19 @@ def prepare(source=DEFAULT_SOURCE):
             if pair in review:
                 edge['review_required'] = True
     graph = {'nodes': nodes, 'edges': edges}
+    public_graph = {
+        'nodes': [
+            {key: node[key] for key in ('id', 'display_name', 'class_name', 'rank', 'x', 'roles')}
+            for node in nodes
+        ],
+        'edges': [{'source': edge['source'], 'target': edge['target']} for edge in edges],
+    }
     target = ROOT / 'public/data'
     target.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(graph, ensure_ascii=True)
     (target / 'graph.json').write_text(payload + '\n')
-    (target / 'graph.js').write_text('globalThis.LINEAGE_DATA = ' + payload + ';\n')
+    public_payload = json.dumps(public_graph, ensure_ascii=True)
+    (target / 'graph.js').write_text('globalThis.LINEAGE_DATA = ' + public_payload + ';\n')
     print(f'Prepared local viewer: {len(nodes)} members, {len(edges)} relationships.')
 
 

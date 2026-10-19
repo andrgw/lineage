@@ -83,11 +83,12 @@ can be clicked to navigate. Nodes and relationship buttons support keyboard sele
 .venv/bin/python scripts/package_site.py
 ```
 
-This creates a new `dist/framework-*` folder containing only an explicit list of
-framework assets. Upload that folder to Cloudflare Pages, not `public/` (which contains
-ignored local data). The public bundle intentionally has no lineage data; visitors use
-**Open graph** to view a local file in memory. During local development, the ignored
-graph preloads automatically.
+This creates a new `dist/deploy-*/stanford-lambdas-lineage` folder with the viewer and a sanitized copy of the
+ignored local graph. The public bundle contains names, class chapters, relationship
+edges, layout positions, and President/Sensei styling so the lineage preloads. It omits
+roster numbers, contact/profile fields, and workbook/TikZ sources. This curated lineage
+becomes public when the bundle is deployed. Upload the generated folder to Cloudflare
+Pages, not `public/` (which also contains private ignored working files).
 The deployed headers prohibit network connections from the application.
 
 Cloudflare Pages supports [static HTML](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/)
