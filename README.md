@@ -20,7 +20,14 @@ ignored `public/data/`; these generated files must not be committed.
 
 ## Contribute a lineage update
 
-Edit `source/lineage.json` in a fork and open a pull request. Keep existing member IDs
+For a guided edit, open **Edit lineage** in the viewer. Add members with their chapter
+and optional President/Sensei role; search for a Big and Little to add a relationship,
+or remove a recorded relationship. The graph updates locally as you work. Use
+**Download lineage.json for PR**, replace `source/lineage.json` with the downloaded
+file, run the checks below, and open a pull request. Nothing is written to the hosted
+site from the editor.
+
+You can also edit `source/lineage.json` directly in a fork. Keep existing member IDs
 unchanged; add new members with UUIDv4 IDs. The chapter array defines the chronological
 class order. An edge's `source` is the Big Bro and its `target` is the Little. Multiple
 Big Bros are supported. Do not add fields to the schema or include roster numbers or
@@ -29,11 +36,13 @@ directory information.
 Set up the local environment and validate/build the source:
 
 ```sh
-python3 -m venv .venv
+uv venv .venv
+# Or, if uv is not installed:
+# python3 -m venv .venv
 .venv/bin/python scripts/prepare_viewer.py
-node --test tests/lineage.test.cjs
+node --test tests/*.test.cjs
 .venv/bin/python -m unittest discover -s tests -p 'test_*.py'
-node --check public/app.js
+node --check public/app.js && node --check public/lineage.js && node --check public/editor.js
 ```
 
 The validator rejects unknown fields, duplicate/invalid IDs, invalid roles, missing
@@ -50,9 +59,7 @@ Bro (`source`) to Little (`target`). Layout positions preserve the historical di
 and newer family corridors; spacing is scaled to prevent card overlap. Isolated mode
 keeps those same horizontal family corridors while hiding unrelated members, avoiding
 the crossings caused by independently centering each row.
-Long edges are fanned at shared card ports and routed around intermediate cards; in
-the densest cases, they use an outside gutter. Historian-review edges are dashed,
-highlighted, and filterable.
+Long edges are routed to preserve the class-row layout and avoid unrelated cards.
 
 Selecting a point traces its connected ancestors and descendants separately, without
 including siblings and cousins.
@@ -61,6 +68,21 @@ The historical workbook/TikZ reconciliation inputs remain local-only and are not
 required to edit or validate the public source graph.
 
 ## View locally
+
+Create a local Python environment once (the repository scripts use only the Python
+standard library, so no Python packages need to be installed):
+
+```sh
+uv venv .venv
+# Or, if uv is not installed:
+python3 -m venv .venv
+```
+
+Generate the preloaded graph and editor source before starting the local viewer:
+
+```sh
+.venv/bin/python scripts/prepare_viewer.py
+```
 
 Optional HTTP preview, bound to this computer only:
 
@@ -76,11 +98,56 @@ can be clicked to navigate. Nodes and relationship buttons support keyboard sele
 
 ## Cloudflare Workers hosting
 
+### Local preview and deploy
+
+Build the same preloaded Worker package used by CI, then run it locally:
+
 ```sh
 .venv/bin/python scripts/prepare_viewer.py
 .venv/bin/python scripts/package_site.py
 cd dist/deploy/stanford-lambdas-lineage
 npm install
+npm run dev
+```
+
+`npm run dev` starts Cloudflare's local Worker preview. To publish manually from
+your computer, authenticate once with `cf auth login`, then run:
+
+```sh
+npm run deploy
+```
+
+This deploys the Worker configured in `cloudflare/cloudflare.config.ts`.
+
+### Production deploys from GitHub
+
+The `Lineage CI` workflow validates the canonical source, runs the tests and
+builds the Worker package on pull requests. `Deploy lineage to Cloudflare` runs
+only after a push to `main` (normally a merged pull request); it repeats those
+checks, builds, and deploys the same package to the existing `workers.dev` Worker.
+Do not also enable Cloudflare Workers Builds for this repository, or each merge
+could deploy twice.
+
+In GitHub, open **Settings → Secrets and variables → Actions** and add these
+repository secrets:
+
+- `CLOUDFLARE_API_TOKEN`: an API token scoped to this account with the **Workers
+  Editor** permission for deploying Worker code. Store it as a GitHub secret;
+  never put it in the source, workflow YAML, or a command line.
+- `CLOUDFLARE_ACCOUNT_ID`: the Cloudflare account ID that owns the Worker.
+
+The deploy job uses those secrets only through environment variables. Pull
+requests do not receive deployment credentials. The API token is not needed for
+local preview; `cf auth login` is used for an intentional local deploy.
+
+For a manual package build or deploy, run:
+
+```sh
+.venv/bin/python scripts/prepare_viewer.py
+.venv/bin/python scripts/package_site.py
+cd dist/deploy/stanford-lambdas-lineage
+npm install
+npm run build
 npm run deploy
 ```
 
@@ -89,26 +156,13 @@ The preloaded graph is generated from the tracked sanitized source. Do not deplo
 repository root or local reconciliation files. Deployment response headers prohibit
 network connections from the application.
 
-### Automatic deployment after merge
-
-Connect the `stanfordlambdas/lineage` repository to the existing Worker in Cloudflare:
-**Workers & Pages → Worker → Settings → Builds → Connect**. Select `main` as the
-production branch and the repository root as the project root. Configure:
-
-- Build command: `python scripts/prepare_viewer.py && python scripts/package_site.py && cd dist/deploy/stanford-lambdas-lineage && npm install && npm run build`
-- Deploy command: `cd dist/deploy/stanford-lambdas-lineage && npm run deploy`
-
-Cloudflare handles the deployment credential through Workers Builds; do not add a
-Cloudflare token to this repository. Merges to `main` will rebuild the graph and deploy
-it to the existing `workers.dev` hostname. See [Cloudflare Workers Builds GitHub
-integration](https://developers.cloudflare.com/workers/ci-cd/builds/git-integration/github-integration/).
-
 The Worker is served on its `workers.dev` hostname. Custom-domain setup is separate;
 first confirm the chapter still controls its registrar account before changing DNS.
 
 ## Verification
 
-`node --test tests/lineage.test.cjs` and `.venv/bin/python -m unittest discover -s tests`
-check viewer operations and source validation. `node --check public/app.js` checks
-viewer syntax.
+`node --test tests/lineage.test.cjs`, `node --test tests/editor.test.cjs`,
+`node --test tests/app_ui.test.cjs`, and `.venv/bin/python -m unittest discover -s tests`
+check viewer operations, editor behavior, UI wiring, and source validation. CI also
+packages and builds the Worker before any deployment.
 

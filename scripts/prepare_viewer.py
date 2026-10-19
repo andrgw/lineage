@@ -104,6 +104,10 @@ def prepare(source: Path = DEFAULT_SOURCE) -> dict:
     payload = json.dumps(graph, ensure_ascii=True, separators=(",", ":"))
     (target / "graph.json").write_text(payload + "\n", encoding="utf-8")
     (target / "graph.js").write_text("globalThis.LINEAGE_DATA = " + payload + ";\n", encoding="utf-8")
+    # The editor needs the contributor-facing UUID schema, not runtime numeric IDs.
+    # Validation above guarantees this is the sanitized allowlisted public source.
+    source_payload = json.dumps(raw, ensure_ascii=True, separators=(",", ":"))
+    (target / "source.js").write_text("globalThis.LINEAGE_SOURCE = " + source_payload + ";\n", encoding="utf-8")
     print(f"Prepared local viewer: {len(graph['nodes'])} members, {len(graph['edges'])} relationships.")
     return graph
 
