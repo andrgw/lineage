@@ -7,12 +7,16 @@ The framework has no runtime dependencies or external assets.
 ## Lineage source and local build
 
 ```sh
-.venv/bin/python scripts/prepare_viewer.py
-open public/index.html
+make setup
+make serve
 ```
 
+Open <http://127.0.0.1:8000>. `make setup` uses `uv` when installed and falls back
+to `python3 -m venv`; the Python scripts use only the standard library. Run
+`make help` to see all available commands.
+
 The canonical, sanitized source is [`source/lineage.json`](source/lineage.json). It
-contains stable opaque IDs, display names, pledge-class chapter, President/Sensei
+contains stable opaque IDs, display names, pledge class, President/Sensei
 roles, layout positions, and relationship edges only. It intentionally excludes
 roster numbers and all contact, location, career, and other directory fields. The
 preparation script validates this file and writes the viewer's preloaded graph to
@@ -20,7 +24,7 @@ ignored `public/data/`; these generated files must not be committed.
 
 ## Contribute a lineage update
 
-For a guided edit, open **Edit lineage** in the viewer. Add members with their chapter
+For a guided edit, open **Edit lineage** in the viewer. Add members with their class
 and optional President/Sensei role; search for a Big and Little to add a relationship,
 or remove a recorded relationship. The graph updates locally as you work. Use
 **Download lineage.json for PR**, replace `source/lineage.json` with the downloaded
@@ -28,26 +32,23 @@ file, run the checks below, and open a pull request. Nothing is written to the h
 site from the editor.
 
 You can also edit `source/lineage.json` directly in a fork. Keep existing member IDs
-unchanged; add new members with UUIDv4 IDs. The chapter array defines the chronological
-class order. An edge's `source` is the Big Bro and its `target` is the Little. Multiple
+unchanged; add new members with UUIDv4 IDs. The `classes` array defines the chronological
+class order. Each member's `class` value must match one of those entries. An edge's `source` is the Big Bro and its `target` is the Little. Multiple
 Big Bros are supported. Do not add fields to the schema or include roster numbers or
 directory information.
 
-Set up the local environment and validate/build the source:
+Validate and lint changes before opening a pull request:
 
 ```sh
-uv venv .venv
-# Or, if uv is not installed:
-# python3 -m venv .venv
-.venv/bin/python scripts/prepare_viewer.py
-node --test tests/*.test.cjs
-.venv/bin/python -m unittest discover -s tests -p 'test_*.py'
-node --check public/app.js && node --check public/lineage.js && node --check public/editor.js
+make setup # once per checkout
+make test
+make lint
+make build
 ```
 
 The validator rejects unknown fields, duplicate/invalid IDs, invalid roles, missing
-edge endpoints, duplicate/self relationships, and edges within the same chapter or
-backwards in chapter order. PR CI runs the same validation and tests. Once merged, the
+edge endpoints, duplicate/self relationships, and edges within the same class or
+backwards in class order. PR CI runs the same validation and tests. Once merged, the
 sanitized source is what the hosted viewer deploys; no private reconciliation files
 are needed by contributors.
 
@@ -69,25 +70,10 @@ required to edit or validate the public source graph.
 
 ## View locally
 
-Create a local Python environment once (the repository scripts use only the Python
-standard library, so no Python packages need to be installed):
+Optional static preview, bound to this computer only:
 
 ```sh
-uv venv .venv
-# Or, if uv is not installed:
-python3 -m venv .venv
-```
-
-Generate the preloaded graph and editor source before starting the local viewer:
-
-```sh
-.venv/bin/python scripts/prepare_viewer.py
-```
-
-Optional HTTP preview, bound to this computer only:
-
-```sh
-.venv/bin/python -m http.server 8000 --bind 127.0.0.1 --directory public
+make serve
 ```
 
 Then visit <http://127.0.0.1:8000>. Select a member to highlight their
@@ -103,18 +89,14 @@ can be clicked to navigate. Nodes and relationship buttons support keyboard sele
 Build the same preloaded Worker package used by CI, then run it locally:
 
 ```sh
-.venv/bin/python scripts/prepare_viewer.py
-.venv/bin/python scripts/package_site.py
-cd dist/deploy/stanford-lambdas-lineage
-npm install
-npm run dev
+make preview
 ```
 
-`npm run dev` starts Cloudflare's local Worker preview. To publish manually from
+`make preview` starts Cloudflare's local Worker preview. To publish manually from
 your computer, authenticate once with `cf auth login`, then run:
 
 ```sh
-npm run deploy
+make deploy
 ```
 
 This deploys the Worker configured in `cloudflare/cloudflare.config.ts`.
@@ -140,15 +122,10 @@ The deploy job uses those secrets only through environment variables. Pull
 requests do not receive deployment credentials. The API token is not needed for
 local preview; `cf auth login` is used for an intentional local deploy.
 
-For a manual package build or deploy, run:
+For a manual package build without starting the preview, run:
 
 ```sh
-.venv/bin/python scripts/prepare_viewer.py
-.venv/bin/python scripts/package_site.py
-cd dist/deploy/stanford-lambdas-lineage
-npm install
-npm run build
-npm run deploy
+make build
 ```
 
 This creates an isolated deploy folder with Cloudflare's Vite plugin and static assets.
@@ -161,8 +138,7 @@ first confirm the chapter still controls its registrar account before changing D
 
 ## Verification
 
-`node --test tests/lineage.test.cjs`, `node --test tests/editor.test.cjs`,
-`node --test tests/app_ui.test.cjs`, and `.venv/bin/python -m unittest discover -s tests`
-check viewer operations, editor behavior, UI wiring, and source validation. CI also
-packages and builds the Worker before any deployment.
+`make test` runs viewer, editor, UI, and source-validation tests. `make lint` checks
+Python and JavaScript syntax plus whitespace. CI runs both targets and builds the
+Worker before any deployment.
 

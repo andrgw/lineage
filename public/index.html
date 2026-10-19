@@ -10,9 +10,9 @@
   <header>
     <a class="brand" href="index.html"><span class="crest">ΛΦΕ</span><span>Stanford Lambdas<small>THETA CHAPTER / LINEAGE EXPLORER</small></span></a>
     <div class="search-wrap">
-      <label class="sr-only" for="member-search">Search members or chapters</label>
+      <label class="sr-only" for="member-search">Search members or classes</label>
       <span class="search-icon" aria-hidden="true">⌕</span>
-      <input id="member-search" type="search" placeholder="Search a name or chapter…" autocomplete="off" aria-controls="search-results" aria-expanded="false">
+      <input id="member-search" type="search" placeholder="Search a name or class…" autocomplete="off" aria-controls="search-results" aria-expanded="false">
       <div id="search-results" class="results" role="listbox" aria-label="Matching members" hidden></div>
     </div>
     <button id="editor-toggle" type="button" aria-expanded="false" aria-controls="editor-panel">Edit lineage</button>
@@ -21,8 +21,8 @@
   </header>
   <div class="workspace">
     <aside class="browse">
-      <div class="browse-heading"><span class="eyebrow">THETA CHAPTER</span><h1>Lineage.</h1><p id="summary">Open a graph to explore its chapters.</p></div>
-      <div class="view-buttons"><button id="overview" disabled>↗ Full overview</button><button id="recent" disabled>↓ Recent chapters</button></div>
+      <div class="browse-heading"><span class="eyebrow">THETA CHAPTER</span><h1>Lineage.</h1><p id="summary">Open a graph to explore its classes.</p></div>
+      <div class="view-buttons"><button id="overview" disabled>↗ Full overview</button><button id="recent" disabled>↓ Recent classes</button></div>
       <div class="class-heading"><span class="eyebrow">PLEDGE CLASSES</span><button id="clear" class="text-button" disabled>Reset</button></div>
       <nav id="classes" aria-label="Pledge classes"></nav>
       <div class="legend"><span><i class="node-swatch"></i>Brother</span><span><i class="node-swatch president-swatch"></i>President</span><span><i class="node-swatch sensei-swatch"></i>Sensei</span><span><i class="node-swatch both-swatch"></i>President &amp; Sensei</span><span><i class="edge-swatch"></i>Big–Little relationship</span></div>
@@ -30,7 +30,7 @@
     <main>
       <div class="map-header"><div><span class="eyebrow">LINEAGE MAP</span><h2 id="view-title">Explore the connections</h2></div><div class="view-actions"><button id="isolate" disabled aria-pressed="false">Isolate lineage</button><button id="fit-selection" disabled>Fit lineage</button></div></div>
       <div id="canvas" tabindex="0" aria-label="Interactive lineage map. Drag to pan. Use plus and minus to zoom, or arrow keys to pan.">
-        <svg id="graph" aria-label="Member relationship graph by pledge-class chapter"><g id="world"></g></svg>
+        <svg id="graph" aria-label="Member relationship graph by pledge class"><g id="world"></g></svg>
         <div id="empty" hidden>
           <div class="empty-content">
             <svg class="lineage-mark" viewBox="0 0 420 180" aria-hidden="true">
@@ -40,9 +40,9 @@
             </svg>
             <span class="eyebrow">THETA CHAPTER · LINEAGE EXPLORER</span>
             <h2>Your lineage, thoughtfully connected.</h2>
-            <p>Open a graph file from your device to explore member names, pledge-class chapters, and Big–Little connections. Profile details are not displayed.</p>
+            <p>Open a graph file from your device to explore member names, pledge classes, and Big–Little connections. Profile details are not displayed.</p>
             <button id="empty-import" class="primary-button">Choose a local graph <span aria-hidden="true">↗</span></button>
-            <div class="privacy-note"><span aria-hidden="true">◈</span><span><strong>Your graph stays on your device.</strong><br>Names, connections, and chapter labels appear; contact and profile details stay off the map.</span></div>
+            <div class="privacy-note"><span aria-hidden="true">◈</span><span><strong>Your graph stays on your device.</strong><br>Names, connections, and class labels appear; contact and profile details stay off the map.</span></div>
           </div>
         </div>
         <div class="map-tools"><button id="zoom-out" aria-label="Zoom out" disabled>−</button><button id="zoom-level" title="Return to readable size" disabled>100%</button><button id="zoom-in" aria-label="Zoom in" disabled>+</button><span></span><button id="fit" title="Fit visible members" disabled>Fit view</button></div>
@@ -51,7 +51,7 @@
       <footer><span id="status" role="status" aria-live="polite">Loading local graph…</span><span>Drag to pan · Scroll to move · Ctrl/⌘ + scroll to zoom</span></footer>
     </main>
     <aside id="details" aria-label="Selected member lineage" aria-live="polite">
-      <div class="details-empty"><span class="eyebrow">LINEAGE DETAILS</span><h2>Explore a lineage</h2><p>Search for a member or select a node to see their chapter, leadership role, Bigs, Littles, and connected lineage.</p></div>
+      <div class="details-empty"><span class="eyebrow">LINEAGE DETAILS</span><h2>Explore a lineage</h2><p>Search for a member or select a node to see their class, leadership role, Bigs, Littles, and connected lineage.</p></div>
     </aside>
   </div>
   <section id="editor-panel" class="editor-panel" aria-label="Local lineage editor" hidden>
