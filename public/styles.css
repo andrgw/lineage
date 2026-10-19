@@ -68,6 +68,9 @@ h1 { margin: 8px 0; font-size: 25px; line-height: 1.2; }
 .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 14px 17px; border-top: 1px solid var(--line); color: var(--muted); font-size: 9px; }
 .legend span { display: flex; align-items: center; gap: 6px; }
 .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 3px; }
+.legend .president-swatch { background: var(--sky); }
+.legend .sensei-swatch { background: var(--red); }
+.legend .both-swatch { background: linear-gradient(90deg,var(--sky) 50%,var(--red) 50%); }
 .president { background: var(--sky); }.sensei { background: var(--red); }.both { background: linear-gradient(90deg,var(--sky) 50%,var(--red) 50%); }.missing { border: 1px dashed var(--gold); }.review-swatch { height: 0 !important; border-top: 2px dashed var(--gold); border-radius: 0 !important; }
 
 main { display: flex; flex: 1; flex-direction: column; min-width: 0; }
@@ -84,6 +87,9 @@ h2 { margin: 2px 0; font-size: 15px; font-weight: 550; }
 .edge.recent { stroke: #6c9db1; }.edge.review { stroke: var(--gold); stroke-width: 2; stroke-dasharray: 6 5; }.edge.active { stroke: var(--sky); stroke-width: 2.7; }.edge.dim { opacity: .09; }
 .node { cursor: pointer; }
 .node .card { fill: #111315; stroke: #3a3d3f; stroke-width: 1.25; filter: drop-shadow(0 3px 8px #0008); rx: 10px; }
+.node.president .card { fill: #244c78; stroke: #6ea8e0; }
+.node.sensei .card { fill: #713d47; stroke: #d78692; }
+.node.both .card { fill: url(#both); stroke: #d7dce0; }
 .node .name { fill: var(--platinum); font-size: 14px; font-weight: 550; }
 .node.dim { opacity: .14; }
 .node.unknown .card { stroke: var(--gold); stroke-dasharray: 5 3; }
@@ -131,6 +137,9 @@ dialog::backdrop { background: #000a; backdrop-filter: blur(3px); }
 [data-theme="light"] .edge.recent { stroke: #5387a0; }
 [data-theme="light"] .edge.review { stroke: #8a641c; }
 [data-theme="light"] .node .card { fill: #fff; stroke: #c8d0d3; filter: drop-shadow(0 3px 7px #24313a12); }
+[data-theme="light"] .node.president .card { fill: #e2eefb; stroke: #466ec3; }
+[data-theme="light"] .node.sensei .card { fill: #fae8eb; stroke: #bf6470; }
+[data-theme="light"] .node.both .card { fill: url(#both); stroke: #53616a; }
 [data-theme="light"] .node .name { fill: #18292e; }
 [data-theme="light"] .node.selected .card { fill: #e8f3f7; }
 [data-theme="light"] .map-tools, [data-theme="light"] .minimap { background: #fffffff2; box-shadow: 0 5px 18px #1a1a1a12; }

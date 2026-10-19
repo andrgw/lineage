@@ -12,8 +12,8 @@ test('lineage excludes siblings and unrelated descendants of ancestors', () => {
   assert.equal(family.all.has(3),false);
 });
 test('import keeps member names but replaces source IDs with private runtime IDs', () => {
-  const graph=L.normalize({nodes:[{id:902,name:'Private Name',display_name:'Nickname',class_name:'Class A',rank:0,x:3,roles:['president']}],edges:[]});
-  assert.deepEqual(graph.nodes[0],{id:1,display_name:'Nickname',class_name:'Class A',rank:0,x:3});
+  const graph=L.normalize({nodes:[{id:902,name:'Private Name',display_name:'Nickname',class_name:'Class A',rank:0,x:3,roles:['president','admin']}],edges:[]});
+  assert.deepEqual(graph.nodes[0],{id:1,display_name:'Nickname',class_name:'Class A',rank:0,x:3,roles:['president']});
 });
 test('invalid relationships and duplicate roster IDs fail import', () => {
   assert.throws(()=>L.normalize({nodes:[node(1,0),node(1,1)],edges:[]}));
@@ -23,7 +23,11 @@ test('invalid relationships and duplicate roster IDs fail import', () => {
 });
 test('file import retains display name and drops roster, leadership, and directory fields', () => {
   const graph=L.normalize({nodes:[{Roster_Number:1,Full_Name:'Example Member',Display_Name:'Example',Class:'Example',Class_Order:1,Layout_X:2,Is_President:true,Is_Sensei:true,Primary_Email:'private@example.test'}],edges:[]});
-  assert.deepEqual(graph.nodes[0],{id:1,display_name:'Example',class_name:'Example',rank:0,x:2});
+  assert.deepEqual(graph.nodes[0],{id:1,display_name:'Example',class_name:'Example',rank:0,x:2,roles:['president','sensei']});
+});
+test('roles are allowlisted and retain combined President/Sensei styling', () => {
+  const graph=L.normalize({nodes:[{id:1,display_name:'Example',class_name:'Class A',rank:0,x:1,roles:['president','sensei','administrator']}],edges:[]});
+  assert.deepEqual(graph.nodes[0].roles,['president','sensei']);
 });
 test('layout preserves class rows, original order, and minimum card spacing', () => {
   const nodes=[node(1,0,1),node(2,0,1.1),node(3,0,1.1),node(4,1,3)];
@@ -51,7 +55,9 @@ test('public viewer renders member names without roster IDs, roles, or profile U
   const html=fs.readFileSync('public/index.html','utf8');
   assert.match(app,/class:'name'\}\)/);
   assert.match(app,/n\.display_name\.split/);
-  assert.match(app,/aria-label':`\$\{n\.display_name\}, \$\{n\.class_name\} chapter`/);
+  assert.match(app,/roleClass==='both'/);
+  assert.match(html,/President &amp; Sensei/);
+  assert.match(app,/aria-label':`\$\{n\.display_name\}, \$\{n\.class_name\} chapter\$\{roleLabel/);
   assert.doesNotMatch(app,/Roster_Number|Is_President|Is_Sensei|Primary_Email|data-source|data-target/);
   assert.doesNotMatch(html,/Member details|#profile|Show members|anonymous relationship graph/i);
 });

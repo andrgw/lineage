@@ -11,12 +11,16 @@
     if (idMap.size !== raw.nodes.length || sourceIds.some(id => !Number.isInteger(id))) throw Error('The graph contains duplicate or invalid IDs.');
     const nodes = raw.nodes.map((n, index) => {
       const source = 'Roster_Number' in n;
+      const rawRoles = source
+        ? [n.Is_President && 'president', n.Is_Sensei && 'sensei'].filter(Boolean)
+        : (Array.isArray(n.roles) ? n.roles : []);
       return {
         id: index + 1,
         display_name: String(source ? n.Display_Name : (n.display_name || n.name || '')).trim(),
         class_name: String(source ? n.Class : n.class_name).trim(),
         rank: Number(source ? n.Class_Order - 1 : n.rank),
         x: Number(source ? n.Layout_X : n.x),
+        roles: [...new Set(rawRoles.filter(role => role === 'president' || role === 'sensei'))],
       };
     });
     const byId = new Map(nodes.map(n => [n.id, n]));

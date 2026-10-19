@@ -14,10 +14,11 @@ open public/index.html
 The importer reads `~/Downloads/lfe_stanford_lineage_graph.json`, or a path supplied
 with `--graph-path`. It retains only the fields needed to render the graph and discards
 contact details and other directory fields. Output is written to ignored `public/data/`.
-The viewer displays member names, relationship edges, and pledge-class
-chapters. Roster numbers, roles, member counts, contact details, and profiles are not shown. Double-click
-`public/index.html`, or choose **Open graph** to read a graph into browser memory; the
-file is not uploaded or saved in browser storage.
+The viewer displays member names, relationship edges, pledge-class chapters, and
+President/Sensei role styling. Roster numbers, member counts, contact details, and
+profiles are not shown. If ignored local `public/data/graph.js` exists, the graph
+preloads when the page opens; otherwise choose **Open graph** to read one into browser
+memory. Imported files are not uploaded or saved in browser storage.
 
 To rebuild the original workbook reconciliation in this checkout, run
 `.venv/bin/python scripts/build_lineage.py`. This requires the original workbooks and
@@ -28,7 +29,8 @@ it stops if that graph's relationships differ from the workbook reconciliation.
 
 ## Data model
 
-Members are matched by roster number internally, while the viewer displays names only. Viewer edges point from Big Bro
+Members are matched by roster number while building the local graph, then use temporary
+runtime IDs in the viewer. Viewer edges point from Big Bro
 (`source`) to Little (`target`). The supplied graph's `Layout_X` values preserve the
 historical diagram and newer family corridors; spacing is scaled to prevent card
 overlap. Isolated mode keeps those same horizontal family corridors while hiding
@@ -45,7 +47,7 @@ to source records.
 
 ## Review or propose a lineage update
 
-After loading a local graph, select **Suggest a correction**. Choose the member(s) by name,
+With the local graph loaded (automatically when prepared), select **Suggest a correction**. Choose the member(s) by name,
 chapter, and left-to-right order, then describe the proposed change and its
 source or context. The viewer downloads a `lineage-review-*.json` note to your device.
 The app adds no roster number, role, contact, or profile details to the note. It does not change the graph
@@ -83,7 +85,9 @@ can be clicked to navigate. Nodes and relationship buttons support keyboard sele
 
 This creates a new `dist/framework-*` folder containing only an explicit list of
 framework assets. Upload that folder to Cloudflare Pages, not `public/` (which contains
-ignored local data). Visitors use **Open local graph** to view their own file in memory.
+ignored local data). The public bundle intentionally has no lineage data; visitors use
+**Open graph** to view a local file in memory. During local development, the ignored
+graph preloads automatically.
 The deployed headers prohibit network connections from the application.
 
 Cloudflare Pages supports [static HTML](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/)

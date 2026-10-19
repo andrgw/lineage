@@ -74,7 +74,9 @@ function render() {
   }
   for (const n of visible) {
     const p=points.get(n.id);
-    const g=svgEl('g',{class:'node',transform:`translate(${p.x},${p.y})`,tabindex:'0',role:'button','aria-label':`${n.display_name}, ${n.class_name} chapter`});
+    const roleClass=n.roles.includes('president')&&n.roles.includes('sensei')?'both':n.roles[0]||'';
+    const roleLabel=roleClass==='both'?'President and Sensei':roleClass==='president'?'President':roleClass==='sensei'?'Sensei':'';
+    const g=svgEl('g',{class:`node ${roleClass}`,transform:`translate(${p.x},${p.y})`,tabindex:'0',role:'button','aria-label':`${n.display_name}, ${n.class_name} chapter${roleLabel?`, ${roleLabel}`:''}`});
     g.append(svgEl('title',{},`${n.display_name} · ${n.class_name}`),svgEl('rect',{x:-Lineage.CARD_W/2,y:-Lineage.CARD_H/2,width:Lineage.CARD_W,height:Lineage.CARD_H,class:'card'}));
     const name=svgEl('text',{x:0,'text-anchor':'middle',class:'name'});
     const lines=[];
