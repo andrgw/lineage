@@ -277,24 +277,28 @@ $('feedback-close').addEventListener('click',()=>$('feedback-dialog').close());
 $('feedback-cancel').addEventListener('click',()=>$('feedback-dialog').close());
 $('feedback-form').addEventListener('submit',e=>{
   e.preventDefault();
-  const member = index.byId.get(feedbackRefs.get($('feedback-member').value));
-  const relatedId = feedbackRefs.get($('feedback-related').value);
-  const related = relatedId ? index.byId.get(relatedId) : null;
-  const note = {
-    schema_version: 1,
-    created_at: new Date().toISOString(),
-    kind: $('feedback-type').value,
-    point: Lineage.publicReference(graph.nodes,member.id),
-    related_point: related ? Lineage.publicReference(graph.nodes,related.id) : null,
-    proposal: $('feedback-note').value.trim(),
-    source_or_context: $('feedback-source').value.trim() || null,
-    status: 'needs_historian_review'
-  };
-  const blob = new Blob([JSON.stringify(note, null, 2) + '\n'], {type:'application/json'});
-  const url = URL.createObjectURL(blob), link = el('a', {href:url, download:`lineage-review-${new Date().toISOString().slice(0,10)}.json`});
-  document.body.append(link); link.click(); link.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
-  $('feedback-dialog').close();
-  $('status').textContent = 'Review note downloaded; it has not changed the lineage.';
+  try {
+    const memberId = feedbackRefs.get($('feedback-member').value);
+    if (memberId === undefined) throw Error('Choose a member before downloading the review note.');
+    const relatedId = feedbackRefs.get($('feedback-related').value) || null;
+    const note = Lineage.correctionNote(graph.nodes, {
+      memberId,
+      relatedId,
+      kind: $('feedback-type').value,
+      proposal: $('feedback-note').value,
+      sourceOrContext: $('feedback-source').value,
+    });
+    const blob = new Blob([JSON.stringify(note, null, 2) + '\n'], {type:'application/json'});
+    const url = URL.createObjectURL(blob), link = el('a', {href:url, download:`lineage-review-${new Date().toISOString().slice(0,10)}.json`});
+    document.body.append(link);
+    link.click();
+    // Keep the object URL alive long enough for slower browsers to start the download.
+    setTimeout(()=>{link.remove(); URL.revokeObjectURL(url);},60_000);
+    $('feedback-dialog').close();
+    $('status').textContent = 'Review note downloaded; it has not changed the lineage.';
+  } catch (error) {
+    $('status').textContent = `Review note not downloaded: ${error.message}`;
+  }
 });
 try {if(globalThis.LINEAGE_DATA)load(globalThis.LINEAGE_DATA);else{$('empty').hidden=false;$('status').textContent='No graph loaded · your data stays on this device.';}}
 catch(error){$('empty').hidden=false;$('status').textContent=error.message;}
