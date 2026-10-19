@@ -1,7 +1,6 @@
 """Create a Workers Static Assets deploy folder with sanitized local lineage."""
 from pathlib import Path
 import shutil
-import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -9,10 +8,12 @@ ROOT = Path(__file__).resolve().parents[1]
 def package():
     dist = ROOT / 'dist'
     dist.mkdir(exist_ok=True)
-    # A new directory prevents stale data from a previous bundle being published.
-    staging = Path(tempfile.mkdtemp(prefix='deploy-', dir=dist))
+    # Replace only this generated staging directory so CI has a stable deploy path.
+    staging = dist / 'deploy'
+    if staging.exists():
+        shutil.rmtree(staging)
     target = staging / 'stanford-lambdas-lineage'
-    target.mkdir()
+    target.mkdir(parents=True)
     graph_script = ROOT / 'public' / 'data' / 'graph.js'
     if not graph_script.is_file():
         raise FileNotFoundError('Prepare the ignored local lineage first; public graph data is never committed.')
