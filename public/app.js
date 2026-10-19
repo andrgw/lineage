@@ -17,34 +17,23 @@ function svgEl(tag, attrs = {}, text) {
 const canvas = $('canvas'), world = $('world');
 let graph, index, points = new Map(), selected = null, isolated = false, activeClass = null;
 let family = null, visibleIds = new Set(), nodeElements = new Map(), edgeElements = [];
-let feedbackRefs = new Map(), feedbackTokenByNode = new Map();
 let camera = {x: 0, y: 0, scale: 0.85}, miniBounds, miniWindow;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 function load(raw) {
   const parsed = Lineage.normalize(raw); // Validate before replacing a working graph.
   graph = parsed; index = Lineage.model(graph);
-  ['overview','recent','clear','zoom-out','zoom-level','zoom-in','fit','feedback-open'].forEach(id => { $(id).disabled = false; });
+  ['overview','recent','clear','zoom-out','zoom-level','zoom-in','fit'].forEach(id => { $(id).disabled = false; });
   selected = null; isolated = false; family = null; activeClass = null;
   $('empty').hidden = true;
   $('summary').textContent = `${new Set(graph.nodes.map(n => n.rank)).size} pledge-class chapters`;
   $('classes').replaceChildren();
-  feedbackRefs = new Map(); feedbackTokenByNode = new Map();
   const classes = [...new Map(graph.nodes.map(n => [n.rank, n.class_name])).entries()].sort((a,b) => a[0]-b[0]);
-  const pointOptions = [el('option', {value:''}, 'Choose a map point…')];
   for (const [rank, label] of classes) {
     const button = el('button', {'data-rank': rank});
     button.append(el('span', {class:'class-number'}, String(rank + 1).padStart(2, '0')), el('span', {}, label));
     button.addEventListener('click', () => jumpClass(rank)); $('classes').append(button);
-    const members=graph.nodes.filter(n=>n.rank===rank).sort((a,b)=>a.x-b.x||a.id-b.id);
-    members.forEach((n,i)=>{
-      const token=`${rank}:${i+1}`;
-      feedbackRefs.set(token,n.id); feedbackTokenByNode.set(n.id,token);
-      pointOptions.push(el('option',{value:token},`${n.display_name} · ${label} · point ${String(i+1).padStart(2,'0')}`));
-    });
   }
-  $('feedback-member').replaceChildren(...pointOptions);
-  $('feedback-related').replaceChildren(el('option', {value:''}, 'Not applicable'), ...pointOptions.slice(1));
   render();
   // Start with readable recent cards; the minimap provides context for the full map.
   recent();
@@ -269,32 +258,5 @@ function setTheme(theme) {
   $('theme-toggle').innerHTML = `${light ? '◐' : '☼'} <span>${light ? 'Dark mode' : 'Light mode'}</span>`;
 }
 $('theme-toggle').addEventListener('click',()=>setTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'));
-$('feedback-open').addEventListener('click',()=>{
-  if(selected !== null) $('feedback-member').value = feedbackTokenByNode.get(selected);
-  $('feedback-dialog').showModal();
-});
-$('feedback-close').addEventListener('click',()=>$('feedback-dialog').close());
-$('feedback-cancel').addEventListener('click',()=>$('feedback-dialog').close());
-$('feedback-form').addEventListener('submit',e=>{
-  e.preventDefault();
-  const member = index.byId.get(feedbackRefs.get($('feedback-member').value));
-  const relatedId = feedbackRefs.get($('feedback-related').value);
-  const related = relatedId ? index.byId.get(relatedId) : null;
-  const note = {
-    schema_version: 1,
-    created_at: new Date().toISOString(),
-    kind: $('feedback-type').value,
-    point: Lineage.publicReference(graph.nodes,member.id),
-    related_point: related ? Lineage.publicReference(graph.nodes,related.id) : null,
-    proposal: $('feedback-note').value.trim(),
-    source_or_context: $('feedback-source').value.trim() || null,
-    status: 'needs_historian_review'
-  };
-  const blob = new Blob([JSON.stringify(note, null, 2) + '\n'], {type:'application/json'});
-  const url = URL.createObjectURL(blob), link = el('a', {href:url, download:`lineage-review-${new Date().toISOString().slice(0,10)}.json`});
-  document.body.append(link); link.click(); link.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
-  $('feedback-dialog').close();
-  $('status').textContent = 'Review note downloaded; it has not changed the lineage.';
-});
 try {if(globalThis.LINEAGE_DATA)load(globalThis.LINEAGE_DATA);else{$('empty').hidden=false;$('status').textContent='No graph loaded · your data stays on this device.';}}
 catch(error){$('empty').hidden=false;$('status').textContent=error.message;}

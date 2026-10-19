@@ -80,13 +80,7 @@
     const y = Math.min(...ps.map(p => p.y)) - CARD_H / 2 - 45;
     return {x, y, w: Math.max(...ps.map(p => p.x)) + CARD_W / 2 + 40 - x, h: Math.max(...ps.map(p => p.y)) + CARD_H / 2 + 45 - y};
   }
-  function publicReference(nodes, id) {
-    const node = nodes.find(candidate => candidate.id === id);
-    if (!node) throw Error('Unknown map point.');
-    const peers = nodes.filter(candidate => candidate.rank === node.rank).sort((a, b) => a.x - b.x || a.id - b.id);
-    return {name: node.display_name, chapter: node.class_name, point: peers.findIndex(candidate => candidate.id === id) + 1};
-  }
-  const api = {normalize, model, layout, bounds, publicReference, CARD_W, CARD_H, ROW};
+  const api = {normalize, model, layout, bounds, CARD_W, CARD_H, ROW};
   if (typeof module !== 'undefined') module.exports = api;
   root.Lineage = api;
 })(globalThis);

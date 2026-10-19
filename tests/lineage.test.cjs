@@ -45,11 +45,6 @@ test('isolated layout preserves horizontal family corridors across pledge classe
   assert.equal(points.get(1).x,points.get(3).x);
   assert.notEqual(points.get(1).x,points.get(2).x);
 });
-test('correction references include the name, chapter, and point but no source ID', () => {
-  const nodes=[node(41,2,4),node(42,2,1),node(43,2,9)];
-  assert.deepEqual(L.publicReference(nodes,41),{name:'Member 41',chapter:'Class 2',point:2});
-  assert.deepEqual(Object.keys(L.publicReference(nodes,42)).sort(),['chapter','name','point']);
-});
 test('public viewer renders member names without roster IDs, roles, or profile UI', () => {
   const app=fs.readFileSync('public/app.js','utf8');
   const html=fs.readFileSync('public/index.html','utf8');

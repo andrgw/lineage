@@ -40,24 +40,7 @@ the densest cases, they use an outside gutter. Historian-review edges are dashed
 highlighted, and filterable.
 
 Selecting a point traces its connected ancestors and descendants separately, without
-including siblings and cousins. Use **Suggest a correction** to download a review note
-identified by member name, chapter, and left-to-right point, without roster numbers. It does not change the graph or
-send the note anywhere; share it privately with a historian who can map the reference
-to source records.
-
-## Review or propose a lineage update
-
-With the local graph loaded (automatically when prepared), select **Suggest a correction**. Choose the member(s) by name,
-chapter, and left-to-right order, then describe the proposed change and its
-source or context. The viewer downloads a `lineage-review-*.json` note to your device.
-The app adds no roster number, role, contact, or profile details to the note. It does not change the graph
-or send the note anywhere; share it with a chapter historian through a private channel.
-
-A historian should verify each proposal against its cited source before changing the
-private reconciliation inputs under ignored `data/private/` (or the authoritative
-source workbook/TikZ file). Rebuild and review the graph locally before distributing
-an updated graph file. The deployed site intentionally has no write endpoint or
-member data, so it cannot accept edits directly.
+including siblings and cousins.
 
 The previous local root commit included screenshot names in the builder. Current
 source moves them into ignored local configuration. Do not publish repository history
@@ -77,26 +60,25 @@ scroll to move, use Ctrl/Command + scroll or the buttons to zoom. **Full overvie
 fits the whole map; the percentage button returns to readable 100% size. The minimap
 can be clicked to navigate. Nodes and relationship buttons support keyboard selection.
 
-## Cloudflare hosting, with data kept local
+## Cloudflare Workers hosting, with source data kept local
 
 ```sh
+.venv/bin/python scripts/prepare_viewer.py
 .venv/bin/python scripts/package_site.py
+cd dist/deploy-*/stanford-lambdas-lineage
+npm install
+npm run deploy
 ```
 
-This creates a new `dist/deploy-*/stanford-lambdas-lineage` folder with the viewer and a sanitized copy of the
-ignored local graph. The public bundle contains names, class chapters, relationship
-edges, layout positions, and President/Sensei styling so the lineage preloads. It omits
-roster numbers, contact/profile fields, and workbook/TikZ sources. This curated lineage
-becomes public when the bundle is deployed. Upload the generated folder to Cloudflare
-Pages, not `public/` (which also contains private ignored working files).
-The deployed headers prohibit network connections from the application.
+This creates an isolated deploy folder with Cloudflare's Vite plugin and static assets.
+The preloaded graph is generated locally from ignored source data and contains only
+names, chapters, relationships, layout, and President/Sensei styling. Roster numbers,
+contact/profile fields, and workbook/TikZ sources are not included. The sanitized graph
+becomes public when deployed. Do not deploy the repository root or `data/private/`.
+Deployment response headers prohibit network connections from the application.
 
-Cloudflare Pages supports [static HTML](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/)
-and [direct uploads](https://developers.cloudflare.com/pages/get-started/direct-upload/).
-For a [custom domain](https://developers.cloudflare.com/pages/configuration/custom-domains/),
-first confirm the chapter still controls its registrar account. The apex domain needs
-a zone with Cloudflare nameservers; a subdomain can use a CNAME with the current DNS
-provider. No domain, DNS, account, or hosting changes are made by these scripts.
+The Worker is served on its `workers.dev` hostname. Custom-domain setup is separate;
+first confirm the chapter still controls its registrar account before changing DNS.
 
 ## Verification
 
