@@ -1,16 +1,14 @@
-name: Validate lineage source
+name: Deploy lineage to Cloudflare
 
 on:
-  pull_request:
   push:
     branches: [main]
-  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  validate:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,11 +24,21 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_*.py'
       - name: Run viewer tests
         run: node --test tests/lineage.test.cjs
+      - name: Run editor tests
+        run: node --test tests/editor.test.cjs
+      - name: Run UI wiring tests
+        run: node --test tests/app_ui.test.cjs
       - name: Check JavaScript syntax
-        run: node --check public/app.js && node --check public/lineage.js
-      - name: Build Cloudflare Worker package
+        run: node --check public/app.js && node --check public/lineage.js && node --check public/editor.js
+      - name: Package Worker
+        run: python scripts/package_site.py
+      - name: Build Worker
         run: |
-          python scripts/package_site.py
           cd dist/deploy/stanford-lambdas-lineage
           npm install
           npm run build
+      - name: Deploy Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: cd dist/deploy/stanford-lambdas-lineage && npm run deploy

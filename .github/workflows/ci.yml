@@ -1,0 +1,40 @@
+name: Lineage CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Validate source and prepare viewer graph
+        run: python scripts/prepare_viewer.py --graph-path source/lineage.json
+      - name: Run source validation tests
+        run: python -m unittest discover -s tests -p 'test_*.py'
+      - name: Run viewer tests
+        run: node --test tests/lineage.test.cjs
+      - name: Run editor tests
+        run: node --test tests/editor.test.cjs
+      - name: Run UI wiring tests
+        run: node --test tests/app_ui.test.cjs
+      - name: Check JavaScript syntax
+        run: node --check public/app.js && node --check public/lineage.js && node --check public/editor.js
+      - name: Build Cloudflare Worker package
+        run: |
+          python scripts/package_site.py
+          cd dist/deploy/stanford-lambdas-lineage
+          npm install
+          npm run build

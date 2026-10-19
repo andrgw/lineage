@@ -18,13 +18,53 @@ const canvas = $('canvas'), world = $('world');
 let graph, index, points = new Map(), selected = null, isolated = false, activeClass = null;
 let family = null, visibleIds = new Set(), nodeElements = new Map(), edgeElements = [];
 let camera = {x: 0, y: 0, scale: 0.85}, miniBounds, miniWindow;
+let editorMounted = false, editorSource = globalThis.LINEAGE_SOURCE || null;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+function graphFromSource(source) {
+  const idBySource = new Map(source.members.map((member, i) => [member.id, i + 1]));
+  return {
+    nodes: source.members.map((member, i) => ({
+      id: i + 1, display_name: member.name, class_name: member.chapter,
+      rank: source.chapters.indexOf(member.chapter), x: member.layout_x, roles: member.roles,
+    })),
+    edges: source.edges.map(edge => ({source: idBySource.get(edge.source), target: idBySource.get(edge.target)})),
+  };
+}
+
+function mountEditor() {
+  const root = $('editor-root');
+  if (editorMounted) return;
+  if (!editorSource) {
+    root.replaceChildren(el('p', {class:'editor-unavailable'}, 'The local editor source is not preloaded. Run `python scripts/prepare_viewer.py` to create the sanitized local source, then reload this page.'));
+    return;
+  }
+  if (!globalThis.LineageEditor) {
+    root.replaceChildren(el('p', {class:'editor-unavailable'}, 'The local editor module is not available on this page.'));
+    return;
+  }
+  try {
+    globalThis.LineageEditor.mount(root, editorSource, {
+      onChange(updatedSource) {
+        editorSource = updatedSource;
+        globalThis.LINEAGE_SOURCE = updatedSource;
+        load(graphFromSource(updatedSource));
+      },
+    });
+    editorMounted = true;
+  } catch (error) {
+    root.replaceChildren(el('p', {class:'editor-unavailable'}, `Editor could not be opened: ${error.message}`));
+  }
+}
 
 function load(raw) {
   const parsed = Lineage.normalize(raw); // Validate before replacing a working graph.
   graph = parsed; index = Lineage.model(graph);
   ['overview','recent','clear','zoom-out','zoom-level','zoom-in','fit'].forEach(id => { $(id).disabled = false; });
   selected = null; isolated = false; family = null; activeClass = null;
+  $('member-search').value = '';
+  closeSearch();
+  showEmptyDetails();
   $('empty').hidden = true;
   $('summary').textContent = `${new Set(graph.nodes.map(n => n.rank)).size} pledge-class chapters`;
   $('classes').replaceChildren();
@@ -148,7 +188,8 @@ function select(id) {
   if(isolated) render(); else updateStyles();
   const n=index.byId.get(id);
   $('view-title').textContent=`${n.class_name} chapter · lineage highlighted`;
-  $('status').textContent='Connected relationships highlighted · profile details are not shown.';
+  $('status').textContent='Connected relationships highlighted.';
+  renderDetails(n);
   center(id,Math.max(camera.scale,.9));
 }
 
@@ -156,8 +197,92 @@ function reset() {
   if(!graph)return;
   selected=null;family=null;isolated=false;activeClass=null;
   $('view-title').textContent='Explore the connections';
-  $('status').textContent='Relationship map · profile details are not shown.';
+  $('status').textContent='Relationship map.';
+  showEmptyDetails();
   render();
+}
+
+function closeSearch() {
+  const results = $('search-results');
+  results.hidden = true;
+  results.replaceChildren();
+  $('member-search').setAttribute('aria-expanded', 'false');
+}
+
+function searchMembers() {
+  if (!graph) return closeSearch();
+  const query = $('member-search').value.trim().toLocaleLowerCase();
+  const results = $('search-results');
+  results.replaceChildren();
+  if (!query) return closeSearch();
+
+  const matches = graph.nodes.filter(n => `${n.display_name} ${n.class_name}`.toLocaleLowerCase().includes(query))
+    .sort((a, b) => a.display_name.localeCompare(b.display_name) || a.rank - b.rank);
+  if (!matches.length) {
+    results.append(el('p', {}, 'No members or chapters found.'));
+  } else {
+    for (const n of matches.slice(0, 30)) {
+      const result = el('button', {class:'result', type:'button', role:'option'});
+      result.append(el('strong', {}, n.display_name), el('span', {}, `${n.class_name} chapter`));
+      result.addEventListener('click', () => {
+        closeSearch();
+        select(n.id);
+        $('member-search').value = `${n.display_name} · ${n.class_name}`;
+      });
+      results.append(result);
+    }
+    if (matches.length > 30) results.append(el('p', {}, `Showing 30 of ${matches.length} matches. Refine your search.`));
+  }
+  results.hidden = false;
+  $('member-search').setAttribute('aria-expanded', 'true');
+}
+
+function showEmptyDetails() {
+  const aside = $('details');
+  aside.classList.remove('open');
+  aside.replaceChildren();
+  aside.append(el('div', {class:'details-empty'}, ''));
+  const content = aside.firstElementChild;
+  content.append(el('span', {class:'eyebrow'}, 'LINEAGE DETAILS'), el('h2', {}, 'Explore a lineage'),
+    el('p', {}, graph ? 'Search for a member or select a node to see their chapter, leadership role, Bigs, Littles, and connected lineage.' : 'Load the graph to explore member relationships.'));
+}
+
+function renderDetails(member) {
+  const aside = $('details');
+  aside.classList.add('open');
+  aside.replaceChildren();
+  const heading = el('div', {class:'details-heading'});
+  const title = el('div');
+  title.append(el('span', {class:'eyebrow'}, `${member.class_name.toUpperCase()} CHAPTER`), el('h2', {}, member.display_name));
+  const close = el('button', {class:'details-close', type:'button', 'aria-label':'Close member details'}, '×');
+  close.addEventListener('click', () => aside.classList.remove('open'));
+  heading.append(title, close);
+  const badges = el('div', {class:'badges'});
+  if (member.roles.includes('president')) badges.append(el('span', {class:'badge president-badge'}, 'President'));
+  if (member.roles.includes('sensei')) badges.append(el('span', {class:'badge sensei-badge'}, 'Sensei'));
+  if (!member.roles.length) badges.append(el('span', {class:'badge'}, 'Member'));
+  heading.append(badges);
+  aside.append(heading);
+
+  const addSection = (title, ids, emptyText) => {
+    const section = el('section', {class:'lineage-section'});
+    section.append(el('h3', {}, `${title} (${ids.length})`));
+    if (!ids.length) section.append(el('p', {class:'lineage-empty'}, emptyText));
+    for (const id of ids) {
+      const related = index.byId.get(id);
+      if (!related) continue;
+      const button = el('button', {class:'member-link', type:'button'});
+      button.append(el('span', {}, related.display_name), el('small', {}, `${related.class_name} chapter`));
+      button.addEventListener('click', () => select(id));
+      section.append(button);
+    }
+    aside.append(section);
+  };
+  const sortByChapter = ids => [...ids].sort((a,b) => index.byId.get(a).rank - index.byId.get(b).rank || index.byId.get(a).display_name.localeCompare(index.byId.get(b).display_name));
+  addSection('Bigs', sortByChapter(index.parents.get(member.id)), 'No Big relationship recorded.');
+  addSection('Littles', sortByChapter(index.children.get(member.id)), 'No Little relationships recorded.');
+  addSection('Ancestors', sortByChapter(family.ancestors), 'No ancestors recorded.');
+  addSection('Descendants', sortByChapter(family.descendants), 'No descendants recorded.');
 }
 function jumpClass(rank) {
   reset();activeClass=rank;updateStyles();
@@ -249,6 +374,27 @@ $('zoom-out').addEventListener('click',()=>zoom(camera.scale/1.25));
 $('zoom-level').addEventListener('click',()=>zoom(1));
 $('fit').addEventListener('click',()=>fit());
 $('import').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{load(JSON.parse(await file.text()));}catch(error){$('status').textContent=error.message;}finally{e.target.value='';}});
+$('member-search').addEventListener('input',searchMembers);
+$('member-search').addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeSearch();return;}
+  if(e.key==='Enter'){
+    const first=$('search-results').querySelector('.result');
+    if(first){e.preventDefault();first.click();}
+  }
+});
+document.addEventListener('pointerdown',e=>{if(!e.target.closest('.search-wrap'))closeSearch();});
+$('editor-toggle').addEventListener('click',()=>{
+  const panel=$('editor-panel'), open=panel.hidden;
+  if(open) mountEditor();
+  panel.hidden=!open;
+  $('editor-toggle').setAttribute('aria-expanded',String(open));
+  if(open) $('editor-close').focus();
+});
+$('editor-close').addEventListener('click',()=>{
+  $('editor-panel').hidden=true;
+  $('editor-toggle').setAttribute('aria-expanded','false');
+  $('editor-toggle').focus();
+});
  $('empty-import').addEventListener('click',()=>$('import').click());
 function setTheme(theme) {
   document.documentElement.dataset.theme = theme;

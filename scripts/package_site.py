@@ -17,12 +17,16 @@ def package():
     graph_script = ROOT / 'public' / 'data' / 'graph.js'
     if not graph_script.is_file():
         raise FileNotFoundError('Prepare the ignored local lineage first; public graph data is never committed.')
+    source_script = ROOT / 'public' / 'data' / 'source.js'
+    if not source_script.is_file():
+        raise FileNotFoundError('Prepare the sanitized canonical source before packaging the local editor.')
     for name in ('index.html',):
         (target / name).write_text((ROOT / 'public' / name).read_text())
     static = target / 'static'
     (static / 'data').mkdir(parents=True)
     (static / 'data' / 'graph.js').write_text(graph_script.read_text())
-    for name in ('styles.css', 'lineage.js', 'app.js'):
+    (static / 'data' / 'source.js').write_text(source_script.read_text())
+    for name in ('styles.css', 'lineage.js', 'app.js', 'editor.js'):
         shutil.copy2(ROOT / 'public' / name, static / name)
     shutil.copy2(ROOT / 'public' / '_headers', static / '_headers')
     shutil.copytree(ROOT / 'cloudflare', target, dirs_exist_ok=True)
