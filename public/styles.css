@@ -83,6 +83,10 @@ h2 { margin: 2px 0; font-size: 15px; font-weight: 550; }
 .edge { fill: none; stroke: #5d6265; stroke-width: 1.7; stroke-opacity: .75; }
 .edge.recent { stroke: #6c9db1; }.edge.review { stroke: var(--gold); stroke-width: 2; stroke-dasharray: 6 5; }.edge.active { stroke: var(--sky); stroke-width: 2.7; }.edge.dim { opacity: .09; }
 .node { cursor: pointer; }
+.node .point { fill: var(--sky); stroke: var(--black); stroke-width: 2; transition: r .15s, fill .15s; }
+.node:hover .point, .node:focus-visible .point, .node.selected .point { fill: var(--gold); r: 9px; }
+.node.related .point { fill: var(--sky); }
+.node.dim { opacity: .14; }
 .node .card { fill: #111315; stroke: #3a3d3f; stroke-width: 1.25; filter: drop-shadow(0 3px 8px #0008); }
 .node .accent { fill: #5a8598; }.node.president .accent { fill: var(--sky); }.node.sensei .accent { fill: var(--red); }.node.both .accent { fill: url(#both); }
 .node .card { rx: 10px; }.node.unknown .card { stroke: var(--gold); stroke-dasharray: 5 3; }
@@ -131,6 +135,8 @@ dialog::backdrop { background: #000a; backdrop-filter: blur(3px); }
 [data-theme="light"] .edge.recent { stroke: #5387a0; }
 [data-theme="light"] .edge.review { stroke: #8a641c; }
 [data-theme="light"] .node .card { fill: #fff; stroke: #c8d0d3; filter: drop-shadow(0 3px 7px #24313a12); }
+[data-theme="light"] .node .point { fill: #1c6685; stroke: #fff; }
+[data-theme="light"] .node.selected .point { fill: #8a641c; }
 [data-theme="light"] .node .meta { fill: #697579; }
 [data-theme="light"] .node.selected .card { fill: #e8f3f7; }
 [data-theme="light"] .map-tools, [data-theme="light"] .minimap { background: #fffffff2; box-shadow: 0 5px 18px #1a1a1a12; }

@@ -6,25 +6,25 @@
   function normalize(raw) {
     if (!raw || !Array.isArray(raw.nodes) || !raw.nodes.length || !Array.isArray(raw.edges)) throw Error('Choose a graph JSON containing nodes and edges.');
     // An allowlist deliberately drops all directory/contact fields on file import.
-    const nodes = raw.nodes.map(n => {
+    const sourceIds = raw.nodes.map(n => Number('Roster_Number' in n ? n.Roster_Number : n.id));
+    const idMap = new Map(sourceIds.map((id, index) => [id, index + 1]));
+    if (idMap.size !== raw.nodes.length || sourceIds.some(id => !Number.isInteger(id))) throw Error('The graph contains duplicate or invalid IDs.');
+    const nodes = raw.nodes.map((n, index) => {
       const source = 'Roster_Number' in n;
       return {
-        id: Number(source ? n.Roster_Number : n.id),
-        name: String(source ? n.Full_Name : n.name),
-        display_name: String(source ? n.Display_Name : (n.display_name || n.name)),
+        id: index + 1,
         class_name: String(source ? n.Class : n.class_name).trim(),
         rank: Number(source ? n.Class_Order - 1 : n.rank),
         x: Number(source ? n.Layout_X : n.x),
-        roles: source ? ['president', 'sensei'].filter((_, i) => i ? n.Is_Sensei : n.Is_President) : (n.roles || []).filter(r => ['president', 'sensei'].includes(r)),
       };
     });
     const byId = new Map(nodes.map(n => [n.id, n]));
-    if (byId.size !== nodes.length || nodes.some(n => !Number.isInteger(n.id) || !Number.isInteger(n.rank) || n.rank < 0 || !Number.isFinite(n.x))) throw Error('The graph contains duplicate IDs or invalid coordinates.');
+    if (nodes.some(n => !Number.isInteger(n.rank) || n.rank < 0 || !Number.isFinite(n.x))) throw Error('The graph contains invalid coordinates.');
     const unique = new Map();
     for (const e of raw.edges) {
-      const a = Number(e.source), b = Number(e.target);
+      const a = idMap.get(Number(e.source)), b = idMap.get(Number(e.target));
       if (!byId.has(a) || !byId.has(b) || byId.get(a).rank >= byId.get(b).rank) throw Error('A relationship has a missing member or runs backwards through pledge classes.');
-      unique.set(`${a}:${b}`, {source: a, target: b, era: e.era === 'post-2019' ? e.era : 'pre-2019', review_required: e.review_required === true});
+      unique.set(`${a}:${b}`, {source: a, target: b});
     }
     return {nodes, edges: [...unique.values()]};
   }
@@ -75,12 +75,13 @@
     const y = Math.min(...ps.map(p => p.y)) - CARD_H / 2 - 45;
     return {x, y, w: Math.max(...ps.map(p => p.x)) + CARD_W / 2 + 40 - x, h: Math.max(...ps.map(p => p.y)) + CARD_H / 2 + 45 - y};
   }
-  function matches(n, query) {
-    const q = query.trim().toLowerCase();
-    if (/^#?\d+$/.test(q)) return n.id === Number(q.replace('#', ''));
-    return `${n.name} ${n.display_name} ${n.class_name}`.toLowerCase().includes(q);
+  function anonymousReference(nodes, id) {
+    const node = nodes.find(candidate => candidate.id === id);
+    if (!node) throw Error('Unknown map point.');
+    const peers = nodes.filter(candidate => candidate.rank === node.rank).sort((a, b) => a.x - b.x || a.id - b.id);
+    return {chapter: node.class_name, point: peers.findIndex(candidate => candidate.id === id) + 1};
   }
-  const api = {normalize, model, layout, bounds, matches, CARD_W, CARD_H, ROW};
+  const api = {normalize, model, layout, bounds, anonymousReference, CARD_W, CARD_H, ROW};
   if (typeof module !== 'undefined') module.exports = api;
   root.Lineage = api;
 })(globalThis);

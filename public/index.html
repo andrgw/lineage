@@ -9,24 +9,22 @@
 <body>
   <header>
     <a class="brand" href="index.html"><span class="crest">ΛΦΕ</span><span>Stanford Lambdas<small>THETA CHAPTER / LINEAGE EXPLORER</small></span></a>
-    <div class="search-wrap"><label class="sr-only" for="search">Find a member</label><span class="search-icon" aria-hidden="true">⌕</span><input id="search" type="search" autocomplete="off" placeholder="Find a name or roster number…" aria-controls="results" disabled><div id="results" class="results" hidden></div></div>
-    <label class="import-button">Open local graph<input id="import" type="file" accept=".json,application/json" class="sr-only"></label>
+    <label class="import-button">Open graph<input id="import" type="file" accept=".json,application/json" class="sr-only"></label>
     <button id="feedback-open" class="feedback-open" disabled>Suggest a correction</button>
     <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" title="Switch to light mode">☼ <span>Light mode</span></button>
   </header>
   <div class="workspace">
     <aside class="browse">
-      <div class="browse-heading"><span class="eyebrow">THE BROTHERHOOD</span><h1>A shared lineage.</h1><p id="summary">Open a local graph to explore.</p></div>
-      <div class="view-buttons"><button id="overview" disabled>↗ Full overview</button><button id="recent" disabled>↓ Recent generations</button></div>
-      <div class="filter-wrap"><label for="role">Show members</label><select id="role" disabled><option value="all">Everyone</option><option value="president">Presidents</option><option value="sensei">Senseis</option><option value="missing">Missing Big Bro · recent</option><option value="review">Historian review · skipped column</option></select></div>
+      <div class="browse-heading"><span class="eyebrow">THETA CHAPTER</span><h1>Lineage.</h1><p id="summary">Open a graph to explore its chapters.</p></div>
+      <div class="view-buttons"><button id="overview" disabled>↗ Full overview</button><button id="recent" disabled>↓ Recent chapters</button></div>
       <div class="class-heading"><span class="eyebrow">PLEDGE CLASSES</span><button id="clear" class="text-button" disabled>Reset</button></div>
       <nav id="classes" aria-label="Pledge classes"></nav>
-      <div class="legend"><span><i class="president"></i>President</span><span><i class="sensei"></i>Sensei</span><span><i class="both"></i>Both roles</span><span><i class="missing"></i>Big Bro unknown</span><span><i class="review-swatch"></i>Historian review link</span></div>
+      <div class="legend"><span><i class="node-swatch"></i>Brother</span><span><i class="edge-swatch"></i>Big–Little relationship</span></div>
     </aside>
     <main>
-      <div class="map-header"><div><span class="eyebrow">LINEAGE MAP</span><h2 id="view-title">Explore the connections</h2></div><div class="view-actions"><button id="isolate" disabled aria-pressed="false">Isolate lineage</button><button id="fit-selection" disabled>Fit lineage</button><button id="close-details" hidden aria-label="Close member details">✕</button></div></div>
+      <div class="map-header"><div><span class="eyebrow">LINEAGE MAP</span><h2 id="view-title">Explore the connections</h2></div><div class="view-actions"><button id="isolate" disabled aria-pressed="false">Isolate lineage</button><button id="fit-selection" disabled>Fit lineage</button></div></div>
       <div id="canvas" tabindex="0" aria-label="Interactive lineage map. Drag to pan. Use plus and minus to zoom, or arrow keys to pan.">
-        <svg id="graph" aria-label="Member lineage graph"><g id="world"></g></svg>
+        <svg id="graph" aria-label="Anonymous relationship graph by pledge-class chapter"><g id="world"></g></svg>
         <div id="empty" hidden>
           <div class="empty-content">
             <svg class="lineage-mark" viewBox="0 0 420 180" aria-hidden="true">
@@ -36,9 +34,9 @@
             </svg>
             <span class="eyebrow">THETA CHAPTER · LINEAGE EXPLORER</span>
             <h2>Your lineage, thoughtfully connected.</h2>
-            <p>Open a graph file from your device to explore pledge classes, Big–Little relationships, and family lines.</p>
+            <p>Open a graph file from your device to explore pledge-class chapters and Big–Little connections. Member names and profile details are not displayed.</p>
             <button id="empty-import" class="primary-button">Choose a local graph <span aria-hidden="true">↗</span></button>
-            <div class="privacy-note"><span aria-hidden="true">◈</span><span><strong>Your data stays on your device.</strong><br>The graph is read in this browser session and is never uploaded or saved.</span></div>
+            <div class="privacy-note"><span aria-hidden="true">◈</span><span><strong>Your graph stays on your device.</strong><br>Only anonymous connections and chapter labels appear in the map.</span></div>
           </div>
         </div>
         <div class="map-tools"><button id="zoom-out" aria-label="Zoom out" disabled>−</button><button id="zoom-level" title="Return to readable size" disabled>100%</button><button id="zoom-in" aria-label="Zoom in" disabled>+</button><span></span><button id="fit" title="Fit visible members" disabled>Fit view</button></div>
@@ -46,22 +44,21 @@
       </div>
       <footer><span id="status" role="status" aria-live="polite">Loading local graph…</span><span>Drag to pan · Scroll to move · Ctrl/⌘ + scroll to zoom</span></footer>
     </main>
-    <aside id="details" hidden aria-label="Member details"><div id="profile"></div></aside>
   </div>
   <dialog id="feedback-dialog" aria-labelledby="feedback-title">
     <form id="feedback-form">
       <div class="dialog-heading"><div><span class="eyebrow">LOCAL REVIEW NOTE</span><h2 id="feedback-title">Suggest a correction</h2></div><button id="feedback-close" type="button" class="dialog-close" aria-label="Close">×</button></div>
-      <p class="dialog-intro">Record a proposed change or critique for a lineage curator. This creates a file on your device; it does not edit the graph or send anything online.</p>
+      <p class="dialog-intro">Select an anonymous point on the map and describe the connection you think needs review. The note contains chapter and position references only; it is saved to your device and never submitted online.</p>
       <label for="feedback-type">What needs review?</label>
-      <select id="feedback-type"><option value="relationship">Big–Little relationship</option><option value="member">Member name or pledge class</option><option value="role">Leadership role</option><option value="source">Source or historical interpretation</option><option value="other">Other critique</option></select>
-      <label for="feedback-member">Member in question</label>
+      <select id="feedback-type"><option value="relationship">Big–Little relationship</option><option value="missing">Missing connection</option><option value="other">Other lineage critique</option></select>
+      <label for="feedback-member">Map point</label>
       <select id="feedback-member" required></select>
-      <label for="feedback-related">Related member <span>(optional)</span></label>
+      <label for="feedback-related">Related map point <span>(optional)</span></label>
       <select id="feedback-related"><option value="">Not applicable</option></select>
-      <label for="feedback-note">Proposed correction or critique</label>
-      <textarea id="feedback-note" rows="4" required placeholder="Describe what you believe should change, or what is uncertain."></textarea>
+      <label for="feedback-note">What should be reviewed?</label>
+      <textarea id="feedback-note" rows="4" required placeholder="Describe the connection or chapter placement to review."></textarea>
       <label for="feedback-source">Source or context <span>(optional)</span></label>
-      <input id="feedback-source" type="text" placeholder="For example: yearbook, chapter record, first-hand confirmation">
+      <input id="feedback-source" type="text" placeholder="A source or historical context">
       <div class="dialog-actions"><button id="feedback-cancel" type="button">Cancel</button><button class="primary-button" type="submit">Download review note</button></div>
     </form>
   </dialog>

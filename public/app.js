@@ -15,30 +15,36 @@ function svgEl(tag, attrs = {}, text) {
   return node;
 }
 const canvas = $('canvas'), world = $('world');
-let graph, index, points = new Map(), selected = null, isolated = false, activeClass = null, reviewIds = new Set();
+let graph, index, points = new Map(), selected = null, isolated = false, activeClass = null;
 let family = null, visibleIds = new Set(), nodeElements = new Map(), edgeElements = [];
+let feedbackRefs = new Map(), feedbackTokenByNode = new Map();
 let camera = {x: 0, y: 0, scale: 0.85}, miniBounds, miniWindow;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 function load(raw) {
   const parsed = Lineage.normalize(raw); // Validate before replacing a working graph.
   graph = parsed; index = Lineage.model(graph);
-  reviewIds = new Set(graph.edges.filter(edge => edge.review_required).flatMap(edge => [edge.source, edge.target]));
-  ['search','overview','recent','role','clear','zoom-out','zoom-level','zoom-in','fit','feedback-open'].forEach(id => { $(id).disabled = false; });
+  ['overview','recent','clear','zoom-out','zoom-level','zoom-in','fit','feedback-open'].forEach(id => { $(id).disabled = false; });
   selected = null; isolated = false; family = null; activeClass = null;
-  $('role').value = 'all'; $('search').value = ''; $('results').hidden = true;
-  $('details').hidden = true; $('close-details').hidden = true; $('empty').hidden = true;
-  $('summary').textContent = `${graph.nodes.length} brothers · ${new Set(graph.nodes.map(n => n.rank)).size} pledge classes`;
+  $('empty').hidden = true;
+  $('summary').textContent = `${new Set(graph.nodes.map(n => n.rank)).size} pledge-class chapters`;
   $('classes').replaceChildren();
-  const memberOptions = [el('option', {value:''}, 'Choose a member…'), ...graph.nodes.map(n => el('option', {value:n.id}, `#${n.id} · ${n.display_name} · ${n.class_name}`))];
-  $('feedback-member').replaceChildren(...memberOptions);
-  $('feedback-related').replaceChildren(el('option', {value:''}, 'Not applicable'), ...graph.nodes.map(n => el('option', {value:n.id}, `#${n.id} · ${n.display_name} · ${n.class_name}`)));
+  feedbackRefs = new Map(); feedbackTokenByNode = new Map();
   const classes = [...new Map(graph.nodes.map(n => [n.rank, n.class_name])).entries()].sort((a,b) => a[0]-b[0]);
+  const pointOptions = [el('option', {value:''}, 'Choose a map point…')];
   for (const [rank, label] of classes) {
     const button = el('button', {'data-rank': rank});
-    button.append(el('span', {class:'class-number'}, String(rank + 1).padStart(2, '0')), el('span', {}, label), el('span', {class:'class-count'}, graph.nodes.filter(n => n.rank === rank).length));
+    button.append(el('span', {class:'class-number'}, String(rank + 1).padStart(2, '0')), el('span', {}, label));
     button.addEventListener('click', () => jumpClass(rank)); $('classes').append(button);
+    const members=graph.nodes.filter(n=>n.rank===rank).sort((a,b)=>a.x-b.x||a.id-b.id);
+    members.forEach((n,i)=>{
+      const token=`${rank}:${i+1}`;
+      feedbackRefs.set(token,n.id); feedbackTokenByNode.set(n.id,token);
+      pointOptions.push(el('option',{value:token},`${label} · point ${String(i+1).padStart(2,'0')}`));
+    });
   }
+  $('feedback-member').replaceChildren(...pointOptions);
+  $('feedback-related').replaceChildren(el('option', {value:''}, 'Not applicable'), ...pointOptions.slice(1));
   render();
   // Start with readable recent cards; the minimap provides context for the full map.
   recent();
@@ -63,24 +69,13 @@ function render() {
   for (const edge of graph.edges) {
     const a=points.get(edge.source), b=points.get(edge.target);
     if(!a || !b) continue;
-    const path=svgEl('path', {d:routeEdge(edge,a,b),class:`edge ${edge.era==='post-2019'?'recent':''} ${edge.review_required?'review':''}`, 'data-source':edge.source,'data-target':edge.target});
-    if(edge.review_required) path.append(svgEl('title',{},'Historian review: the source screenshot skips a column.'));
+    const path=svgEl('path', {d:routeEdge(edge,a,b),class:'edge'});
     edgeLayer.append(path); edgeElements.push({edge,path});
   }
   for (const n of visible) {
-    const p=points.get(n.id), role=n.roles.length===2?'both':(n.roles[0]||'');
-    const unknown=n.rank>=31&&!index.parents.get(n.id).length;
-    const g=svgEl('g',{class:`node ${role} ${unknown?'unknown':''}`,transform:`translate(${p.x-Lineage.CARD_W/2},${p.y-Lineage.CARD_H/2})`,'data-id':n.id,tabindex:'0',role:'button','aria-label':`#${n.id} ${n.name}, ${n.class_name}`});
-    g.append(svgEl('title',{},`#${n.id} ${n.name} · ${n.class_name}`),svgEl('rect',{width:Lineage.CARD_W,height:Lineage.CARD_H,class:'card'}),svgEl('rect',{x:0,y:12,width:3,height:48,rx:1.5,class:'accent'}));
-    g.append(svgEl('text',{x:15,y:20,class:'meta'},`#${n.id}  ·  ${unknown?'BIG BRO UNKNOWN':n.roles.length?n.roles.join(' + ').toUpperCase():'BROTHER'}`));
-    const name = n.display_name.replace(/\*/g,'');
-    const words=name.split(' '), lines=[''];
-    for (const word of words) {
-      const last=lines.length-1;
-      if ((lines[last]+' '+word).trim().length>23 && lines[last]) lines.push(word);
-      else lines[last]=(lines[last]+' '+word).trim();
-    }
-    lines.slice(0,2).forEach((line,i)=>g.append(svgEl('text',{x:15,y:lines.length>1?41+i*17:48,class:'name'},line.length>25?line.slice(0,24)+'…':line)));
+    const p=points.get(n.id);
+    const g=svgEl('g',{class:'node',transform:`translate(${p.x},${p.y})`,tabindex:'0',role:'button','aria-label':`Unlabeled point in ${n.class_name} chapter`});
+    g.append(svgEl('title',{},`Unlabeled point · ${n.class_name}`),svgEl('circle',{r:6,class:'point'}));
     g.addEventListener('click',()=>{ if(!suppressClick) select(n.id); });
     g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();select(n.id);}});
     nodeLayer.append(g); nodeElements.set(n.id,g);
@@ -91,9 +86,9 @@ function render() {
 function routeEdge(edge, a, b) {
   const source=index.byId.get(edge.source), target=index.byId.get(edge.target);
   const outgoing=index.children.get(edge.source), incoming=index.parents.get(edge.target);
-  const port=(neighbors,id)=>neighbors.length>1?(neighbors.indexOf(id)-(neighbors.length-1)/2)*14:0;
+  const port=(neighbors,id)=>neighbors.length>1?(neighbors.indexOf(id)-(neighbors.length-1)/2)*3:0;
   const x1=a.x+port(outgoing,edge.target), x2=b.x+port(incoming,edge.source);
-  const y1=a.y+Lineage.CARD_H/2, y2=b.y-Lineage.CARD_H/2, middle=(y1+y2)/2;
+  const y1=a.y, y2=b.y, middle=(y1+y2)/2;
   const obstacles=source.rank+1<target.rank?graph.nodes.filter(n=>n.rank>source.rank&&n.rank<target.rank&&points.has(n.id)).map(n=>points.get(n.id)):[];
   const pathFor=bow=>`M${x1},${y1} C${x1+bow},${middle} ${x2+bow},${middle} ${x2},${y2}`;
   if(!obstacles.length) return pathFor(0);
@@ -103,7 +98,7 @@ function routeEdge(edge, a, b) {
       const t=step/48, mt=1-t;
       const x=mt**3*x1+3*mt**2*t*(x1+bow)+3*mt*t**2*(x2+bow)+t**3*x2;
       const y=mt**3*y1+3*mt**2*t*middle+3*mt*t**2*middle+t**3*y2;
-      if(obstacles.some(p=>Math.abs(x-p.x)<Lineage.CARD_W/2+8&&Math.abs(y-p.y)<Lineage.CARD_H/2+5)) hits++;
+      if(obstacles.some(p=>Math.abs(x-p.x)<10&&Math.abs(y-p.y)<10)) hits++;
     }
     return hits;
   };
@@ -123,29 +118,23 @@ function routeEdge(edge, a, b) {
     const left=Math.min(...obstacles.map(p=>p.x))-Lineage.CARD_W/2-24;
     const right=Math.max(...obstacles.map(p=>p.x))+Lineage.CARD_W/2+24;
     const gutter=Math.abs(x1-left)+Math.abs(x2-left)<Math.abs(x1-right)+Math.abs(x2-right)?left:right;
-    const gapTop=y1+Lineage.ROW/2-12, gapBottom=y2-Lineage.ROW/2+12;
+    const gapTop=y1+Lineage.ROW/2, gapBottom=y2-Lineage.ROW/2;
     return `M${x1},${y1} C${x1},${gapTop} ${gutter},${gapTop} ${gutter},${gapTop} L${gutter},${gapBottom} C${gutter},${gapBottom} ${x2},${gapBottom} ${x2},${y2}`;
   }
   return pathFor(bestBow);
 }
 
-function roleMatch(n) {
-  const role=$('role').value;
-  return role==='all' || (role==='missing' ? n.rank>=31&&!index.parents.get(n.id).length : role==='review' ? reviewIds.has(n.id) : n.roles.includes(role));
-}
 function updateStyles() {
-  const query=$('search').value.trim();
   for (const [id,g] of nodeElements) {
-    const n=index.byId.get(id), filtered=roleMatch(n)&&(activeClass===null||n.rank===activeClass)&&(!query||Lineage.matches(n,query));
+    const n=index.byId.get(id), filtered=activeClass===null||n.rank===activeClass;
     g.classList.toggle('selected',id===selected);
     g.classList.toggle('related',!!family?.all.has(id));
     g.classList.toggle('dim',family?!family.all.has(id):!filtered);
-    g.classList.toggle('matched',!family&&filtered&&(!!query||$('role').value!=='all'||activeClass!==null));
   }
   for (const {edge,path} of edgeElements) {
     const chain=family?.all.has(edge.source)&&family?.all.has(edge.target);
     path.classList.toggle('active',!!chain);
-    path.classList.toggle('dim',family?!chain:!!query||$('role').value!=='all'||activeClass!==null);
+    path.classList.toggle('dim',family?!chain:activeClass!==null&&!(index.byId.get(edge.source).rank===activeClass||index.byId.get(edge.target).rank===activeClass));
   }
   $('isolate').disabled=selected===null; $('fit-selection').disabled=selected===null;
   $('isolate').setAttribute('aria-pressed',String(isolated));
@@ -155,55 +144,25 @@ function updateStyles() {
 
 function select(id) {
   selected=id; family=index.family(id); activeClass=null;
-  $('search').value=''; $('results').hidden=true; $('role').value='all';
-  $('details').hidden=false; $('close-details').hidden=false;
   if(isolated) render(); else updateStyles();
   const n=index.byId.get(id);
-  $('view-title').textContent=`${n.display_name}’s lineage`;
-  $('status').textContent=`${family.ancestors.size} ancestors · ${family.descendants.size} descendants · #${id} ${n.class_name}`;
-  profile(n); center(id,Math.max(camera.scale,.9));
-}
-
-function profile(n) {
-  const box=$('profile');box.replaceChildren();
-  box.append(el('span',{class:'eyebrow'},`ROSTER #${n.id} / ${n.class_name.toUpperCase()}`),el('h2',{},n.name));
-  const badges=el('div',{class:'badges'});
-  n.roles.forEach(role=>badges.append(el('span',{class:'badge'},role==='president'?'Chapter President':'Sensei')));box.append(badges);
-  const counts=el('div',{class:'counts'});
-  [[family.ancestors.size,'Ancestors'],[family.descendants.size,'Descendants']].forEach(([num,label])=>{const c=el('div');c.append(el('strong',{},num),el('span',{},label));counts.append(c);});box.append(counts);
-  const focus=el('button',{class:'inspector-action'},'Explore just this lineage');focus.addEventListener('click',()=>{isolated=true;render();center(n.id,.95);});box.append(focus);
-  function links(ids, title, collapsible=false) {
-    const section=el(collapsible?'details':'section');
-    section.append(el(collapsible?'summary':'h3',{},title));
-    if(!ids.length) section.append(el('p',{},'No recorded relationship.'));
-    for(const id of ids) {
-      const other=index.byId.get(id), button=el('button',{class:'member-link'},other.display_name);
-      button.append(el('small',{},`#${id} · ${other.class_name}`));button.addEventListener('click',()=>select(id));section.append(button);
-    }
-    box.append(section);
-  }
-  links(index.parents.get(n.id),'Big Bros');links(index.children.get(n.id),'Littles');
-  if(graph.edges.some(e=>e.review_required&&(e.target===n.id||e.source===n.id))) box.append(el('p',{class:'warning'},'The screenshot skips a column before this connection. A historian should confirm whether this is a direct Big/Little relationship. The dashed edge marks that uncertainty.'));
-  if(n.rank>1&&!index.parents.get(n.id).length) box.append(el('p',{class:'warning'},'No Big Bro is recorded for this member. This is a gap in the sources, not a confirmed founding ancestor.'));
-  links([...family.ancestors].sort((a,b)=>a-b),'All ancestors',true);
-  links([...family.descendants].sort((a,b)=>a-b),'All descendants',true);
-  const eras=new Set(graph.edges.filter(e=>e.source===n.id||e.target===n.id).map(e=>e.era));
-  box.append(el('p',{class:'provenance'},'Sources: '+[...(eras.has('pre-2019')?['2019 lineage diagram']:[]),...(eras.has('post-2019')?['post-2019 screenshot']:[])].join(' · ')+'. Missing links remain unfilled.'));
+  $('view-title').textContent=`${n.class_name} chapter · lineage highlighted`;
+  $('status').textContent='A connected lineage is highlighted; names and member details are hidden.';
+  center(id,Math.max(camera.scale,.9));
 }
 
 function reset() {
   if(!graph)return;
   selected=null;family=null;isolated=false;activeClass=null;
-  $('search').value='';$('results').hidden=true;$('role').value='all';$('details').hidden=true;$('close-details').hidden=true;
   $('view-title').textContent='Explore the connections';
-  $('status').textContent=`${graph.nodes.length} members · ${graph.edges.length} recorded relationships`;
+  $('status').textContent='Relationship map · member details hidden';
   render();
 }
 function jumpClass(rank) {
   reset();activeClass=rank;updateStyles();
   const group=graph.nodes.filter(n=>n.rank===rank).sort((a,b)=>a.x-b.x);
   $('view-title').textContent=group[0].class_name+' class';
-  $('status').textContent=`${group.length} members · Select a card or search to trace a lineage`;
+  $('status').textContent='Chapter highlighted · select a point to trace its connections';
   center(group[Math.floor(group.length/2)].id,.85);
 }
 function recent() {
@@ -279,27 +238,8 @@ canvas.addEventListener('keydown',e=>{
 });
 new ResizeObserver(()=>transform()).observe(canvas);
 
-$('search').addEventListener('input',()=>{
-  if(!graph)return;
-  const q=$('search').value.trim(), results=$('results');results.replaceChildren();results.hidden=!q;
-  if(!q){updateStyles();return;}
-  const matched=graph.nodes.filter(n=>Lineage.matches(n,q)&&roleMatch(n));
-  for(const n of matched.slice(0,20)) {const b=el('button',{class:'result'},n.name);b.append(el('span',{},`#${n.id} · ${n.class_name}`));b.addEventListener('click',()=>select(n.id));results.append(b);}
-  if(!matched.length)results.append(el('p',{},'No matching members. Try a name or roster number.'));
-  else if(matched.length>20)results.append(el('p',{},`${matched.length} matches · keep typing to narrow the list`));
-  updateStyles();
-});
-$('search').addEventListener('keydown',e=>{if(e.key==='Escape')$('results').hidden=true;else if(e.key==='Enter')$('results').querySelector('button')?.click();else if(e.key==='ArrowDown'){e.preventDefault();$('results').querySelector('button')?.focus();}});
-document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap'))$('results').hidden=true;});
-$('role').addEventListener('change',()=>{
-  if(!graph)return;
-  const role=$('role').value;reset();$('role').value=role;updateStyles();
-  const matches=graph.nodes.filter(roleMatch);$('status').textContent=`${matches.length} matching members`;
-  if(matches.length) {center(matches[0].id,.9);$('view-title').textContent=role==='all'?'Everyone':$('role').selectedOptions[0].textContent;}
-});
 $('isolate').addEventListener('click',()=>{if(selected===null)return;isolated=!isolated;render();center(selected,.95);});
 $('fit-selection').addEventListener('click',()=>{if(family)fit(family.all);});
-$('close-details').addEventListener('click',()=>{$('details').hidden=true;$('close-details').hidden=true;});
 $('clear').addEventListener('click',reset);
 $('recent').addEventListener('click',recent);
 $('overview').addEventListener('click',()=>{reset();fit();$('view-title').textContent='The full lineage';});
@@ -318,22 +258,22 @@ function setTheme(theme) {
 }
 $('theme-toggle').addEventListener('click',()=>setTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'));
 $('feedback-open').addEventListener('click',()=>{
-  if(selected !== null) $('feedback-member').value = String(selected);
+  if(selected !== null) $('feedback-member').value = feedbackTokenByNode.get(selected);
   $('feedback-dialog').showModal();
 });
 $('feedback-close').addEventListener('click',()=>$('feedback-dialog').close());
 $('feedback-cancel').addEventListener('click',()=>$('feedback-dialog').close());
 $('feedback-form').addEventListener('submit',e=>{
   e.preventDefault();
-  const member = index.byId.get(Number($('feedback-member').value));
-  const relatedId = Number($('feedback-related').value);
+  const member = index.byId.get(feedbackRefs.get($('feedback-member').value));
+  const relatedId = feedbackRefs.get($('feedback-related').value);
   const related = relatedId ? index.byId.get(relatedId) : null;
   const note = {
     schema_version: 1,
     created_at: new Date().toISOString(),
     kind: $('feedback-type').value,
-    member: {id: member.id, name: member.name, pledge_class: member.class_name},
-    related_member: related ? {id: related.id, name: related.name, pledge_class: related.class_name} : null,
+    point: Lineage.anonymousReference(graph.nodes,member.id),
+    related_point: related ? Lineage.anonymousReference(graph.nodes,related.id) : null,
     proposal: $('feedback-note').value.trim(),
     source_or_context: $('feedback-source').value.trim() || null,
     status: 'needs_historian_review'
@@ -342,7 +282,7 @@ $('feedback-form').addEventListener('submit',e=>{
   const url = URL.createObjectURL(blob), link = el('a', {href:url, download:`lineage-review-${new Date().toISOString().slice(0,10)}.json`});
   document.body.append(link); link.click(); link.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
   $('feedback-dialog').close();
-  $('status').textContent = `Review note downloaded for #${member.id} · it has not changed the lineage.`;
+  $('status').textContent = 'Anonymous review note downloaded; it has not changed the lineage.';
 });
 try {if(globalThis.LINEAGE_DATA)load(globalThis.LINEAGE_DATA);else{$('empty').hidden=false;$('status').textContent='No graph loaded · your data stays on this device.';}}
 catch(error){$('empty').hidden=false;$('status').textContent=error.message;}
