@@ -25,8 +25,8 @@ function graphFromSource(source) {
   const idBySource = new Map(source.members.map((member, i) => [member.id, i + 1]));
   return {
     nodes: source.members.map((member, i) => ({
-      id: i + 1, display_name: member.name, class_name: member.chapter,
-      rank: source.chapters.indexOf(member.chapter), x: member.layout_x, roles: member.roles,
+      id: i + 1, display_name: member.name, class_name: member.class,
+      rank: source.classes.indexOf(member.class), x: member.layout_x, roles: member.roles,
     })),
     edges: source.edges.map(edge => ({source: idBySource.get(edge.source), target: idBySource.get(edge.target)})),
   };
@@ -66,7 +66,7 @@ function load(raw) {
   closeSearch();
   showEmptyDetails();
   $('empty').hidden = true;
-  $('summary').textContent = `${new Set(graph.nodes.map(n => n.rank)).size} pledge-class chapters`;
+  $('summary').textContent = `${new Set(graph.nodes.map(n => n.rank)).size} pledge classes`;
   $('classes').replaceChildren();
   const classes = [...new Map(graph.nodes.map(n => [n.rank, n.class_name])).entries()].sort((a,b) => a[0]-b[0]);
   for (const [rank, label] of classes) {
@@ -105,7 +105,7 @@ function render() {
     const p=points.get(n.id);
     const roleClass=n.roles.includes('president')&&n.roles.includes('sensei')?'both':n.roles[0]||'';
     const roleLabel=roleClass==='both'?'President and Sensei':roleClass==='president'?'President':roleClass==='sensei'?'Sensei':'';
-    const g=svgEl('g',{class:`node ${roleClass}`,transform:`translate(${p.x},${p.y})`,tabindex:'0',role:'button','aria-label':`${n.display_name}, ${n.class_name} chapter${roleLabel?`, ${roleLabel}`:''}`});
+    const g=svgEl('g',{class:`node ${roleClass}`,transform:`translate(${p.x},${p.y})`,tabindex:'0',role:'button','aria-label':`${n.display_name}, ${n.class_name} class${roleLabel?`, ${roleLabel}`:''}`});
     g.append(svgEl('title',{},`${n.display_name} · ${n.class_name}`),svgEl('rect',{x:-Lineage.CARD_W/2,y:-Lineage.CARD_H/2,width:Lineage.CARD_W,height:Lineage.CARD_H,class:'card'}));
     const name=svgEl('text',{x:0,'text-anchor':'middle',class:'name'});
     const lines=[];
@@ -187,7 +187,7 @@ function select(id) {
   selected=id; family=index.family(id); activeClass=null;
   if(isolated) render(); else updateStyles();
   const n=index.byId.get(id);
-  $('view-title').textContent=`${n.class_name} chapter · lineage highlighted`;
+  $('view-title').textContent=`${n.class_name} class · lineage highlighted`;
   $('status').textContent='Connected relationships highlighted.';
   renderDetails(n);
   center(id,Math.max(camera.scale,.9));
@@ -219,11 +219,11 @@ function searchMembers() {
   const matches = graph.nodes.filter(n => `${n.display_name} ${n.class_name}`.toLocaleLowerCase().includes(query))
     .sort((a, b) => a.display_name.localeCompare(b.display_name) || a.rank - b.rank);
   if (!matches.length) {
-    results.append(el('p', {}, 'No members or chapters found.'));
+    results.append(el('p', {}, 'No members or classes found.'));
   } else {
     for (const n of matches.slice(0, 30)) {
       const result = el('button', {class:'result', type:'button', role:'option'});
-      result.append(el('strong', {}, n.display_name), el('span', {}, `${n.class_name} chapter`));
+      result.append(el('strong', {}, n.display_name), el('span', {}, `${n.class_name} class`));
       result.addEventListener('click', () => {
         closeSearch();
         select(n.id);
@@ -244,7 +244,7 @@ function showEmptyDetails() {
   aside.append(el('div', {class:'details-empty'}, ''));
   const content = aside.firstElementChild;
   content.append(el('span', {class:'eyebrow'}, 'LINEAGE DETAILS'), el('h2', {}, 'Explore a lineage'),
-    el('p', {}, graph ? 'Search for a member or select a node to see their chapter, leadership role, Bigs, Littles, and connected lineage.' : 'Load the graph to explore member relationships.'));
+    el('p', {}, graph ? 'Search for a member or select a node to see their class, leadership role, Bigs, Littles, and connected lineage.' : 'Load the graph to explore member relationships.'));
 }
 
 function renderDetails(member) {
@@ -253,7 +253,7 @@ function renderDetails(member) {
   aside.replaceChildren();
   const heading = el('div', {class:'details-heading'});
   const title = el('div');
-  title.append(el('span', {class:'eyebrow'}, `${member.class_name.toUpperCase()} CHAPTER`), el('h2', {}, member.display_name));
+  title.append(el('span', {class:'eyebrow'}, `${member.class_name.toUpperCase()} CLASS`), el('h2', {}, member.display_name));
   const close = el('button', {class:'details-close', type:'button', 'aria-label':'Close member details'}, '×');
   close.addEventListener('click', () => aside.classList.remove('open'));
   heading.append(title, close);
@@ -272,23 +272,23 @@ function renderDetails(member) {
       const related = index.byId.get(id);
       if (!related) continue;
       const button = el('button', {class:'member-link', type:'button'});
-      button.append(el('span', {}, related.display_name), el('small', {}, `${related.class_name} chapter`));
+      button.append(el('span', {}, related.display_name), el('small', {}, `${related.class_name} class`));
       button.addEventListener('click', () => select(id));
       section.append(button);
     }
     aside.append(section);
   };
-  const sortByChapter = ids => [...ids].sort((a,b) => index.byId.get(a).rank - index.byId.get(b).rank || index.byId.get(a).display_name.localeCompare(index.byId.get(b).display_name));
-  addSection('Bigs', sortByChapter(index.parents.get(member.id)), 'No Big relationship recorded.');
-  addSection('Littles', sortByChapter(index.children.get(member.id)), 'No Little relationships recorded.');
-  addSection('Ancestors', sortByChapter(family.ancestors), 'No ancestors recorded.');
-  addSection('Descendants', sortByChapter(family.descendants), 'No descendants recorded.');
+  const sortByClass = ids => [...ids].sort((a,b) => index.byId.get(a).rank - index.byId.get(b).rank || index.byId.get(a).display_name.localeCompare(index.byId.get(b).display_name));
+  addSection('Bigs', sortByClass(index.parents.get(member.id)), 'No Big relationship recorded.');
+  addSection('Littles', sortByClass(index.children.get(member.id)), 'No Little relationship recorded.');
+  addSection('Ancestors', sortByClass(family.ancestors), 'No ancestors recorded.');
+  addSection('Descendants', sortByClass(family.descendants), 'No descendants recorded.');
 }
 function jumpClass(rank) {
   reset();activeClass=rank;updateStyles();
   const group=graph.nodes.filter(n=>n.rank===rank).sort((a,b)=>a.x-b.x);
   $('view-title').textContent=group[0].class_name+' class';
-  $('status').textContent='Chapter highlighted · select a member to trace their connections';
+  $('status').textContent='Class highlighted · select a member to trace their connections';
   center(group[Math.floor(group.length/2)].id,.85);
 }
 function recent() {

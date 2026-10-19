@@ -16,7 +16,7 @@ to `python3 -m venv`; the Python scripts use only the standard library. Run
 `make help` to see all available commands.
 
 The canonical, sanitized source is [`source/lineage.json`](source/lineage.json). It
-contains stable opaque IDs, display names, pledge-class chapter, President/Sensei
+contains stable opaque IDs, display names, pledge class, President/Sensei
 roles, layout positions, and relationship edges only. It intentionally excludes
 roster numbers and all contact, location, career, and other directory fields. The
 preparation script validates this file and writes the viewer's preloaded graph to
@@ -24,7 +24,7 @@ ignored `public/data/`; these generated files must not be committed.
 
 ## Contribute a lineage update
 
-For a guided edit, open **Edit lineage** in the viewer. Add members with their chapter
+For a guided edit, open **Edit lineage** in the viewer. Add members with their class
 and optional President/Sensei role; search for a Big and Little to add a relationship,
 or remove a recorded relationship. The graph updates locally as you work. Use
 **Download lineage.json for PR**, replace `source/lineage.json` with the downloaded
@@ -32,8 +32,8 @@ file, run the checks below, and open a pull request. Nothing is written to the h
 site from the editor.
 
 You can also edit `source/lineage.json` directly in a fork. Keep existing member IDs
-unchanged; add new members with UUIDv4 IDs. The chapter array defines the chronological
-class order. An edge's `source` is the Big Bro and its `target` is the Little. Multiple
+unchanged; add new members with UUIDv4 IDs. The `classes` array defines the chronological
+class order. Each member's `class` value must match one of those entries. An edge's `source` is the Big Bro and its `target` is the Little. Multiple
 Big Bros are supported. Do not add fields to the schema or include roster numbers or
 directory information.
 
@@ -47,8 +47,8 @@ make build
 ```
 
 The validator rejects unknown fields, duplicate/invalid IDs, invalid roles, missing
-edge endpoints, duplicate/self relationships, and edges within the same chapter or
-backwards in chapter order. PR CI runs the same validation and tests. Once merged, the
+edge endpoints, duplicate/self relationships, and edges within the same class or
+backwards in class order. PR CI runs the same validation and tests. Once merged, the
 sanitized source is what the hosted viewer deploys; no private reconciliation files
 are needed by contributors.
 

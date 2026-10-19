@@ -52,7 +52,7 @@ test('public viewer renders member names without roster IDs, roles, or profile U
   assert.match(app,/n\.display_name\.split/);
   assert.match(app,/roleClass==='both'/);
   assert.match(html,/President &amp; Sensei/);
-  assert.match(app,/aria-label':`\$\{n\.display_name\}, \$\{n\.class_name\} chapter\$\{roleLabel/);
+  assert.match(app,/aria-label':`\$\{n\.display_name\}, \$\{n\.class_name\} class\$\{roleLabel/);
   assert.doesNotMatch(app,/Roster_Number|Is_President|Is_Sensei|Primary_Email|data-source|data-target/);
   assert.doesNotMatch(html,/Member details|#profile|Show members|anonymous relationship graph/i);
 });

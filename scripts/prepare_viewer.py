@@ -10,8 +10,8 @@ from uuid import UUID
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCE = ROOT / "source/lineage.json"
-ROOT_FIELDS = {"schema_version", "chapters", "members", "edges"}
-MEMBER_FIELDS = {"id", "name", "chapter", "roles", "layout_x"}
+ROOT_FIELDS = {"schema_version", "classes", "members", "edges"}
+MEMBER_FIELDS = {"id", "name", "class", "roles", "layout_x"}
 EDGE_FIELDS = {"source", "target"}
 ALLOWED_ROLES = {"president", "sensei"}
 
@@ -19,27 +19,27 @@ ALLOWED_ROLES = {"president", "sensei"}
 def build_graph(raw: object) -> dict:
     """Validate the contributor-facing schema and return viewer-safe data."""
     if not isinstance(raw, dict) or set(raw) != ROOT_FIELDS:
-        raise ValueError("Source must contain only schema_version, chapters, members, and edges.")
-    if type(raw["schema_version"]) is not int or raw["schema_version"] != 1:
+        raise ValueError("Source must contain only schema_version, classes, members, and edges.")
+    if type(raw["schema_version"]) is not int or raw["schema_version"] != 2:
         raise ValueError("Unsupported lineage source schema_version.")
-    chapters = raw["chapters"]
+    classes = raw["classes"]
     members = raw["members"]
     edges = raw["edges"]
-    if not isinstance(chapters, list) or not chapters or any(not isinstance(c, str) or not c.strip() for c in chapters):
-        raise ValueError("chapters must be a non-empty ordered list of names.")
-    if len(set(chapters)) != len(chapters):
-        raise ValueError("Chapter names must be unique.")
+    if not isinstance(classes, list) or not classes or any(not isinstance(c, str) or not c.strip() for c in classes):
+        raise ValueError("classes must be a non-empty ordered list of names.")
+    if len(set(classes)) != len(classes):
+        raise ValueError("Class names must be unique.")
     if not isinstance(members, list) or not members:
         raise ValueError("members must be a non-empty list.")
     if not isinstance(edges, list):
         raise ValueError("edges must be a list.")
 
-    chapter_rank = {chapter: rank for rank, chapter in enumerate(chapters)}
+    class_rank = {class_name: rank for rank, class_name in enumerate(classes)}
     ids: set[str] = set()
     viewer_nodes = []
     for member in members:
         if not isinstance(member, dict) or set(member) != MEMBER_FIELDS:
-            raise ValueError("Each member must contain only id, name, chapter, roles, and layout_x.")
+            raise ValueError("Each member must contain only id, name, class, roles, and layout_x.")
         member_id = member["id"]
         try:
             parsed_id = UUID(member_id)
@@ -51,13 +51,13 @@ def build_graph(raw: object) -> dict:
             raise ValueError("Member IDs must be unique.")
         ids.add(member_id)
         name = member["name"]
-        chapter = member["chapter"]
+        class_name = member["class"]
         roles = member["roles"]
         layout_x = member["layout_x"]
         if not isinstance(name, str) or not name.strip():
             raise ValueError("Every member needs a display name.")
-        if not isinstance(chapter, str) or chapter not in chapter_rank:
-            raise ValueError(f"Unknown chapter for member {name!r}.")
+        if not isinstance(class_name, str) or class_name not in class_rank:
+            raise ValueError(f"Unknown class for member {name!r}.")
         if (not isinstance(roles, list) or any(not isinstance(role, str) or role not in ALLOWED_ROLES for role in roles)
                 or len(set(roles)) != len(roles)):
             raise ValueError(f"Roles for {name!r} must be unique values from president/sensei.")
@@ -66,13 +66,13 @@ def build_graph(raw: object) -> dict:
         viewer_nodes.append({
             "id": len(viewer_nodes) + 1,
             "display_name": name.strip(),
-            "class_name": chapter.strip(),
-            "rank": chapter_rank[chapter],
+            "class_name": class_name.strip(),
+            "rank": class_rank[class_name],
             "x": layout_x,
             "roles": list(roles),
         })
 
-    rank_by_id = {member["id"]: chapter_rank[member["chapter"]] for member in members}
+    rank_by_id = {member["id"]: class_rank[member["class"]] for member in members}
     viewer_id_by_source_id = {member["id"]: index + 1 for index, member in enumerate(members)}
     seen_edges: set[tuple[str, str]] = set()
     viewer_edges = []
@@ -87,7 +87,7 @@ def build_graph(raw: object) -> dict:
         if source == target:
             raise ValueError("A member cannot be their own Big Bro.")
         if rank_by_id[source] >= rank_by_id[target]:
-            raise ValueError("Relationships must point from an earlier to a later chapter.")
+            raise ValueError("Relationships must point from an earlier to a later class.")
         pair = (source, target)
         if pair in seen_edges:
             raise ValueError("Duplicate Big–Little relationships are not allowed.")

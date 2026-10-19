@@ -3,8 +3,8 @@
   'use strict';
 
   const ALLOWED_ROLES = new Set(['president', 'sensei']);
-  const ROOT_KEYS = ['schema_version', 'chapters', 'members', 'edges'];
-  const MEMBER_KEYS = ['id', 'name', 'chapter', 'roles', 'layout_x'];
+  const ROOT_KEYS = ['schema_version', 'classes', 'members', 'edges'];
+  const MEMBER_KEYS = ['id', 'name', 'class', 'roles', 'layout_x'];
   const EDGE_KEYS = ['source', 'target'];
 
   function clone(value) {
@@ -15,19 +15,19 @@
     const fail = (message) => { throw new Error(message); };
     const exactKeys = (value, expected) => value && typeof value === 'object' && !Array.isArray(value)
       && Object.keys(value).sort().join('|') === [...expected].sort().join('|');
-    if (!exactKeys(source, ROOT_KEYS) || source.schema_version !== 1) fail('Source must use schema version 1 and contain only chapters, members, and edges.');
-    if (!Array.isArray(source.chapters) || !source.chapters.length || source.chapters.some(c => typeof c !== 'string' || !c.trim())) fail('Add at least one named chapter.');
-    if (new Set(source.chapters).size !== source.chapters.length) fail('Chapter names must be unique.');
+    if (!exactKeys(source, ROOT_KEYS) || source.schema_version !== 2) fail('Source must use schema version 2 and contain only classes, members, and edges.');
+    if (!Array.isArray(source.classes) || !source.classes.length || source.classes.some(c => typeof c !== 'string' || !c.trim())) fail('Add at least one named class.');
+    if (new Set(source.classes).size !== source.classes.length) fail('Class names must be unique.');
     if (!Array.isArray(source.members) || !Array.isArray(source.edges)) fail('Members and relationships must be arrays.');
-    const ranks = new Map(source.chapters.map((chapter, rank) => [chapter, rank]));
+    const ranks = new Map(source.classes.map((className, rank) => [className, rank]));
     const ids = new Set();
     for (const member of source.members) {
-      if (!exactKeys(member, MEMBER_KEYS)) fail('Members may contain only id, name, chapter, roles, and layout_x.');
+      if (!exactKeys(member, MEMBER_KEYS)) fail('Members may contain only id, name, class, roles, and layout_x.');
       if (typeof member.id !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(member.id)) fail('Member IDs must be canonical lowercase UUIDv4 values.');
       if (ids.has(member.id)) fail('Member IDs must be unique.');
       ids.add(member.id);
       if (typeof member.name !== 'string' || !member.name.trim()) fail('Every member needs a name.');
-      if (typeof member.chapter !== 'string' || !ranks.has(member.chapter)) fail(`Choose a valid chapter for ${member.name || 'the member'}.`);
+      if (typeof member.class !== 'string' || !ranks.has(member.class)) fail(`Choose a valid class for ${member.name || 'the member'}.`);
       if (!Array.isArray(member.roles) || member.roles.some(role => !ALLOWED_ROLES.has(role)) || new Set(member.roles).size !== member.roles.length) fail(`Roles for ${member.name} must be unique President/Sensei values.`);
       if (typeof member.layout_x !== 'number' || !Number.isFinite(member.layout_x)) fail(`Layout position for ${member.name} must be a finite number.`);
     }
@@ -38,7 +38,7 @@
       const little = source.members.find(member => member.id === edge.target);
       if (!big || !little) fail('Relationship references a member that does not exist.');
       if (edge.source === edge.target) fail('A member cannot be their own Big Brother.');
-      if (ranks.get(big.chapter) >= ranks.get(little.chapter)) fail('Big Brothers must be from an earlier chapter than their Little.');
+      if (ranks.get(big.class) >= ranks.get(little.class)) fail('Big Brothers must be from an earlier class than their Little.');
       const pair = `${edge.source}:${edge.target}`;
       if (pairs.has(pair)) fail('That Big/Little relationship already exists.');
       pairs.add(pair);
@@ -59,16 +59,16 @@
   function addMember(source, input, idFactory = makeUuid) {
     assertCanonical(source);
     const name = String(input.name || '').trim();
-    const chapter = input.chapter;
+    const className = input.class;
     if (!name) throw new Error('Enter a member name.');
-    if (!source.chapters.includes(chapter)) throw new Error('Choose a valid chapter.');
+    if (!source.classes.includes(className)) throw new Error('Choose a valid class.');
     const roles = [...new Set(Array.isArray(input.roles) ? input.roles : [])];
     if (roles.some(role => !ALLOWED_ROLES.has(role))) throw new Error('Roles can only be President and/or Sensei.');
-    const row = source.members.filter(member => member.chapter === chapter);
+    const row = source.members.filter(member => member.class === className);
     const layout_x = input.layout_x === undefined || input.layout_x === ''
       ? (row.length ? Math.max(...row.map(member => member.layout_x)) + 2 : 1)
       : Number(input.layout_x);
-    const member = {id: idFactory(), name, chapter, roles, layout_x};
+    const member = {id: idFactory(), name, class: className, roles, layout_x};
     const next = clone(source);
     next.members.push(member);
     assertCanonical(next);
@@ -95,7 +95,7 @@
   function searchMembers(source, query) {
     const needle = String(query || '').trim().toLocaleLowerCase();
     if (!needle) return [];
-    return source.members.filter(member => `${member.name} ${member.chapter} ${member.roles.join(' ')}`.toLocaleLowerCase().includes(needle));
+    return source.members.filter(member => `${member.name} ${member.class} ${member.roles.join(' ')}`.toLocaleLowerCase().includes(needle));
   }
 
   function mount(container, initialSource, options = {}) {
@@ -116,8 +116,8 @@
     const status = el('p', {className: 'lineage-editor__status', role: 'status', 'aria-live': 'polite'});
     const form = el('form', {className: 'lineage-editor__member-form'});
     const nameInput = el('input', {name: 'name', required: 'required', maxlength: '120', placeholder: 'Full name', 'aria-label': 'Member name'});
-    const chapterSelect = el('select', {name: 'chapter', required: 'required', 'aria-label': 'Chapter'});
-    source.chapters.forEach(chapter => chapterSelect.append(el('option', {value: chapter}, chapter)));
+    const classSelect = el('select', {name: 'class', required: 'required', 'aria-label': 'Class'});
+    source.classes.forEach(className => classSelect.append(el('option', {value: className}, className)));
     const rolesLabel = el('span', {className: 'lineage-editor__label'}, 'Leadership roles');
     const roleControls = el('div', {className: 'lineage-editor__roles'});
     ['president', 'sensei'].forEach(role => {
@@ -127,7 +127,7 @@
       roleControls.append(label);
     });
     const addMemberButton = el('button', {type: 'submit'}, 'Add member');
-    form.append(nameInput, chapterSelect, rolesLabel, roleControls, addMemberButton);
+    form.append(nameInput, classSelect, rolesLabel, roleControls, addMemberButton);
 
     const relationships = el('section', {className: 'lineage-editor__relationships'});
     relationships.append(el('h3', {}, 'Big → Little relationship'));
@@ -151,7 +151,7 @@
       const member = source.members.find(item => item.id === id);
       if (!member) return 'Unknown member';
       const duplicates = source.members.filter(item => item.name.toLocaleLowerCase() === member.name.toLocaleLowerCase()).length;
-      const qualifier = duplicates > 1 ? ` · ${member.chapter} · ${source.members.filter(item => item.chapter === member.chapter && item.name.toLocaleLowerCase() === member.name.toLocaleLowerCase()).indexOf(member) + 1}` : ` · ${member.chapter}`;
+      const qualifier = duplicates > 1 ? ` · ${member.class} · ${source.members.filter(item => item.class === member.class && item.name.toLocaleLowerCase() === member.name.toLocaleLowerCase()).indexOf(member) + 1}` : ` · ${member.class}`;
       return `${member.name}${qualifier}`;
     }
     function setStatus(message, error = false) {
@@ -194,11 +194,11 @@
       event.preventDefault();
       try {
         const roles = [...roleControls.querySelectorAll('input:checked')].map(input => input.value);
-        const result = addMember(source, {name: nameInput.value, chapter: chapterSelect.value, roles});
+        const result = addMember(source, {name: nameInput.value, class: classSelect.value, roles});
         source = result.source;
         nameInput.value = '';
         roleControls.querySelectorAll('input').forEach(input => { input.checked = false; });
-        setStatus(`Added ${result.member.name} to ${result.member.chapter}. Member ID generated; download JSON to submit a PR.`);
+        setStatus(`Added ${result.member.name} to ${result.member.class} class. Member ID generated; download JSON to submit a PR.`);
         publishChange();
         render();
       } catch (error) { setStatus(error.message, true); }

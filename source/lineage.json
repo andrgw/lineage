@@ -1,2356 +1,2316 @@
 {
-  "schema_version": 1,
-  "chapters": [
-    "Founding",
-    "Charter",
-    "Alpha",
-    "Beta",
-    "Gamma",
-    "Delta",
-    "Epsilon",
-    "Zeta",
-    "Eta",
-    "Theta",
-    "Iota",
-    "Kappa",
-    "Mu",
-    "Nu",
-    "Xi",
-    "Omicron",
-    "Pi",
-    "Rho",
-    "Sigma",
-    "Tau",
-    "Upsilon",
-    "Phi",
-    "Chi",
-    "Psi",
-    "Alpha Alpha",
-    "Alpha Beta",
-    "Alpha Gamma",
-    "Alpha Delta",
-    "Alpha Epsilon",
-    "Alpha Zeta",
-    "Alpha Eta",
-    "Alpha Theta",
-    "Alpha Iota",
-    "Alpha Kappa",
-    "Alpha Mu",
-    "Alpha Nu",
-    "Alpha Xi",
-    "Alpha Omicron"
-  ],
+  "schema_version": 2,
   "members": [
     {
       "id": "1de3cedc-21b5-472c-8ed6-5a51dc90a2a6",
       "name": "Don Chin",
-      "chapter": "Founding",
       "roles": [],
-      "layout_x": 16
+      "layout_x": 16,
+      "class": "Founding"
     },
     {
       "id": "1455bc60-1a87-433e-9e3b-f33b0c730ebe",
       "name": "Hanns Lee",
-      "chapter": "Founding",
       "roles": [],
-      "layout_x": 19
+      "layout_x": 19,
+      "class": "Founding"
     },
     {
       "id": "75fec6b1-009b-4e7c-abf0-553144ad2f6d",
       "name": "Ernie Sibal",
-      "chapter": "Founding",
       "roles": [],
-      "layout_x": 6.25
+      "layout_x": 6.25,
+      "class": "Founding"
     },
     {
       "id": "ac462575-3ef2-46ba-9a0b-d3a220abd1b3",
       "name": "Alan Tien",
-      "chapter": "Founding",
       "roles": [],
-      "layout_x": 13
+      "layout_x": 13,
+      "class": "Founding"
     },
     {
       "id": "4f53b2aa-48a5-40cc-a43f-6f893b34d64d",
       "name": "Yi-Fang Yen",
-      "chapter": "Founding",
       "roles": [],
-      "layout_x": 22
+      "layout_x": 22,
+      "class": "Founding"
     },
     {
       "id": "ef33453c-9977-41ff-957c-9772adbea3c5",
       "name": "Michael Yun",
-      "chapter": "Founding",
       "roles": [],
-      "layout_x": 10
+      "layout_x": 10,
+      "class": "Founding"
     },
     {
       "id": "021627d6-9eee-4fda-b90c-1a331b786c16",
       "name": "Andy Chang",
-      "chapter": "Charter",
       "roles": [],
-      "layout_x": 13
+      "layout_x": 13,
+      "class": "Charter"
     },
     {
       "id": "34a46220-3eb9-4498-9015-84f896282749",
       "name": "Anthony Chang",
-      "chapter": "Charter",
       "roles": [],
-      "layout_x": 26
+      "layout_x": 26,
+      "class": "Charter"
     },
     {
       "id": "23b0bbf6-1e6c-446e-8ca2-22eb851a08b7",
       "name": "David Chang",
-      "chapter": "Charter",
       "roles": [],
-      "layout_x": 9
+      "layout_x": 9,
+      "class": "Charter"
     },
     {
       "id": "30fc1524-4f85-4d52-878c-eb501c31a1c7",
       "name": "Eric Del Rosario",
-      "chapter": "Charter",
       "roles": [],
-      "layout_x": 5
+      "layout_x": 5,
+      "class": "Charter"
     },
     {
       "id": "1c3b8a04-ef33-4721-a88e-70e23cf73bca",
       "name": "Harrison Hsieh",
-      "chapter": "Charter",
       "roles": [],
-      "layout_x": 16
+      "layout_x": 16,
+      "class": "Charter"
     },
     {
       "id": "ef592268-07d1-4397-85a5-6c365c287f3d",
       "name": "Richard Hung",
-      "chapter": "Charter",
       "roles": [
         "sensei"
       ],
-      "layout_x": 20
+      "layout_x": 20,
+      "class": "Charter"
     },
     {
       "id": "2eb7aba0-be16-4ef2-b8e0-cc7f7c74b986",
       "name": "Eugene Iwami",
-      "chapter": "Charter",
       "roles": [],
-      "layout_x": 2
+      "layout_x": 2,
+      "class": "Charter"
     },
     {
       "id": "5a00624c-2bcb-44bd-bfc2-e822749ccf73",
       "name": "David Lee",
-      "chapter": "Charter",
       "roles": [],
-      "layout_x": 14.5
+      "layout_x": 14.5,
+      "class": "Charter"
     },
     {
       "id": "f1fafb02-bfea-4ead-a8ed-1798ff1ce7b3",
       "name": "David Lin",
-      "chapter": "Charter",
       "roles": [],
-      "layout_x": 17.5
+      "layout_x": 17.5,
+      "class": "Charter"
     },
     {
       "id": "6b5fe592-0382-4ad3-93ab-1bcc2e8731f6",
       "name": "Henry Miyoshi",
-      "chapter": "Charter",
       "roles": [],
-      "layout_x": 11
+      "layout_x": 11,
+      "class": "Charter"
     },
     {
       "id": "ad45144c-fea5-4886-af46-a43ce2a057ec",
       "name": "Ken Tan",
-      "chapter": "Charter",
       "roles": [],
-      "layout_x": 7.5
+      "layout_x": 7.5,
+      "class": "Charter"
     },
     {
       "id": "cfeb8796-6ffa-4f2d-ac52-2d94ef769a98",
       "name": "Jack Yu",
-      "chapter": "Charter",
       "roles": [],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Charter"
     },
     {
       "id": "ec48f3fb-179b-48d9-8de9-4acd1ed62d6a",
       "name": "Johnny Sun",
-      "chapter": "Alpha",
       "roles": [],
-      "layout_x": 9
+      "layout_x": 9,
+      "class": "Alpha"
     },
     {
       "id": "8e581a53-0d07-421a-a2ea-acacdd36d328",
       "name": "John Chang",
-      "chapter": "Alpha",
       "roles": [],
-      "layout_x": 6.25
+      "layout_x": 6.25,
+      "class": "Alpha"
     },
     {
       "id": "3b176f2f-54d6-4ca8-91f4-5e7b6a288ef2",
       "name": "Jerry Fang",
-      "chapter": "Alpha",
       "roles": [],
-      "layout_x": 22
+      "layout_x": 22,
+      "class": "Alpha"
     },
     {
       "id": "2f3b2ab4-b545-471b-9915-e721c51d4ef5",
       "name": "Taro Goto",
-      "chapter": "Alpha",
       "roles": [],
-      "layout_x": 5
+      "layout_x": 5,
+      "class": "Alpha"
     },
     {
       "id": "6f944c5b-168d-4de2-9a78-2ad6dbe1ef43",
       "name": "Eugene Hong",
-      "chapter": "Alpha",
       "roles": [],
-      "layout_x": 20
+      "layout_x": 20,
+      "class": "Alpha"
     },
     {
       "id": "7ba7b7e0-fb64-4f8a-85b2-dd1197f1c3c9",
       "name": "Stan Hsu",
-      "chapter": "Alpha",
       "roles": [],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Alpha"
     },
     {
       "id": "a7662bbe-2cfb-4ef5-8247-5d69498f06ba",
       "name": "Thomas Kang",
-      "chapter": "Alpha",
       "roles": [],
-      "layout_x": 1.25
+      "layout_x": 1.25,
+      "class": "Alpha"
     },
     {
       "id": "03964242-6021-4d66-9c7a-af43d4a94da7",
       "name": "Bart Lane",
-      "chapter": "Alpha",
       "roles": [],
-      "layout_x": 7.75
+      "layout_x": 7.75,
+      "class": "Alpha"
     },
     {
       "id": "6f640b02-f19b-4f43-a35a-1f83cd44c692",
       "name": "David Li",
-      "chapter": "Alpha",
       "roles": [],
-      "layout_x": 14.5
+      "layout_x": 14.5,
+      "class": "Alpha"
     },
     {
       "id": "41190cf5-7e9b-4d73-aa87-9c62582164bf",
       "name": "Elliot Loh",
-      "chapter": "Alpha",
       "roles": [],
-      "layout_x": 16
+      "layout_x": 16,
+      "class": "Alpha"
     },
     {
       "id": "e61eb386-2b9e-4d0b-8522-c740c983b77e",
       "name": "Eddie Ong",
-      "chapter": "Alpha",
       "roles": [],
-      "layout_x": 24
+      "layout_x": 24,
+      "class": "Alpha"
     },
     {
       "id": "59d4cf6b-0b45-4370-b6da-d124fc18ab30",
       "name": "Mike Siegl",
-      "chapter": "Alpha",
       "roles": [],
-      "layout_x": 17.5
+      "layout_x": 17.5,
+      "class": "Alpha"
     },
     {
       "id": "8e24c368-5e71-4a5b-9837-862e917014d7",
       "name": "Tuck Chang",
-      "chapter": "Beta",
       "roles": [],
-      "layout_x": 26
+      "layout_x": 26,
+      "class": "Beta"
     },
     {
       "id": "1871f9db-01e9-4cf0-8ca8-ca49306f6e9c",
       "name": "Art Chow",
-      "chapter": "Beta",
       "roles": [],
-      "layout_x": 1.25
+      "layout_x": 1.25,
+      "class": "Beta"
     },
     {
       "id": "5151cb7c-eb28-459c-8f82-e195e4b09c8c",
       "name": "Joe Hsu",
-      "chapter": "Beta",
       "roles": [],
-      "layout_x": 18.5
+      "layout_x": 18.5,
+      "class": "Beta"
     },
     {
       "id": "0ea2ffde-13b9-4498-82e6-059cef5f2bf6",
       "name": "Ryokei Imai",
-      "chapter": "Beta",
       "roles": [],
-      "layout_x": 14.5
+      "layout_x": 14.5,
+      "class": "Beta"
     },
     {
       "id": "d77376e7-d124-4514-a269-b9ba0c3b24b8",
       "name": "Jay Lee",
-      "chapter": "Beta",
       "roles": [],
-      "layout_x": 4
+      "layout_x": 4,
+      "class": "Beta"
     },
     {
       "id": "ddf92c75-6bc5-471a-bdca-8281f598ad26",
       "name": "James Ng",
-      "chapter": "Beta",
       "roles": [],
-      "layout_x": 6.75
+      "layout_x": 6.75,
+      "class": "Beta"
     },
     {
       "id": "a4e12677-ab72-411d-8b94-aa261ce47696",
       "name": "Jerry Chen",
-      "chapter": "Gamma",
       "roles": [],
-      "layout_x": 11
+      "layout_x": 11,
+      "class": "Gamma"
     },
     {
       "id": "76a8e463-a789-4e14-9c25-994eb4344d42",
       "name": "Mauro Ruffy",
-      "chapter": "Gamma",
       "roles": [],
-      "layout_x": 1.25
+      "layout_x": 1.25,
+      "class": "Gamma"
     },
     {
       "id": "ccb4a019-70ed-454c-bd43-becc437e3dac",
       "name": "Tuan Nguyen",
-      "chapter": "Gamma",
       "roles": [],
-      "layout_x": 13
+      "layout_x": 13,
+      "class": "Gamma"
     },
     {
       "id": "07cc075a-4e63-4821-8c86-28da8508f7f4",
       "name": "Peter Peng",
-      "chapter": "Gamma",
       "roles": [
         "sensei"
       ],
-      "layout_x": 4.75
+      "layout_x": 4.75,
+      "class": "Gamma"
     },
     {
       "id": "45b6d062-91b8-425c-a915-5f70c7e33fad",
       "name": "Mark Shieh",
-      "chapter": "Gamma",
       "roles": [],
-      "layout_x": 17.5
+      "layout_x": 17.5,
+      "class": "Gamma"
     },
     {
       "id": "2b852577-28b6-4185-beeb-1a45c98c6e4c",
       "name": "Ken Wong",
-      "chapter": "Gamma",
       "roles": [],
-      "layout_x": 14.5
+      "layout_x": 14.5,
+      "class": "Gamma"
     },
     {
       "id": "c671d2ca-81e6-4180-ba5a-a58832823769",
       "name": "Alan Young",
-      "chapter": "Gamma",
       "roles": [],
-      "layout_x": 6.75
+      "layout_x": 6.75,
+      "class": "Gamma"
     },
     {
       "id": "bac602ab-4e44-4ad2-b150-bd4252e1f515",
       "name": "Evan Chen",
-      "chapter": "Delta",
       "roles": [],
-      "layout_x": 1.25
+      "layout_x": 1.25,
+      "class": "Delta"
     },
     {
       "id": "48518779-ba08-4653-be6e-aad0de2b2936",
       "name": "Gallant Chen",
-      "chapter": "Delta",
       "roles": [],
-      "layout_x": 7.5
+      "layout_x": 7.5,
+      "class": "Delta"
     },
     {
       "id": "76a0cde0-9f92-4fe2-b949-766ef41e4173",
       "name": "Jon Chen",
-      "chapter": "Delta",
       "roles": [],
-      "layout_x": 2.5
+      "layout_x": 2.5,
+      "class": "Delta"
     },
     {
       "id": "9c82401c-89bd-4e35-b902-f154b1115b1a",
       "name": "Don Chennavasin",
-      "chapter": "Delta",
       "roles": [
         "sensei"
       ],
-      "layout_x": 17.5
+      "layout_x": 17.5,
+      "class": "Delta"
     },
     {
       "id": "83a19532-5021-4f3d-b96b-a3180f356ac8",
       "name": "Jason Hondo",
-      "chapter": "Delta",
       "roles": [],
-      "layout_x": 4.75
+      "layout_x": 4.75,
+      "class": "Delta"
     },
     {
       "id": "3dd01d07-4b70-49a5-8dc1-394efc016668",
       "name": "Yosup Joo",
-      "chapter": "Delta",
       "roles": [],
-      "layout_x": 9
+      "layout_x": 9,
+      "class": "Delta"
     },
     {
       "id": "846576fb-23d2-46da-b514-24ab00ba0e0f",
       "name": "Chong Kim",
-      "chapter": "Delta",
       "roles": [],
-      "layout_x": 11
+      "layout_x": 11,
+      "class": "Delta"
     },
     {
       "id": "cb1facf2-e401-482d-a06d-2535be2e4ff4",
       "name": "Yul Kwon",
-      "chapter": "Delta",
       "roles": [],
-      "layout_x": 6
+      "layout_x": 6,
+      "class": "Delta"
     },
     {
       "id": "cc52b43c-78b2-48a8-bb38-37add8c281a5",
       "name": "Jason Liu",
-      "chapter": "Delta",
       "roles": [
         "sensei"
       ],
-      "layout_x": 16
+      "layout_x": 16,
+      "class": "Delta"
     },
     {
       "id": "4790ed2e-898c-4eed-8313-febf61708fb0",
       "name": "Eddie Min",
-      "chapter": "Delta",
       "roles": [],
-      "layout_x": 26
+      "layout_x": 26,
+      "class": "Delta"
     },
     {
       "id": "ce9ebe6d-f52c-40af-b5d6-60c420dc3278",
       "name": "Jack Oak",
-      "chapter": "Delta",
       "roles": [],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Delta"
     },
     {
       "id": "0de25aa2-5387-4532-9d3d-fa0b4c87ad87",
       "name": "Edward Park",
-      "chapter": "Delta",
       "roles": [],
-      "layout_x": 13
+      "layout_x": 13,
+      "class": "Delta"
     },
     {
       "id": "4cdbfb63-4be6-4127-a55a-e8cfc418b725",
       "name": "Chung-Man Tam",
-      "chapter": "Delta",
       "roles": [],
-      "layout_x": 23
+      "layout_x": 23,
+      "class": "Delta"
     },
     {
       "id": "7d3c234d-b7e2-49e3-aab9-8e7b6e5217d2",
       "name": "Dro Hsieh",
-      "chapter": "Epsilon",
       "roles": [],
-      "layout_x": 13
+      "layout_x": 13,
+      "class": "Epsilon"
     },
     {
       "id": "9b431207-b504-465c-98b7-4f6ae095fd93",
       "name": "Andy Hsieh",
-      "chapter": "Epsilon",
       "roles": [],
-      "layout_x": 9
+      "layout_x": 9,
+      "class": "Epsilon"
     },
     {
       "id": "23d04f92-c263-4c26-97f6-e9a52c8bb8ff",
       "name": "Will Hsu",
-      "chapter": "Epsilon",
       "roles": [],
-      "layout_x": 2.75
+      "layout_x": 2.75,
+      "class": "Epsilon"
     },
     {
       "id": "0b7fdf0c-8943-4f79-a34f-25357f44f943",
       "name": "Chang Lieu",
-      "chapter": "Epsilon",
       "roles": [],
-      "layout_x": 17.5
+      "layout_x": 17.5,
+      "class": "Epsilon"
     },
     {
       "id": "d26da0a4-e4c5-4b4c-bd34-d796b56edfa7",
       "name": "William Lee",
-      "chapter": "Epsilon",
       "roles": [
         "president",
         "sensei"
       ],
-      "layout_x": 11
+      "layout_x": 11,
+      "class": "Epsilon"
     },
     {
       "id": "9d1bb7af-f5f5-4ded-9a89-5255bd5b0a54",
       "name": "Hansang Noh",
-      "chapter": "Epsilon",
       "roles": [],
-      "layout_x": 26
+      "layout_x": 26,
+      "class": "Epsilon"
     },
     {
       "id": "d52c5c1e-783c-45a3-b7ee-c16a2acc9888",
       "name": "Richard Wang",
-      "chapter": "Epsilon",
       "roles": [],
-      "layout_x": 22
+      "layout_x": 22,
+      "class": "Epsilon"
     },
     {
       "id": "183399e9-5a70-4fab-b5b2-2bff4eb48d3e",
       "name": "Keith Chan",
-      "chapter": "Zeta",
       "roles": [],
-      "layout_x": 11
+      "layout_x": 11,
+      "class": "Zeta"
     },
     {
       "id": "8baedba6-8276-4fca-b3fd-03456b104e53",
       "name": "Stan Hsu",
-      "chapter": "Zeta",
       "roles": [],
-      "layout_x": 17.5
+      "layout_x": 17.5,
+      "class": "Zeta"
     },
     {
       "id": "b4306707-367c-4742-9b1d-cbe01340cac5",
       "name": "Ed Li",
-      "chapter": "Zeta",
       "roles": [],
-      "layout_x": 4.5
+      "layout_x": 4.5,
+      "class": "Zeta"
     },
     {
       "id": "5cd96342-0799-4eb7-af85-3106f690fd5b",
       "name": "Dave Liu",
-      "chapter": "Zeta",
       "roles": [],
-      "layout_x": 26
+      "layout_x": 26,
+      "class": "Zeta"
     },
     {
       "id": "4f611f43-551b-4aa7-998c-462161a968f2",
       "name": "Chris Mah",
-      "chapter": "Zeta",
       "roles": [],
-      "layout_x": 13
+      "layout_x": 13,
+      "class": "Zeta"
     },
     {
       "id": "74af8a5d-5509-4e89-a82a-15a7d0d01825",
       "name": "Dave Wang",
-      "chapter": "Zeta",
       "roles": [],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Zeta"
     },
     {
       "id": "0650ab7b-cf13-4f00-8af9-de580ca4548d",
       "name": "Burkon Wang",
-      "chapter": "Zeta",
       "roles": [
         "president"
       ],
-      "layout_x": 24
+      "layout_x": 24,
+      "class": "Zeta"
     },
     {
       "id": "359af332-8dff-470a-a3ad-9c8a743d4487",
       "name": "Herman Yang",
-      "chapter": "Zeta",
       "roles": [],
-      "layout_x": 9
+      "layout_x": 9,
+      "class": "Zeta"
     },
     {
       "id": "ea7dcb57-cf26-4a54-8045-c03ec54fa619",
       "name": "Steve Yang",
-      "chapter": "Zeta",
       "roles": [],
-      "layout_x": 6
+      "layout_x": 6,
+      "class": "Zeta"
     },
     {
       "id": "795b7dac-e8fd-4264-8340-0184b9cbfb0d",
       "name": "Tipatat Chennavasin",
-      "chapter": "Eta",
       "roles": [],
-      "layout_x": 12
+      "layout_x": 12,
+      "class": "Eta"
     },
     {
       "id": "de36dd4f-c6c1-4cd1-a701-36f71733f77a",
       "name": "Steve Chin",
-      "chapter": "Eta",
       "roles": [],
-      "layout_x": 5.75
+      "layout_x": 5.75,
+      "class": "Eta"
     },
     {
       "id": "5e8f96eb-d0f1-4a41-b55a-8a3583e5b27c",
       "name": "Mike Lai",
-      "chapter": "Eta",
       "roles": [],
-      "layout_x": 25.25
+      "layout_x": 25.25,
+      "class": "Eta"
     },
     {
       "id": "2b644d5a-47eb-447a-a0d3-fcb0dc022528",
       "name": "Kane Lee",
-      "chapter": "Eta",
       "roles": [
         "sensei"
       ],
-      "layout_x": 17.5
+      "layout_x": 17.5,
+      "class": "Eta"
     },
     {
       "id": "73601f95-e437-44fc-baf0-3445ccc2d6b3",
       "name": "Ken Mah",
-      "chapter": "Eta",
       "roles": [],
-      "layout_x": 2
+      "layout_x": 2,
+      "class": "Eta"
     },
     {
       "id": "ee2e3c05-94c9-45c5-ab59-cc54060561bb",
       "name": "Nehal Raj",
-      "chapter": "Eta",
       "roles": [],
-      "layout_x": 24
+      "layout_x": 24,
+      "class": "Eta"
     },
     {
       "id": "25ac164b-61f6-4685-9c88-69bf1ad1129d",
       "name": "Alex Rosten",
-      "chapter": "Eta",
       "roles": [
         "president"
       ],
-      "layout_x": 22
+      "layout_x": 22,
+      "class": "Eta"
     },
     {
       "id": "500493d6-5f18-43e9-b1da-cce021c03210",
       "name": "Gilbert Tyan",
-      "chapter": "Eta",
       "roles": [],
-      "layout_x": 9
+      "layout_x": 9,
+      "class": "Eta"
     },
     {
       "id": "7d2267cd-b425-4e1e-83fe-eb90dd032ce2",
       "name": "Cary Chen",
-      "chapter": "Theta",
       "roles": [],
-      "layout_x": 7
+      "layout_x": 7,
+      "class": "Theta"
     },
     {
       "id": "bd11dd62-dd59-4854-a1ae-453dd563afd9",
       "name": "Stevie Chew",
-      "chapter": "Theta",
       "roles": [],
-      "layout_x": 10.25
+      "layout_x": 10.25,
+      "class": "Theta"
     },
     {
       "id": "3db2bff1-c498-4462-a21d-21b4c555a550",
       "name": "Robert Ferrario",
-      "chapter": "Theta",
       "roles": [],
-      "layout_x": 9
+      "layout_x": 9,
+      "class": "Theta"
     },
     {
       "id": "af25ae0b-e136-41d2-a46a-76d846d63d91",
       "name": "Steve Jue",
-      "chapter": "Theta",
       "roles": [],
-      "layout_x": 17.5
+      "layout_x": 17.5,
+      "class": "Theta"
     },
     {
       "id": "7f52d133-eef5-441a-a770-3b84927ab5e0",
       "name": "Tony Ngo",
-      "chapter": "Theta",
       "roles": [
         "president",
         "sensei"
       ],
-      "layout_x": 24
+      "layout_x": 24,
+      "class": "Theta"
     },
     {
       "id": "914cdf02-a1a7-4e2a-a68d-2857d11c7ade",
       "name": "Ian Van Reepinghen",
-      "chapter": "Theta",
       "roles": [],
-      "layout_x": 26.5
+      "layout_x": 26.5,
+      "class": "Theta"
     },
     {
       "id": "8687fd85-357d-45d4-9345-77ef5eb63983",
       "name": "Ryan Sandoval",
-      "chapter": "Theta",
       "roles": [],
-      "layout_x": 12
+      "layout_x": 12,
+      "class": "Theta"
     },
     {
       "id": "7bb61231-019d-4922-b85b-000a042b210d",
       "name": "Tony Tzeng",
-      "chapter": "Theta",
       "roles": [],
-      "layout_x": 5.75
+      "layout_x": 5.75,
+      "class": "Theta"
     },
     {
       "id": "a20596e8-25e0-44c4-98a9-9fc39b99b0c4",
       "name": "Jeff Wang",
-      "chapter": "Theta",
       "roles": [],
-      "layout_x": 20.5
+      "layout_x": 20.5,
+      "class": "Theta"
     },
     {
       "id": "c9b3e91b-307d-49ee-b33b-89e9d1cd5a43",
       "name": "Steve Wei",
-      "chapter": "Theta",
       "roles": [],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Theta"
     },
     {
       "id": "c6d00c59-6888-4c8f-ab73-f0d775c036b0",
       "name": "Eddy Chi",
-      "chapter": "Iota",
       "roles": [
         "president"
       ],
-      "layout_x": 7
+      "layout_x": 7,
+      "class": "Iota"
     },
     {
       "id": "1516653b-922a-4d62-80be-aa435c75f00b",
       "name": "Kang Han",
-      "chapter": "Iota",
       "roles": [],
-      "layout_x": 5.75
+      "layout_x": 5.75,
+      "class": "Iota"
     },
     {
       "id": "c0628440-708f-40de-aed5-c2ba381eb27e",
       "name": "Kenneth Horne",
-      "chapter": "Iota",
       "roles": [
         "sensei"
       ],
-      "layout_x": 22.5
+      "layout_x": 22.5,
+      "class": "Iota"
     },
     {
       "id": "1cdc011e-07d8-4a24-a268-d14262f2fd8a",
       "name": "John Vinh",
-      "chapter": "Iota",
       "roles": [],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Iota"
     },
     {
       "id": "a6791d46-930b-4714-83e1-d1d807d97b1c",
       "name": "Warren Wu",
-      "chapter": "Iota",
       "roles": [
         "sensei"
       ],
-      "layout_x": 9.5
+      "layout_x": 9.5,
+      "class": "Iota"
     },
     {
       "id": "34c11316-2cc1-4fdb-821e-d40b9318d572",
       "name": "Wei Hsu",
-      "chapter": "Kappa",
       "roles": [],
-      "layout_x": 26.5
+      "layout_x": 26.5,
+      "class": "Kappa"
     },
     {
       "id": "35a2f19a-8fa5-4cab-aa61-fe0cc3a85e47",
       "name": "KJ Kim",
-      "chapter": "Kappa",
       "roles": [],
-      "layout_x": 9.5
+      "layout_x": 9.5,
+      "class": "Kappa"
     },
     {
       "id": "778234f7-38fc-4a72-a916-1a7de25676c3",
       "name": "Hoon Ra",
-      "chapter": "Kappa",
       "roles": [
         "president"
       ],
-      "layout_x": 14
+      "layout_x": 14,
+      "class": "Kappa"
     },
     {
       "id": "8774370c-c9df-4c8c-a5e1-1215984ed358",
       "name": "Hai Ton",
-      "chapter": "Kappa",
       "roles": [],
-      "layout_x": 27.75
+      "layout_x": 27.75,
+      "class": "Kappa"
     },
     {
       "id": "3d7e64e1-81ff-485b-bbcb-c2b01102fbdd",
       "name": "Toan Ton",
-      "chapter": "Kappa",
       "roles": [],
-      "layout_x": 2
+      "layout_x": 2,
+      "class": "Kappa"
     },
     {
       "id": "bc086324-f937-4c83-b62f-3579626a286a",
       "name": "Ray Tsao",
-      "chapter": "Kappa",
       "roles": [
         "sensei"
       ],
-      "layout_x": 21.25
+      "layout_x": 21.25,
+      "class": "Kappa"
     },
     {
       "id": "2b79d5f8-9058-4a6f-a85b-1d3162dbed9f",
       "name": "Chien Le",
-      "chapter": "Mu",
       "roles": [],
-      "layout_x": 4.5
+      "layout_x": 4.5,
+      "class": "Mu"
     },
     {
       "id": "e2d411d3-cf1c-48c0-a315-1fffa5048552",
       "name": "Woojin Lee",
-      "chapter": "Mu",
       "roles": [],
-      "layout_x": 6.25
+      "layout_x": 6.25,
+      "class": "Mu"
     },
     {
       "id": "67952791-616a-4cec-b55e-4986b2657807",
       "name": "Yefei Lu",
-      "chapter": "Mu",
       "roles": [],
-      "layout_x": 2
+      "layout_x": 2,
+      "class": "Mu"
     },
     {
       "id": "c6e4b50a-bf04-49bd-898b-b82cdba121d3",
       "name": "Charles Srisuwananukorn",
-      "chapter": "Mu",
       "roles": [],
-      "layout_x": 24.5
+      "layout_x": 24.5,
+      "class": "Mu"
     },
     {
       "id": "6e6cb260-9cd3-4d15-ace6-1c179dd5ac9c",
       "name": "Eric Sue",
-      "chapter": "Mu",
       "roles": [
         "president"
       ],
-      "layout_x": 18.5
+      "layout_x": 18.5,
+      "class": "Mu"
     },
     {
       "id": "0149561b-b026-4c0e-99f5-c000ef64b135",
       "name": "Albert Han",
-      "chapter": "Nu",
       "roles": [
         "president",
         "sensei"
       ],
-      "layout_x": 21.25
+      "layout_x": 21.25,
+      "class": "Nu"
     },
     {
       "id": "891f65d7-6831-4dd7-948f-48d1dab33b51",
       "name": "Gilbert Hwang",
-      "chapter": "Nu",
       "roles": [],
-      "layout_x": 12
+      "layout_x": 12,
+      "class": "Nu"
     },
     {
       "id": "263f5d02-6139-43ca-8711-ae0648199dd4",
       "name": "Kelly Hwang",
-      "chapter": "Nu",
       "roles": [],
-      "layout_x": 20
+      "layout_x": 20,
+      "class": "Nu"
     },
     {
       "id": "8df2ba44-4ec0-4b70-9278-2f56259884df",
       "name": "Jeff Kim",
-      "chapter": "Nu",
       "roles": [],
-      "layout_x": 24
+      "layout_x": 24,
+      "class": "Nu"
     },
     {
       "id": "aac21296-73b7-433b-9fe7-2a26fa672ed4",
       "name": "Kenny Lee",
-      "chapter": "Nu",
       "roles": [],
-      "layout_x": 4.5
+      "layout_x": 4.5,
+      "class": "Nu"
     },
     {
       "id": "c75a6e84-18bd-42f6-80b6-e4411466d3c1",
       "name": "Matthew Liu",
-      "chapter": "Nu",
       "roles": [
         "sensei"
       ],
-      "layout_x": 26
+      "layout_x": 26,
+      "class": "Nu"
     },
     {
       "id": "52ecd70e-0348-4ff5-8843-8f6017249d48",
       "name": "Ken Moon",
-      "chapter": "Nu",
       "roles": [],
-      "layout_x": 7.25
+      "layout_x": 7.25,
+      "class": "Nu"
     },
     {
       "id": "0265946c-befc-403e-b6ca-a72fa095a15f",
       "name": "Ceron Rhee",
-      "chapter": "Nu",
       "roles": [],
-      "layout_x": 23
+      "layout_x": 23,
+      "class": "Nu"
     },
     {
       "id": "4a6e594c-0c9c-4096-8b83-37726a680069",
       "name": "John Vinyard",
-      "chapter": "Nu",
       "roles": [],
-      "layout_x": 2
+      "layout_x": 2,
+      "class": "Nu"
     },
     {
       "id": "40203538-febc-4143-abb1-40a1a795cf89",
       "name": "Eric Chen",
-      "chapter": "Xi",
       "roles": [],
-      "layout_x": 14
+      "layout_x": 14,
+      "class": "Xi"
     },
     {
       "id": "6eca67ec-0abf-4094-91da-1524d7a17abe",
       "name": "Eun Cho",
-      "chapter": "Xi",
       "roles": [],
-      "layout_x": 8.25
+      "layout_x": 8.25,
+      "class": "Xi"
     },
     {
       "id": "9789d587-42a0-4673-87e4-9833165b9841",
       "name": "Linus Chung",
-      "chapter": "Xi",
       "roles": [
         "president",
         "sensei"
       ],
-      "layout_x": 2.75
+      "layout_x": 2.75,
+      "class": "Xi"
     },
     {
       "id": "1533f7d0-384c-4383-b2da-a61c1d66c798",
       "name": "Lance Cidre",
-      "chapter": "Xi",
       "roles": [
         "sensei"
       ],
-      "layout_x": 17.5
+      "layout_x": 17.5,
+      "class": "Xi"
     },
     {
       "id": "3ba35f27-8555-47d9-bdb2-42ba62a3fe23",
       "name": "Tom Deane",
-      "chapter": "Xi",
       "roles": [],
-      "layout_x": 22.5
+      "layout_x": 22.5,
+      "class": "Xi"
     },
     {
       "id": "3cc4ac9c-fa0a-4d54-9e0a-661a28a36a7a",
       "name": "Kevin Gao",
-      "chapter": "Xi",
       "roles": [],
-      "layout_x": 9.5
+      "layout_x": 9.5,
+      "class": "Xi"
     },
     {
       "id": "48c3c82d-11f9-4881-84c4-36ebe9af20c7",
       "name": "Ambert Ho",
-      "chapter": "Xi",
       "roles": [],
-      "layout_x": 20
+      "layout_x": 20,
+      "class": "Xi"
     },
     {
       "id": "10b883e5-1f71-4c4a-b1f9-8992371464ec",
       "name": "Derek Huang",
-      "chapter": "Xi",
       "roles": [],
-      "layout_x": 21.25
+      "layout_x": 21.25,
+      "class": "Xi"
     },
     {
       "id": "cbf81517-273e-4702-b057-7c36f6d91dc8",
       "name": "Joey Kim",
-      "chapter": "Xi",
       "roles": [],
-      "layout_x": 25.5
+      "layout_x": 25.5,
+      "class": "Xi"
     },
     {
       "id": "3f07841a-225a-40e6-9be0-74f65dafab6f",
       "name": "David Lee",
-      "chapter": "Xi",
       "roles": [],
-      "layout_x": 27
+      "layout_x": 27,
+      "class": "Xi"
     },
     {
       "id": "114859f2-8b32-4499-a59f-82f380dc0505",
       "name": "Brian Nguyen",
-      "chapter": "Xi",
       "roles": [],
-      "layout_x": 4.5
+      "layout_x": 4.5,
+      "class": "Xi"
     },
     {
       "id": "fbef882c-1296-428a-9f75-4dac673069b2",
       "name": "Tim Chang",
-      "chapter": "Omicron",
       "roles": [
         "president"
       ],
-      "layout_x": 14
+      "layout_x": 14,
+      "class": "Omicron"
     },
     {
       "id": "debf7406-b35a-4822-a8da-593c0bbec5cb",
       "name": "Dan Cho",
-      "chapter": "Omicron",
       "roles": [],
-      "layout_x": 6
+      "layout_x": 6,
+      "class": "Omicron"
     },
     {
       "id": "5089da51-deb0-4694-98ea-3f2c7927244f",
       "name": "Seonkee Choi",
-      "chapter": "Omicron",
       "roles": [],
-      "layout_x": 25.5
+      "layout_x": 25.5,
+      "class": "Omicron"
     },
     {
       "id": "8f03a8b0-52c8-4eea-81e0-0637f98f34e0",
       "name": "Gene Hu",
-      "chapter": "Omicron",
       "roles": [],
-      "layout_x": 17.5
+      "layout_x": 17.5,
+      "class": "Omicron"
     },
     {
       "id": "9d1fc62a-b7c6-4c22-8396-ba319ded9730",
       "name": "Steve Ta",
-      "chapter": "Omicron",
       "roles": [],
-      "layout_x": 9.5
+      "layout_x": 9.5,
+      "class": "Omicron"
     },
     {
       "id": "9b2b2ea1-4352-4bc6-97ec-11e2e4f22318",
       "name": "Trung Vu",
-      "chapter": "Omicron",
       "roles": [],
-      "layout_x": 2.75
+      "layout_x": 2.75,
+      "class": "Omicron"
     },
     {
       "id": "2cb31ef2-a5b0-4e9b-9ce9-be64b76e6e6d",
       "name": "Mark Sun",
-      "chapter": "Pi",
       "roles": [],
-      "layout_x": 16.5
+      "layout_x": 16.5,
+      "class": "Pi"
     },
     {
       "id": "64edaa58-3413-4225-818a-4c3c4bed0149",
       "name": "Doyon Chung",
-      "chapter": "Pi",
       "roles": [],
-      "layout_x": 8.25
+      "layout_x": 8.25,
+      "class": "Pi"
     },
     {
       "id": "51cb440b-654b-462e-b93f-23d99f72e2d5",
       "name": "Don Hoang",
-      "chapter": "Pi",
       "roles": [],
-      "layout_x": 24
+      "layout_x": 24,
+      "class": "Pi"
     },
     {
       "id": "5b8d66e0-c607-4814-bbc7-7dc225cd9c35",
       "name": "Kenny Kim",
-      "chapter": "Pi",
       "roles": [
         "sensei"
       ],
-      "layout_x": 7
+      "layout_x": 7,
+      "class": "Pi"
     },
     {
       "id": "17e5ba62-4240-4b91-b498-c9ced21334e1",
       "name": "Michael Kim",
-      "chapter": "Pi",
       "roles": [
         "president"
       ],
-      "layout_x": 9.5
+      "layout_x": 9.5,
+      "class": "Pi"
     },
     {
       "id": "8aa7c70e-1bca-4b9e-b60e-365dcab49452",
       "name": "Greg Lee",
-      "chapter": "Pi",
       "roles": [],
-      "layout_x": 1.5
+      "layout_x": 1.5,
+      "class": "Pi"
     },
     {
       "id": "5938516b-9c68-4562-92ed-e68583ee0420",
       "name": "Hin Leung",
-      "chapter": "Pi",
       "roles": [],
-      "layout_x": 3.75
+      "layout_x": 3.75,
+      "class": "Pi"
     },
     {
       "id": "4af5d028-c06e-4d67-a34b-d0e2e4de12b5",
       "name": "Alan Neo",
-      "chapter": "Pi",
       "roles": [],
-      "layout_x": 20
+      "layout_x": 20,
+      "class": "Pi"
     },
     {
       "id": "0071524e-23a9-436e-90dc-241966beb5d5",
       "name": "Eric Shin",
-      "chapter": "Pi",
       "roles": [],
-      "layout_x": 2.75
+      "layout_x": 2.75,
+      "class": "Pi"
     },
     {
       "id": "a3568627-b5bc-417b-a468-c10d0bbd1ad6",
       "name": "David Bao",
-      "chapter": "Rho",
       "roles": [
         "president",
         "sensei"
       ],
-      "layout_x": 16.5
+      "layout_x": 16.5,
+      "class": "Rho"
     },
     {
       "id": "740562db-4cf0-4cbb-a61e-80dad4ea37b4",
       "name": "Alex Dao",
-      "chapter": "Rho",
       "roles": [],
-      "layout_x": 9.5
+      "layout_x": 9.5,
+      "class": "Rho"
     },
     {
       "id": "f83206d7-eb44-4dea-97f8-bf804f05696e",
       "name": "Sheppard Peng",
-      "chapter": "Rho",
       "roles": [],
-      "layout_x": 6
+      "layout_x": 6,
+      "class": "Rho"
     },
     {
       "id": "965f3d7b-97dc-411d-bb8e-72b2d911e6b9",
       "name": "Albert Rhee",
-      "chapter": "Rho",
       "roles": [],
-      "layout_x": 25.5
+      "layout_x": 25.5,
+      "class": "Rho"
     },
     {
       "id": "d3320588-6cec-4427-a537-76ffebb03d88",
       "name": "Tayvin Saks",
-      "chapter": "Rho",
       "roles": [],
-      "layout_x": 18.75
+      "layout_x": 18.75,
+      "class": "Rho"
     },
     {
       "id": "239b21ae-3da9-4ce5-92cc-c685128cf9f4",
       "name": "Philip So",
-      "chapter": "Rho",
       "roles": [],
-      "layout_x": 23
+      "layout_x": 23,
+      "class": "Rho"
     },
     {
       "id": "21427e82-f411-473f-a19a-9c8435dfe0c1",
       "name": "Arthur Yang",
-      "chapter": "Rho",
       "roles": [],
-      "layout_x": 1.5
+      "layout_x": 1.5,
+      "class": "Rho"
     },
     {
       "id": "300762b7-b71e-4806-b7d4-82df986ec9ac",
       "name": "Bryan Aphayrath",
-      "chapter": "Sigma",
       "roles": [
         "president"
       ],
-      "layout_x": 14.5
+      "layout_x": 14.5,
+      "class": "Sigma"
     },
     {
       "id": "c48db735-7656-4350-b1ed-b19797290459",
       "name": "Rajesh Broschat",
-      "chapter": "Sigma",
       "roles": [],
-      "layout_x": 13
+      "layout_x": 13,
+      "class": "Sigma"
     },
     {
       "id": "9d43011b-3399-48c3-a679-aeea40c23f0b",
       "name": "Andrew Dao",
-      "chapter": "Sigma",
       "roles": [
         "president",
         "sensei"
       ],
-      "layout_x": 20
+      "layout_x": 20,
+      "class": "Sigma"
     },
     {
       "id": "b6c92d16-da5a-41dc-9476-0c3c96d9ee24",
       "name": "Kyle Horimoto",
-      "chapter": "Sigma",
       "roles": [],
-      "layout_x": 17.25
+      "layout_x": 17.25,
+      "class": "Sigma"
     },
     {
       "id": "09aab186-5120-4bf8-a4a0-0e8b00f74186",
       "name": "Jason Jia",
-      "chapter": "Sigma",
       "roles": [],
-      "layout_x": 8.5
+      "layout_x": 8.5,
+      "class": "Sigma"
     },
     {
       "id": "3abbf54a-8c67-4fb5-be4f-daacae1cf045",
       "name": "Justin Lee",
-      "chapter": "Sigma",
       "roles": [],
-      "layout_x": 3.75
+      "layout_x": 3.75,
+      "class": "Sigma"
     },
     {
       "id": "6a49f4d2-ea0c-4bf2-b9ea-b6c103a52401",
       "name": "Solomon Lee",
-      "chapter": "Sigma",
       "roles": [],
-      "layout_x": 23
+      "layout_x": 23,
+      "class": "Sigma"
     },
     {
       "id": "23506e12-925b-48bf-88fa-bfee4d3aa1e4",
       "name": "Teddy Lee",
-      "chapter": "Sigma",
       "roles": [],
-      "layout_x": 6
+      "layout_x": 6,
+      "class": "Sigma"
     },
     {
       "id": "6f32975c-2a31-4983-a05c-1a4e65fbd863",
       "name": "Jeffrey Lock",
-      "chapter": "Sigma",
       "roles": [],
-      "layout_x": 21.5
+      "layout_x": 21.5,
+      "class": "Sigma"
     },
     {
       "id": "68e1268b-526d-4173-a042-b28d1cb604cc",
       "name": "Michael Ngo",
-      "chapter": "Sigma",
       "roles": [],
-      "layout_x": 18.75
+      "layout_x": 18.75,
+      "class": "Sigma"
     },
     {
       "id": "4eafbfaa-7e13-4953-90b3-e9be8df7d873",
       "name": "Jeff Pang",
-      "chapter": "Sigma",
       "roles": [],
-      "layout_x": 15.75
+      "layout_x": 15.75,
+      "class": "Sigma"
     },
     {
       "id": "73e2fc7b-062c-45db-b88a-6c16a8c4871f",
       "name": "Andrew Pipathsouk",
-      "chapter": "Sigma",
       "roles": [],
-      "layout_x": 10.5
+      "layout_x": 10.5,
+      "class": "Sigma"
     },
     {
       "id": "74669cfb-2a75-453a-853c-15b4de1fc410",
       "name": "Jack Yang",
-      "chapter": "Sigma",
       "roles": [],
-      "layout_x": 24.5
+      "layout_x": 24.5,
+      "class": "Sigma"
     },
     {
       "id": "3d788b2a-fa03-4056-8e2e-7d0aacb700bc",
       "name": "Alan You",
-      "chapter": "Sigma",
       "roles": [],
-      "layout_x": 1.5
+      "layout_x": 1.5,
+      "class": "Sigma"
     },
     {
       "id": "5de6170b-fa85-4725-a333-eaff4b234353",
       "name": "Martin Kim",
-      "chapter": "Tau",
       "roles": [],
-      "layout_x": 17.25
+      "layout_x": 17.25,
+      "class": "Tau"
     },
     {
       "id": "d6f7e503-d7fc-4802-9d8b-4889d62df102",
       "name": "Ramon Qiu",
-      "chapter": "Tau",
       "roles": [],
-      "layout_x": 3.75
+      "layout_x": 3.75,
+      "class": "Tau"
     },
     {
       "id": "eff3cab2-bb26-405a-881f-94f1412cbe8e",
       "name": "Joshua Wells",
-      "chapter": "Tau",
       "roles": [],
-      "layout_x": 5
+      "layout_x": 5,
+      "class": "Tau"
     },
     {
       "id": "89815636-6fb8-4bfe-a795-4ff79ffc9fe3",
       "name": "Vinh Bui",
-      "chapter": "Upsilon",
       "roles": [],
-      "layout_x": 20
+      "layout_x": 20,
+      "class": "Upsilon"
     },
     {
       "id": "0b6be168-e8f1-4036-9578-8f43eccac18e",
       "name": "Anthony Dao",
-      "chapter": "Upsilon",
       "roles": [],
-      "layout_x": 14.5
+      "layout_x": 14.5,
+      "class": "Upsilon"
     },
     {
       "id": "fcb8a049-770d-4551-8b69-b36d915ea0d8",
       "name": "Justin Hou",
-      "chapter": "Upsilon",
       "roles": [],
-      "layout_x": 23
+      "layout_x": 23,
+      "class": "Upsilon"
     },
     {
       "id": "6ccab292-0277-4d20-a419-686cc0b6d9c2",
       "name": "Andrew Kim",
-      "chapter": "Upsilon",
       "roles": [],
-      "layout_x": 5
+      "layout_x": 5,
+      "class": "Upsilon"
     },
     {
       "id": "1c3f053e-64f3-48b1-8c04-b77aeb56bca3",
       "name": "Herry Lian",
-      "chapter": "Upsilon",
       "roles": [
         "president"
       ],
-      "layout_x": 7.25
+      "layout_x": 7.25,
+      "class": "Upsilon"
     },
     {
       "id": "0edfd649-2c6e-4699-84e9-9692318b26fa",
       "name": "Jeff Lu",
-      "chapter": "Upsilon",
       "roles": [
         "president"
       ],
-      "layout_x": 13
+      "layout_x": 13,
+      "class": "Upsilon"
     },
     {
       "id": "53bc4e59-39e7-4c49-ad4d-a4c01932bdeb",
       "name": "Kevin Mo",
-      "chapter": "Upsilon",
       "roles": [
         "sensei"
       ],
-      "layout_x": 2.5
+      "layout_x": 2.5,
+      "class": "Upsilon"
     },
     {
       "id": "937b7662-425a-481e-97de-c30e7070fbc4",
       "name": "Wanjin Park",
-      "chapter": "Upsilon",
       "roles": [],
-      "layout_x": 17.25
+      "layout_x": 17.25,
+      "class": "Upsilon"
     },
     {
       "id": "bb4d1405-3da8-45b0-80c9-532eb5433130",
       "name": "Jeong Soo Sim",
-      "chapter": "Upsilon",
       "roles": [],
-      "layout_x": 25.5
+      "layout_x": 25.5,
+      "class": "Upsilon"
     },
     {
       "id": "2d6c8a9d-87ff-496d-b156-3ec62b40d2cb",
       "name": "Vang Xiong",
-      "chapter": "Upsilon",
       "roles": [
         "sensei"
       ],
-      "layout_x": 3.75
+      "layout_x": 3.75,
+      "class": "Upsilon"
     },
     {
       "id": "c55376a3-3ce3-4cdc-a67c-7994a43921b2",
       "name": "Lance Zhao",
-      "chapter": "Upsilon",
       "roles": [],
-      "layout_x": 12
+      "layout_x": 12,
+      "class": "Upsilon"
     },
     {
       "id": "4e1637f1-b201-4270-a4ee-0514c0e3a138",
       "name": "Kava Afu",
-      "chapter": "Phi",
       "roles": [],
-      "layout_x": 21
+      "layout_x": 21,
+      "class": "Phi"
     },
     {
       "id": "c78d5809-3014-49c5-8102-bfe96d6b98d4",
       "name": "Conrad Chan",
-      "chapter": "Phi",
       "roles": [],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Phi"
     },
     {
       "id": "8e1c9540-ce0f-4b87-9c63-f90805b181e0",
       "name": "Bryan Cheng",
-      "chapter": "Phi",
       "roles": [],
-      "layout_x": 18.5
+      "layout_x": 18.5,
+      "class": "Phi"
     },
     {
       "id": "f277b774-5d6e-44ef-a24e-088007b8cdd2",
       "name": "Joel Dubray",
-      "chapter": "Phi",
       "roles": [],
-      "layout_x": 15.75
+      "layout_x": 15.75,
+      "class": "Phi"
     },
     {
       "id": "a4e2de80-2e02-4f6f-beb7-752c07b11125",
       "name": "Victor Em",
-      "chapter": "Phi",
       "roles": [
         "president"
       ],
-      "layout_x": 1.5
+      "layout_x": 1.5,
+      "class": "Phi"
     },
     {
       "id": "cf7247a9-26df-4ad4-990b-da2aad83689e",
       "name": "Kurt Horimoto",
-      "chapter": "Phi",
       "roles": [],
-      "layout_x": 5
+      "layout_x": 5,
+      "class": "Phi"
     },
     {
       "id": "1888dee4-b7a6-4e4f-a031-78e9d903eb9c",
       "name": "Tony Jin",
-      "chapter": "Phi",
       "roles": [],
-      "layout_x": 13
+      "layout_x": 13,
+      "class": "Phi"
     },
     {
       "id": "d8a006b4-8f4c-49da-b6e5-e285390dd21d",
       "name": "Tommy Lee",
-      "chapter": "Phi",
       "roles": [],
-      "layout_x": 11.75
+      "layout_x": 11.75,
+      "class": "Phi"
     },
     {
       "id": "dd97a083-d0f4-499e-8959-8519786ff4c2",
       "name": "David Ngo",
-      "chapter": "Phi",
       "roles": [],
-      "layout_x": 6.25
+      "layout_x": 6.25,
+      "class": "Phi"
     },
     {
       "id": "24fae4da-5537-4775-88f2-d3c85d450af4",
       "name": "Andy Park",
-      "chapter": "Phi",
       "roles": [],
-      "layout_x": 14.25
+      "layout_x": 14.25,
+      "class": "Phi"
     },
     {
       "id": "a3796507-c231-45fa-b9e4-5888bc88145b",
       "name": "Jason Song",
-      "chapter": "Phi",
       "roles": [],
-      "layout_x": 25.5
+      "layout_x": 25.5,
+      "class": "Phi"
     },
     {
       "id": "22371217-0f46-4c1f-9ffe-f2e14aad7307",
       "name": "Calvin Tuong",
-      "chapter": "Phi",
       "roles": [],
-      "layout_x": 8.25
+      "layout_x": 8.25,
+      "class": "Phi"
     },
     {
       "id": "9dd73f95-e33d-406d-a90a-a1c0895ceb54",
       "name": "Julius Vasquez",
-      "chapter": "Phi",
       "roles": [],
-      "layout_x": 10
+      "layout_x": 10,
+      "class": "Phi"
     },
     {
       "id": "8f2ea35c-57a1-4d61-8736-cb2ef86d9b99",
       "name": "Garrett Hara",
-      "chapter": "Chi",
       "roles": [],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Chi"
     },
     {
       "id": "5c0e968a-2da3-4101-838d-7baed03a0a5a",
       "name": "David Huynh",
-      "chapter": "Chi",
       "roles": [
         "president",
         "sensei"
       ],
-      "layout_x": 1.5
+      "layout_x": 1.5,
+      "class": "Chi"
     },
     {
       "id": "eae40d0d-8b65-4408-9ad7-0db3a5127a6f",
       "name": "Jack Hwang",
-      "chapter": "Chi",
       "roles": [],
-      "layout_x": 11
+      "layout_x": 11,
+      "class": "Chi"
     },
     {
       "id": "2ed3a7df-bd49-4c73-a5ef-881f197fecde",
       "name": "Jacky Lee",
-      "chapter": "Chi",
       "roles": [],
-      "layout_x": 18.5
+      "layout_x": 18.5,
+      "class": "Chi"
     },
     {
       "id": "b121cb12-7f12-4c1e-a863-73c94cb3e363",
       "name": "Neil Luu",
-      "chapter": "Chi",
       "roles": [],
-      "layout_x": 25.5
+      "layout_x": 25.5,
+      "class": "Chi"
     },
     {
       "id": "6de34fdf-bdf3-4517-af80-89422de3ba58",
       "name": "Brandon Romero",
-      "chapter": "Chi",
       "roles": [],
-      "layout_x": 5
+      "layout_x": 5,
+      "class": "Chi"
     },
     {
       "id": "4eb36aa8-58ac-4188-acca-563e94f99fe4",
       "name": "Leo Rong",
-      "chapter": "Chi",
       "roles": [],
-      "layout_x": 6.25
+      "layout_x": 6.25,
+      "class": "Chi"
     },
     {
       "id": "3719e05f-850d-4a2f-98e4-9e00cd3c28ea",
       "name": "Tim Santos",
-      "chapter": "Chi",
       "roles": [],
-      "layout_x": 23
+      "layout_x": 23,
+      "class": "Chi"
     },
     {
       "id": "60da64e0-8ec9-4880-8771-9f77239c7be7",
       "name": "Warren Chan",
-      "chapter": "Psi",
       "roles": [],
-      "layout_x": 8.25
+      "layout_x": 8.25,
+      "class": "Psi"
     },
     {
       "id": "45d1ca4d-068c-4885-a11c-b562c42c01b8",
       "name": "Anthony Fowler",
-      "chapter": "Psi",
       "roles": [],
-      "layout_x": 23
+      "layout_x": 23,
+      "class": "Psi"
     },
     {
       "id": "bdf70613-0f20-4a5d-8328-02410eda94c3",
       "name": "Jason Kung",
-      "chapter": "Psi",
       "roles": [
         "president"
       ],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Psi"
     },
     {
       "id": "4412152e-96f9-4fe5-8088-6504e983c138",
       "name": "Gene Oetomo",
-      "chapter": "Psi",
       "roles": [
         "sensei"
       ],
-      "layout_x": 18.5
+      "layout_x": 18.5,
+      "class": "Psi"
     },
     {
       "id": "61fe7f73-5baf-4897-9a23-6d4f585b7b1e",
       "name": "Matthew Rillera",
-      "chapter": "Psi",
       "roles": [],
-      "layout_x": 13
+      "layout_x": 13,
+      "class": "Psi"
     },
     {
       "id": "2b935388-3b71-46b7-beb8-0e3356a9ef3a",
       "name": "Max Silverstein",
-      "chapter": "Psi",
       "roles": [],
-      "layout_x": 11.5
+      "layout_x": 11.5,
+      "class": "Psi"
     },
     {
       "id": "38a50c94-6020-491b-9f19-2f7790aa6420",
       "name": "Ricky Tran",
-      "chapter": "Psi",
       "roles": [],
-      "layout_x": 1.5
+      "layout_x": 1.5,
+      "class": "Psi"
     },
     {
       "id": "02358da1-2dd3-401c-832b-08f93b68e749",
       "name": "Tony Wang",
-      "chapter": "Psi",
       "roles": [],
-      "layout_x": 6.25
+      "layout_x": 6.25,
+      "class": "Psi"
     },
     {
       "id": "694c60d6-9d69-4314-bc5c-5adce2a80ace",
       "name": "Dennis Won",
-      "chapter": "Psi",
       "roles": [],
-      "layout_x": 14.5
+      "layout_x": 14.5,
+      "class": "Psi"
     },
     {
       "id": "b3bff87a-171e-4f08-a08d-9b9524eedfde",
       "name": "Lloyd Lucin",
-      "chapter": "Alpha Alpha",
       "roles": [],
-      "layout_x": 13
+      "layout_x": 13,
+      "class": "Alpha Alpha"
     },
     {
       "id": "1347b02c-5cf8-4794-a6f2-40ee254d6579",
       "name": "Eddie Dinh",
-      "chapter": "Alpha Alpha",
       "roles": [
         "sensei"
       ],
-      "layout_x": 9.5
+      "layout_x": 9.5,
+      "class": "Alpha Alpha"
     },
     {
       "id": "257c6660-e2b3-461b-9768-b2beb21e894d",
       "name": "Rob Resma",
-      "chapter": "Alpha Alpha",
       "roles": [
         "president"
       ],
-      "layout_x": 21
+      "layout_x": 21,
+      "class": "Alpha Alpha"
     },
     {
       "id": "81181266-a0a2-4301-838d-9e5e584a0aa4",
       "name": "Kevin Wu",
-      "chapter": "Alpha Alpha",
       "roles": [],
-      "layout_x": 16.5
+      "layout_x": 16.5,
+      "class": "Alpha Alpha"
     },
     {
       "id": "c1056a1e-c96e-4d49-9bdc-067b53e08b36",
       "name": "Travis Le",
-      "chapter": "Alpha Alpha",
       "roles": [],
-      "layout_x": 26
+      "layout_x": 26,
+      "class": "Alpha Alpha"
     },
     {
       "id": "af577ff3-6d58-4c92-bb37-c77e580605c7",
       "name": "Hanjoon Kim",
-      "chapter": "Alpha Alpha",
       "roles": [],
-      "layout_x": 1.5
+      "layout_x": 1.5,
+      "class": "Alpha Alpha"
     },
     {
       "id": "3d2c0396-b036-463e-8a46-3958133d672d",
       "name": "Aloysius Makalinao",
-      "chapter": "Alpha Alpha",
       "roles": [],
-      "layout_x": 24
+      "layout_x": 24,
+      "class": "Alpha Alpha"
     },
     {
       "id": "a41817f6-74c5-4e1f-b3bb-37a589ba9f98",
       "name": "Michael Xu",
-      "chapter": "Alpha Alpha",
       "roles": [],
-      "layout_x": 8.25
+      "layout_x": 8.25,
+      "class": "Alpha Alpha"
     },
     {
       "id": "f120dda5-dc0c-4a04-8f9a-0169bef3d22c",
       "name": "Andrew Khor",
-      "chapter": "Alpha Alpha",
       "roles": [
         "sensei"
       ],
-      "layout_x": 5
+      "layout_x": 5,
+      "class": "Alpha Alpha"
     },
     {
       "id": "4cce9f18-ab61-40a4-aed5-01057aa6834a",
       "name": "Raymond Chan",
-      "chapter": "Alpha Beta",
       "roles": [],
-      "layout_x": 8.25
+      "layout_x": 8.25,
+      "class": "Alpha Beta"
     },
     {
       "id": "605373f8-4faa-4cd2-871a-27a4d07976bc",
       "name": "David Park",
-      "chapter": "Alpha Beta",
       "roles": [],
-      "layout_x": 24
+      "layout_x": 24,
+      "class": "Alpha Beta"
     },
     {
       "id": "90b08301-8f12-4ff2-ae68-b9b36ec2f2d8",
       "name": "Nick Trac",
-      "chapter": "Alpha Beta",
       "roles": [
         "president"
       ],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Alpha Beta"
     },
     {
       "id": "a35ead97-9e91-4b89-948a-2d5e96228863",
       "name": "Matthew Wang",
-      "chapter": "Alpha Gamma",
       "roles": [
         "sensei"
       ],
-      "layout_x": 22.5
+      "layout_x": 22.5,
+      "class": "Alpha Gamma"
     },
     {
       "id": "369ec247-0b27-4ec5-9dd4-b728e68e73e2",
       "name": "Quan Nguyen",
-      "chapter": "Alpha Gamma",
       "roles": [],
-      "layout_x": 8.25
+      "layout_x": 8.25,
+      "class": "Alpha Gamma"
     },
     {
       "id": "aedfe36e-e121-47e5-82fe-2a0d5139c9c2",
       "name": "Kyle Qian",
-      "chapter": "Alpha Gamma",
       "roles": [],
-      "layout_x": 16.5
+      "layout_x": 16.5,
+      "class": "Alpha Gamma"
     },
     {
       "id": "82d61b34-911f-4785-8379-c9b257be8248",
       "name": "James Bai",
-      "chapter": "Alpha Gamma",
       "roles": [],
-      "layout_x": 10
+      "layout_x": 10,
+      "class": "Alpha Gamma"
     },
     {
       "id": "c1d9564f-ad55-4585-b2df-c651dda9f6fd",
       "name": "Joseph Wu",
-      "chapter": "Alpha Gamma",
       "roles": [],
-      "layout_x": 6.25
+      "layout_x": 6.25,
+      "class": "Alpha Gamma"
     },
     {
       "id": "785486b0-d8d3-4a8d-9b48-54aca36aa605",
       "name": "Alex Wang",
-      "chapter": "Alpha Gamma",
       "roles": [],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Alpha Gamma"
     },
     {
       "id": "786e4a57-eafc-488d-b9ac-5f51d8c43183",
       "name": "Owen Wang",
-      "chapter": "Alpha Gamma",
       "roles": [],
-      "layout_x": 1.5
+      "layout_x": 1.5,
+      "class": "Alpha Gamma"
     },
     {
       "id": "92b47d12-687e-4890-9f8c-ee1937a2a1e5",
       "name": "William Zeng",
-      "chapter": "Alpha Gamma",
       "roles": [],
-      "layout_x": 20
+      "layout_x": 20,
+      "class": "Alpha Gamma"
     },
     {
       "id": "41c768e0-064a-4727-beee-f70e99be111b",
       "name": "Alec Deng",
-      "chapter": "Alpha Delta",
       "roles": [
         "sensei"
       ],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Alpha Delta"
     },
     {
       "id": "2a130174-6a8d-4561-bcb7-47cd158556f2",
       "name": "Vikram Sreedhar",
-      "chapter": "Alpha Delta",
       "roles": [
         "president"
       ],
-      "layout_x": 26
+      "layout_x": 26,
+      "class": "Alpha Delta"
     },
     {
       "id": "7746a479-68c2-4b57-87bc-2b39b0760dd9",
       "name": "David Tran",
-      "chapter": "Alpha Delta",
       "roles": [],
-      "layout_x": 24
+      "layout_x": 24,
+      "class": "Alpha Delta"
     },
     {
       "id": "d0df3859-dd49-434a-a3cf-d2b0024209f6",
       "name": "Peter Karnchanapimonkul",
-      "chapter": "Alpha Delta",
       "roles": [],
-      "layout_x": 6.25
+      "layout_x": 6.25,
+      "class": "Alpha Delta"
     },
     {
       "id": "22feaece-290f-4a56-a7aa-4feddf323c3e",
       "name": "Gerry Meixiong",
-      "chapter": "Alpha Delta",
       "roles": [],
-      "layout_x": 8.25
+      "layout_x": 8.25,
+      "class": "Alpha Delta"
     },
     {
       "id": "cf47d276-544a-4777-b905-4283630becb5",
       "name": "Jon Wang",
-      "chapter": "Alpha Delta",
       "roles": [],
-      "layout_x": 1.5
+      "layout_x": 1.5,
+      "class": "Alpha Delta"
     },
     {
       "id": "36e6e3d6-84af-4fb8-9871-72c8aa135ada",
       "name": "Kevin Ko",
-      "chapter": "Alpha Delta",
       "roles": [],
-      "layout_x": 21
+      "layout_x": 21,
+      "class": "Alpha Delta"
     },
     {
       "id": "1977524f-83d2-4b16-bff1-d73ae5523ede",
       "name": "Kenny Chang",
-      "chapter": "Alpha Delta",
       "roles": [],
-      "layout_x": 16.5
+      "layout_x": 16.5,
+      "class": "Alpha Delta"
     },
     {
       "id": "f6abf867-9713-4737-a649-e2a16dd9ebf4",
       "name": "Ryan Kurohara",
-      "chapter": "Alpha Delta",
       "roles": [
         "president"
       ],
-      "layout_x": 22.5
+      "layout_x": 22.5,
+      "class": "Alpha Delta"
     },
     {
       "id": "b5778ab2-4be4-4513-a12f-d3e1bcdc8802",
       "name": "Kai Feng",
-      "chapter": "Alpha Delta",
       "roles": [],
-      "layout_x": 19
+      "layout_x": 19,
+      "class": "Alpha Delta"
     },
     {
       "id": "f5e93a38-a026-4a4f-a68a-3abb95deccac",
       "name": "Daniel Classon",
-      "chapter": "Alpha Epsilon",
       "roles": [
         "president",
         "sensei"
       ],
-      "layout_x": 21
+      "layout_x": 21,
+      "class": "Alpha Epsilon"
     },
     {
       "id": "6335ef4c-e38c-4476-b20a-51dad89ca953",
       "name": "Peicun Jiang",
-      "chapter": "Alpha Epsilon",
       "roles": [],
-      "layout_x": 26
+      "layout_x": 26,
+      "class": "Alpha Epsilon"
     },
     {
       "id": "74effdf9-81df-445c-a566-bbfbdac9f251",
       "name": "Evan Liang",
-      "chapter": "Alpha Epsilon",
       "roles": [],
-      "layout_x": 10
+      "layout_x": 10,
+      "class": "Alpha Epsilon"
     },
     {
       "id": "936ff7a3-3827-4b44-8d28-57479ba42ccc",
       "name": "Kevin Li",
-      "chapter": "Alpha Epsilon",
       "roles": [],
-      "layout_x": 24
+      "layout_x": 24,
+      "class": "Alpha Epsilon"
     },
     {
       "id": "52cc391c-ad41-40c9-ba1a-117024fe6454",
       "name": "Trevor Tsue",
-      "chapter": "Alpha Epsilon",
       "roles": [],
-      "layout_x": 16.5
+      "layout_x": 16.5,
+      "class": "Alpha Epsilon"
     },
     {
       "id": "f74897ed-b605-466e-92b8-5d6c552cb084",
       "name": "Jay Gonzalez",
-      "chapter": "Alpha Epsilon",
       "roles": [],
-      "layout_x": 13
+      "layout_x": 13,
+      "class": "Alpha Epsilon"
     },
     {
       "id": "3876f89b-42aa-4e6a-980f-853a488d0399",
       "name": "Sam Kwong",
-      "chapter": "Alpha Zeta",
       "roles": [],
-      "layout_x": 17.5
+      "layout_x": 17.5,
+      "class": "Alpha Zeta"
     },
     {
       "id": "76b8f010-069d-4cc3-a9bc-b5239543d8f2",
       "name": "Charles Tsao",
-      "chapter": "Alpha Zeta",
       "roles": [],
-      "layout_x": 23.25
+      "layout_x": 23.25,
+      "class": "Alpha Zeta"
     },
     {
       "id": "6323faab-9679-4f9d-89c2-62d6b7a363d8",
       "name": "Tyler Vo",
-      "chapter": "Alpha Zeta",
       "roles": [],
-      "layout_x": 1.5
+      "layout_x": 1.5,
+      "class": "Alpha Zeta"
     },
     {
       "id": "e2a84946-8615-406f-8013-90d4565b0bb7",
       "name": "Alex Lee",
-      "chapter": "Alpha Zeta",
       "roles": [],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Alpha Zeta"
     },
     {
       "id": "38a85f7b-2a0d-4a8a-a937-6f6caa87efc5",
       "name": "Matthew Tatsumi",
-      "chapter": "Alpha Zeta",
       "roles": [],
-      "layout_x": 15.5
+      "layout_x": 15.5,
+      "class": "Alpha Zeta"
     },
     {
       "id": "3aa430db-875f-4705-8019-f011aea4df59",
       "name": "Ryan Peng",
-      "chapter": "Alpha Zeta",
       "roles": [],
-      "layout_x": 13
+      "layout_x": 13,
+      "class": "Alpha Zeta"
     },
     {
       "id": "940a7d84-9c61-4de1-9536-f8b9434a7316",
       "name": "Austin Cai",
-      "chapter": "Alpha Zeta",
       "roles": [],
-      "layout_x": 6.25
+      "layout_x": 6.25,
+      "class": "Alpha Zeta"
     },
     {
       "id": "66a726c8-8c05-46bc-85a9-31efe4dd7b19",
       "name": "Kinbert Chou",
-      "chapter": "Alpha Zeta",
       "roles": [],
-      "layout_x": 25
+      "layout_x": 25,
+      "class": "Alpha Zeta"
     },
     {
       "id": "4ca5f201-6bb3-440b-9554-d49f4c1973ba",
       "name": "Kevin Duan",
-      "chapter": "Alpha Zeta",
       "roles": [],
-      "layout_x": 19.5
+      "layout_x": 19.5,
+      "class": "Alpha Zeta"
     },
     {
       "id": "8ee00013-726e-4ac5-90fd-4caa3ad2f774",
       "name": "David Guo",
-      "chapter": "Alpha Zeta",
       "roles": [],
-      "layout_x": 21.75
+      "layout_x": 21.75,
+      "class": "Alpha Zeta"
     },
     {
       "id": "02982f26-4f6e-4fe2-8bc9-fc53edb3072a",
       "name": "Thomas Jiang",
-      "chapter": "Alpha Zeta",
       "roles": [],
-      "layout_x": 8.25
+      "layout_x": 8.25,
+      "class": "Alpha Zeta"
     },
     {
       "id": "b31cc850-5d34-4f83-a1e2-345998f2f448",
       "name": "William Park",
-      "chapter": "Alpha Eta",
       "roles": [],
-      "layout_x": 21.75
+      "layout_x": 21.75,
+      "class": "Alpha Eta"
     },
     {
       "id": "f79330ab-9a26-4dd4-9817-a629d2b3872f",
       "name": "Ricky Grannis-Vu",
-      "chapter": "Alpha Eta",
       "roles": [],
-      "layout_x": 10
+      "layout_x": 10,
+      "class": "Alpha Eta"
     },
     {
       "id": "1b10754f-3d9f-4847-a21d-9c6738988ee4",
       "name": "Michael Chang",
-      "chapter": "Alpha Eta",
       "roles": [],
-      "layout_x": 15.5
+      "layout_x": 15.5,
+      "class": "Alpha Eta"
     },
     {
       "id": "0980b856-d40a-4835-9ea9-4100e6226d38",
       "name": "Lee Duan",
-      "chapter": "Alpha Eta",
       "roles": [],
-      "layout_x": 20.25
+      "layout_x": 20.25,
+      "class": "Alpha Eta"
     },
     {
       "id": "e5fc96a6-0950-4571-ab1a-728b1dada9c6",
       "name": "Saw Kyaw",
-      "chapter": "Alpha Eta",
       "roles": [],
-      "layout_x": 25
+      "layout_x": 25,
+      "class": "Alpha Eta"
     },
     {
       "id": "33e23950-1d6d-400e-bbec-c4e44b9da262",
       "name": "Eric Zeng",
-      "chapter": "Alpha Eta",
       "roles": [],
-      "layout_x": 23.25
+      "layout_x": 23.25,
+      "class": "Alpha Eta"
     },
     {
       "id": "6a3d8507-cd16-4e46-bfdc-6e74ba5421c5",
       "name": "Jason Ah Chuen",
-      "chapter": "Alpha Eta",
       "roles": [],
-      "layout_x": 19
+      "layout_x": 19,
+      "class": "Alpha Eta"
     },
     {
       "id": "020eb8e2-656e-43c4-b973-ddc5d22b78f6",
       "name": "Leon Bi",
-      "chapter": "Alpha Eta",
       "roles": [],
-      "layout_x": 26
+      "layout_x": 26,
+      "class": "Alpha Eta"
     },
     {
       "id": "4742ae11-3f5f-492d-9460-a8679674e5eb",
       "name": "John Altankhuyag",
-      "chapter": "Alpha Eta",
       "roles": [],
-      "layout_x": 8.25
+      "layout_x": 8.25,
+      "class": "Alpha Eta"
     },
     {
       "id": "daa87f6e-cef2-4302-b4f6-d8d1ec7d4a75",
       "name": "Tyler Hong",
-      "chapter": "Alpha Eta",
       "roles": [],
-      "layout_x": 17.5
+      "layout_x": 17.5,
+      "class": "Alpha Eta"
     },
     {
       "id": "491c9929-914f-4729-914b-8f1c403b86aa",
       "name": "Brian Park",
-      "chapter": "Alpha Theta",
       "roles": [],
-      "layout_x": 1.75
+      "layout_x": 1.75,
+      "class": "Alpha Theta"
     },
     {
       "id": "53b628c1-6967-4059-a648-0d99e3fd48ac",
       "name": "David (Big Dave) Liu",
-      "chapter": "Alpha Theta",
       "roles": [],
-      "layout_x": 10.25
+      "layout_x": 10.25,
+      "class": "Alpha Theta"
     },
     {
       "id": "6612a84b-9e62-4544-b621-2311e0f18224",
       "name": "Kachachan (Em) Chotitamnavee",
-      "chapter": "Alpha Theta",
       "roles": [],
-      "layout_x": 13.75
+      "layout_x": 13.75,
+      "class": "Alpha Theta"
     },
     {
       "id": "643dc934-b421-47f3-92f4-063a4ef9d6e9",
       "name": "Jay Chiruvolu",
-      "chapter": "Alpha Theta",
       "roles": [],
-      "layout_x": 17
+      "layout_x": 17,
+      "class": "Alpha Theta"
     },
     {
       "id": "95d92dcc-2617-4719-81c6-8b98d3ac184f",
       "name": "Andrew Franco",
-      "chapter": "Alpha Theta",
       "roles": [],
-      "layout_x": 19.5
+      "layout_x": 19.5,
+      "class": "Alpha Theta"
     },
     {
       "id": "6551b26a-0e2f-4793-bae0-b24ca8cf3c5d",
       "name": "Andrew (Gan) Gan",
-      "chapter": "Alpha Theta",
       "roles": [],
-      "layout_x": 23.25
+      "layout_x": 23.25,
+      "class": "Alpha Theta"
     },
     {
       "id": "d2ba8e9c-273a-4562-a996-507aa15772d1",
       "name": "Nathan Hu",
-      "chapter": "Alpha Theta",
       "roles": [],
-      "layout_x": 5.75
+      "layout_x": 5.75,
+      "class": "Alpha Theta"
     },
     {
       "id": "a3d63d60-e030-4848-b6ea-a5137efb5001",
       "name": "Taran Kota",
-      "chapter": "Alpha Iota",
       "roles": [],
-      "layout_x": 15.5
+      "layout_x": 15.5,
+      "class": "Alpha Iota"
     },
     {
       "id": "e8c64345-49cf-4acb-8aef-74d46c41a60c",
       "name": "Jeewoo Choi",
-      "chapter": "Alpha Iota",
       "roles": [],
-      "layout_x": 26
+      "layout_x": 26,
+      "class": "Alpha Iota"
     },
     {
       "id": "bf407b53-41e9-4564-b62d-0a7ff04bfc7a",
       "name": "Ryan Vu",
-      "chapter": "Alpha Iota",
       "roles": [],
-      "layout_x": 21.25
+      "layout_x": 21.25,
+      "class": "Alpha Iota"
     },
     {
       "id": "627e50a8-1472-4c85-904a-a923a85e382e",
       "name": "Minh Vu",
-      "chapter": "Alpha Iota",
       "roles": [],
-      "layout_x": 10.25
+      "layout_x": 10.25,
+      "class": "Alpha Iota"
     },
     {
       "id": "ddf31859-40a8-4651-82e8-ab895b07397f",
       "name": "Jerry Wei",
-      "chapter": "Alpha Kappa",
       "roles": [],
-      "layout_x": 12
+      "layout_x": 12,
+      "class": "Alpha Kappa"
     },
     {
       "id": "5a9e646f-b3f4-4704-9e5a-c77c6a8662eb",
       "name": "Jimming He",
-      "chapter": "Alpha Kappa",
       "roles": [],
-      "layout_x": 10.25
+      "layout_x": 10.25,
+      "class": "Alpha Kappa"
     },
     {
       "id": "5feb748a-a69b-409b-8eb8-c568b6002afa",
       "name": "David Zhou",
-      "chapter": "Alpha Kappa",
       "roles": [],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Alpha Kappa"
     },
     {
       "id": "6f697420-2d88-473a-91d7-5f637a5f1868",
       "name": "Richard Cheung",
-      "chapter": "Alpha Kappa",
       "roles": [],
-      "layout_x": 23.25
+      "layout_x": 23.25,
+      "class": "Alpha Kappa"
     },
     {
       "id": "5727bf6a-fa76-4344-afea-7ac7965cdbc2",
       "name": "Anton Lok",
-      "chapter": "Alpha Kappa",
       "roles": [],
-      "layout_x": 13.75
+      "layout_x": 13.75,
+      "class": "Alpha Kappa"
     },
     {
       "id": "a0e663e3-11ae-40ef-89c0-fc3e004f11fc",
       "name": "Alex Kwon",
-      "chapter": "Alpha Kappa",
       "roles": [],
-      "layout_x": 21.25
+      "layout_x": 21.25,
+      "class": "Alpha Kappa"
     },
     {
       "id": "dc46cc0a-9897-44ca-be07-3a869aaa9d23",
       "name": "Everrett Lee",
-      "chapter": "Alpha Kappa",
       "roles": [],
-      "layout_x": 8.25
+      "layout_x": 8.25,
+      "class": "Alpha Kappa"
     },
     {
       "id": "cd9fc46c-83b2-4beb-ab4d-47d77f039c2b",
       "name": "William Li",
-      "chapter": "Alpha Mu",
       "roles": [],
-      "layout_x": 12
+      "layout_x": 12,
+      "class": "Alpha Mu"
     },
     {
       "id": "2f4992c6-b6ff-45c5-b9f5-c957a034a44c",
       "name": "Anthony Qin",
-      "chapter": "Alpha Mu",
       "roles": [],
-      "layout_x": 15.5
+      "layout_x": 15.5,
+      "class": "Alpha Mu"
     },
     {
       "id": "3b3bf3ca-7bfb-4baa-bc8d-f694a4d2092b",
       "name": "Alfred Yu",
-      "chapter": "Alpha Mu",
       "roles": [],
-      "layout_x": 23.25
+      "layout_x": 23.25,
+      "class": "Alpha Mu"
     },
     {
       "id": "58d1e63b-ae61-4d7b-a24e-9b622d9b2b03",
       "name": "Gerwin Mateo",
-      "chapter": "Alpha Mu",
       "roles": [],
-      "layout_x": 19.5
+      "layout_x": 19.5,
+      "class": "Alpha Mu"
     },
     {
       "id": "6b239761-29b3-4498-a2a7-8b8a79fecb61",
       "name": "Terrance Yang",
-      "chapter": "Alpha Mu",
       "roles": [],
-      "layout_x": 5.75
+      "layout_x": 5.75,
+      "class": "Alpha Mu"
     },
     {
       "id": "048fafe6-93ae-44c1-b5ee-1b8e462b97d0",
       "name": "Zachary Lin",
-      "chapter": "Alpha Mu",
       "roles": [],
-      "layout_x": 21.25
+      "layout_x": 21.25,
+      "class": "Alpha Mu"
     },
     {
       "id": "ce7e2df2-a35e-4ce4-981c-e54ae2bb964d",
       "name": "Sean Huang",
-      "chapter": "Alpha Mu",
       "roles": [],
-      "layout_x": 13.75
+      "layout_x": 13.75,
+      "class": "Alpha Mu"
     },
     {
       "id": "936eb58d-1e2f-41c0-a57f-f45d2b59201d",
       "name": "Nathan Tan",
-      "chapter": "Alpha Mu",
       "roles": [],
-      "layout_x": 24.75
+      "layout_x": 24.75,
+      "class": "Alpha Mu"
     },
     {
       "id": "80b53d25-babb-4bc3-a49d-d768fb3b0eca",
       "name": "Nash Young",
-      "chapter": "Alpha Nu",
       "roles": [],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Alpha Nu"
     },
     {
       "id": "2b9791f0-3c0b-4a78-9b0f-4fa2337535f2",
       "name": "Luke Zhao",
-      "chapter": "Alpha Nu",
       "roles": [],
-      "layout_x": 10.25
+      "layout_x": 10.25,
+      "class": "Alpha Nu"
     },
     {
       "id": "6704e0e0-c754-4f04-966f-586c72348c44",
       "name": "Sunstone Shi",
-      "chapter": "Alpha Nu",
       "roles": [],
-      "layout_x": 15.5
+      "layout_x": 15.5,
+      "class": "Alpha Nu"
     },
     {
       "id": "792c9d4d-39c9-408c-be82-527b4beb6f33",
       "name": "Ryan Da",
-      "chapter": "Alpha Nu",
       "roles": [],
-      "layout_x": 21.25
+      "layout_x": 21.25,
+      "class": "Alpha Nu"
     },
     {
       "id": "136bee0c-01e7-438e-b6b6-3511039d932d",
       "name": "Ian Song",
-      "chapter": "Alpha Nu",
       "roles": [],
-      "layout_x": 5.75
+      "layout_x": 5.75,
+      "class": "Alpha Nu"
     },
     {
       "id": "f929553f-588e-4db3-869b-ed2129f21472",
       "name": "Jason Shih",
-      "chapter": "Alpha Nu",
       "roles": [],
-      "layout_x": 23.25
+      "layout_x": 23.25,
+      "class": "Alpha Nu"
     },
     {
       "id": "b03b71cc-4d2a-437c-86b6-1c56c86350d3",
       "name": "Yoshi Nakachi",
-      "chapter": "Alpha Nu",
       "roles": [],
-      "layout_x": 8.25
+      "layout_x": 8.25,
+      "class": "Alpha Nu"
     },
     {
       "id": "182d57f0-b863-499d-b87f-0299deaf7b87",
       "name": "Ethan Kim",
-      "chapter": "Alpha Nu",
       "roles": [],
-      "layout_x": 26
+      "layout_x": 26,
+      "class": "Alpha Nu"
     },
     {
       "id": "b9dea02c-57e7-4305-91c1-b0d4c0bf9fef",
       "name": "Willy Chan",
-      "chapter": "Alpha Xi",
       "roles": [],
-      "layout_x": 19.5
+      "layout_x": 19.5,
+      "class": "Alpha Xi"
     },
     {
       "id": "79666b9c-ec1b-45c0-9e0f-e5f03a3f5dd6",
       "name": "Steven Wan",
-      "chapter": "Alpha Xi",
       "roles": [],
-      "layout_x": 15.5
+      "layout_x": 15.5,
+      "class": "Alpha Xi"
     },
     {
       "id": "b61bc061-3880-4627-82ae-07d054d353b3",
       "name": "Khoa Trinh",
-      "chapter": "Alpha Xi",
       "roles": [],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Alpha Xi"
     },
     {
       "id": "8e3d438f-b0a3-4c24-8dba-4ee1b81abdbd",
       "name": "Vincent Yip",
-      "chapter": "Alpha Xi",
       "roles": [],
-      "layout_x": 12
+      "layout_x": 12,
+      "class": "Alpha Xi"
     },
     {
       "id": "ce784436-2f72-40e6-896a-88b1ac86be47",
       "name": "John Ou",
-      "chapter": "Alpha Xi",
       "roles": [],
-      "layout_x": 24.75
+      "layout_x": 24.75,
+      "class": "Alpha Xi"
     },
     {
       "id": "ffc0e41c-7ed2-4be5-bb8f-92a6107c4884",
       "name": "Andrew Bui",
-      "chapter": "Alpha Xi",
       "roles": [],
-      "layout_x": 21.25
+      "layout_x": 21.25,
+      "class": "Alpha Xi"
     },
     {
       "id": "7f0af117-750e-4391-9296-a474ab28cb6d",
       "name": "Neev Seedani",
-      "chapter": "Alpha Xi",
       "roles": [],
-      "layout_x": 13.75
+      "layout_x": 13.75,
+      "class": "Alpha Xi"
     },
     {
       "id": "f46d760a-3f2d-406c-8ae8-9438443c93a0",
       "name": "Zihan Wang",
-      "chapter": "Alpha Xi",
       "roles": [],
-      "layout_x": 5.75
+      "layout_x": 5.75,
+      "class": "Alpha Xi"
     },
     {
       "id": "0b8acb56-8923-4ca0-ab87-580f57013cd4",
       "name": "Karl Songcuan",
-      "chapter": "Alpha Omicron",
       "roles": [],
-      "layout_x": 8.25
+      "layout_x": 8.25,
+      "class": "Alpha Omicron"
     },
     {
       "id": "a27a6436-8ff8-448d-b9f0-a0af9b76734d",
       "name": "Ethan Kim",
-      "chapter": "Alpha Omicron",
       "roles": [],
-      "layout_x": 26
+      "layout_x": 26,
+      "class": "Alpha Omicron"
     },
     {
       "id": "852a5982-01d2-41f4-a90a-1702719245d8",
       "name": "William Aung",
-      "chapter": "Alpha Omicron",
       "roles": [],
-      "layout_x": 19.5
+      "layout_x": 19.5,
+      "class": "Alpha Omicron"
     },
     {
       "id": "bc9c41e2-85ff-447c-8b42-158ebb4a98fa",
       "name": "Dylan Reyes",
-      "chapter": "Alpha Omicron",
       "roles": [],
-      "layout_x": 24.75
+      "layout_x": 24.75,
+      "class": "Alpha Omicron"
     },
     {
       "id": "b0c95345-f028-4a88-b83a-c992c716f578",
       "name": "Austin Lieu",
-      "chapter": "Alpha Omicron",
       "roles": [],
-      "layout_x": 23.25
+      "layout_x": 23.25,
+      "class": "Alpha Omicron"
     },
     {
       "id": "72d3bb54-e0ca-4d79-b592-5e991ef9b713",
       "name": "Peter Vu",
-      "chapter": "Alpha Omicron",
       "roles": [],
-      "layout_x": 21.25
+      "layout_x": 21.25,
+      "class": "Alpha Omicron"
     },
     {
       "id": "2b0f9763-a478-4807-a9fd-c3067e289e3e",
       "name": "Sydney Zhang",
-      "chapter": "Alpha Omicron",
       "roles": [],
-      "layout_x": 3.5
+      "layout_x": 3.5,
+      "class": "Alpha Omicron"
     },
     {
       "id": "c9b09287-daf5-4498-b0c3-a48ce417c472",
       "name": "Alan Huang",
-      "chapter": "Alpha Omicron",
       "roles": [],
-      "layout_x": 13.75
+      "layout_x": 13.75,
+      "class": "Alpha Omicron"
     },
     {
       "id": "c7feb476-d13f-47c6-9dfb-91c960bcb7c9",
       "name": "Jiashu Zhou",
-      "chapter": "Alpha Omicron",
       "roles": [],
-      "layout_x": 15.5
+      "layout_x": 15.5,
+      "class": "Alpha Omicron"
     },
     {
       "id": "4e79c80e-fc98-45d9-b6dc-9f9056a21bcc",
       "name": "Kyle Roh",
-      "chapter": "Alpha Omicron",
       "roles": [],
-      "layout_x": 17.5
+      "layout_x": 17.5,
+      "class": "Alpha Omicron"
     },
     {
       "id": "15ada068-a030-4698-a63e-c285c1d08a43",
       "name": "Siddharth Bellam",
-      "chapter": "Alpha Omicron",
       "roles": [],
-      "layout_x": 5.75
+      "layout_x": 5.75,
+      "class": "Alpha Omicron"
     },
     {
       "id": "c889593d-a149-4fc1-819a-51d4f8b117e4",
       "name": "Bill Giang",
-      "chapter": "Alpha Omicron",
       "roles": [],
-      "layout_x": 10.25
+      "layout_x": 10.25,
+      "class": "Alpha Omicron"
     }
   ],
   "edges": [
@@ -3514,5 +3474,45 @@
       "source": "f46d760a-3f2d-406c-8ae8-9438443c93a0",
       "target": "15ada068-a030-4698-a63e-c285c1d08a43"
     }
+  ],
+  "classes": [
+    "Founding",
+    "Charter",
+    "Alpha",
+    "Beta",
+    "Gamma",
+    "Delta",
+    "Epsilon",
+    "Zeta",
+    "Eta",
+    "Theta",
+    "Iota",
+    "Kappa",
+    "Mu",
+    "Nu",
+    "Xi",
+    "Omicron",
+    "Pi",
+    "Rho",
+    "Sigma",
+    "Tau",
+    "Upsilon",
+    "Phi",
+    "Chi",
+    "Psi",
+    "Alpha Alpha",
+    "Alpha Beta",
+    "Alpha Gamma",
+    "Alpha Delta",
+    "Alpha Epsilon",
+    "Alpha Zeta",
+    "Alpha Eta",
+    "Alpha Theta",
+    "Alpha Iota",
+    "Alpha Kappa",
+    "Alpha Mu",
+    "Alpha Nu",
+    "Alpha Xi",
+    "Alpha Omicron"
   ]
 }
