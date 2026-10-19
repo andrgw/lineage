@@ -14,7 +14,7 @@ function svgEl(tag, attrs = {}, text) {
   if (text !== undefined) node.textContent = text;
   return node;
 }
-const canvas = $('canvas'), world = $('world');
+const canvas = $('canvas'), graphSvg = $('graph'), world = $('world');
 let graph, index, points = new Map(), selected = null, isolated = false, activeClass = null;
 let family = null, visibleIds = new Set(), nodeElements = new Map(), edgeElements = [];
 let camera = {x: 0, y: 0, scale: 0.85}, miniBounds, miniWindow;
@@ -87,6 +87,9 @@ function render() {
   const defs = svgEl('defs'), grad = svgEl('linearGradient', {id:'both'});
   grad.append(svgEl('stop', {offset:'50%', 'stop-color':'#466ec3'}), svgEl('stop', {offset:'50%', 'stop-color':'#bf6470'})); defs.append(grad); world.append(defs);
   const bounds = Lineage.bounds(visibleIds, points);
+  // Size the SVG to the map; the camera moves it with a CSS transform (see applyCamera).
+  graphSvg.setAttribute('width', Math.ceil(bounds.x + bounds.w + 60));
+  graphSvg.setAttribute('height', Math.ceil(bounds.y + bounds.h + Lineage.ROW));
   const rows = [...new Map(visible.map(n => [n.rank,n.class_name])).entries()].sort((a,b)=>a[0]-b[0]);
   for (const [rank, name] of rows) {
     const y = 90 + rank * Lineage.ROW;
@@ -313,13 +316,24 @@ function fit(ids=visibleIds) {
 function zoom(scale,x=canvas.clientWidth/2,y=canvas.clientHeight/2) {
   scale=clamp(scale,.06,2.5);camera.x=x-(x-camera.x)*scale/camera.scale;camera.y=y-(y-camera.y)*scale/camera.scale;camera.scale=scale;transform();
 }
+// Wheel and pointer events can arrive several times per frame, so apply the camera
+// once per frame and never read layout here. The camera is a CSS transform on the
+// <svg> element: changing an SVG transform attribute re-lays out every text label
+// whenever the scale changes, while a CSS transform only repaints.
+let cameraFrame=0, viewport={width:0,height:0}, zoomText='';
 function transform() {
-  world.setAttribute('transform',`translate(${camera.x},${camera.y}) scale(${camera.scale})`);
+  if(!cameraFrame) cameraFrame=requestAnimationFrame(applyCamera);
+}
+function applyCamera() {
+  cameraFrame=0;
+  graphSvg.style.transform=`translate(${camera.x}px,${camera.y}px) scale(${camera.scale})`;
   world.classList.toggle('zoom-far',camera.scale<.45);
-  $('zoom-level').textContent=Math.round(camera.scale*100)+'%';
+  const text=Math.round(camera.scale*100)+'%';
+  if(text!==zoomText){zoomText=text;$('zoom-level').textContent=text;}
   if(miniWindow) {
+    const width=viewport.width||canvas.clientWidth, height=viewport.height||canvas.clientHeight;
     miniWindow.setAttribute('x',-camera.x/camera.scale);miniWindow.setAttribute('y',-camera.y/camera.scale);
-    miniWindow.setAttribute('width',canvas.clientWidth/camera.scale);miniWindow.setAttribute('height',canvas.clientHeight/camera.scale);
+    miniWindow.setAttribute('width',width/camera.scale);miniWindow.setAttribute('height',height/camera.scale);
   }
 }
 function buildMini() {
@@ -353,8 +367,11 @@ function endPointer(e){pointers.delete(e.pointerId);pinch=null;drag=null;canvas.
 canvas.addEventListener('pointerup',endPointer);canvas.addEventListener('pointercancel',endPointer);
 canvas.addEventListener('wheel',e=>{
   if(!graph)return;e.preventDefault();
-  if(e.ctrlKey||e.metaKey){const r=canvas.getBoundingClientRect();zoom(camera.scale*Math.exp(-e.deltaY*.008),e.clientX-r.left,e.clientY-r.top);}
-  else{camera.x-=e.deltaX+(e.shiftKey?e.deltaY:0);camera.y-=e.shiftKey?0:e.deltaY;transform();}
+  // Firefox reports mouse wheels in lines or pages; convert them to pixels.
+  const unit=e.deltaMode===1?16:e.deltaMode===2?viewport.height||canvas.clientHeight:1;
+  const dx=e.deltaX*unit, dy=e.deltaY*unit;
+  if(e.ctrlKey||e.metaKey){const r=canvas.getBoundingClientRect();zoom(camera.scale*Math.exp(-dy*.008),e.clientX-r.left,e.clientY-r.top);}
+  else{camera.x-=dx+(e.shiftKey?dy:0);camera.y-=e.shiftKey?0:dy;transform();}
 },{passive:false});
 canvas.addEventListener('keydown',e=>{
   if(e.target.closest('button'))return;
@@ -362,7 +379,9 @@ canvas.addEventListener('keydown',e=>{
   else if(e.key==='-')zoom(camera.scale/1.2);
   else if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();camera.x+=e.key==='ArrowLeft'?80:e.key==='ArrowRight'?-80:0;camera.y+=e.key==='ArrowUp'?80:e.key==='ArrowDown'?-80:0;transform();}
 });
-new ResizeObserver(()=>transform()).observe(canvas);
+new ResizeObserver(([entry])=>{viewport={width:entry.contentRect.width,height:entry.contentRect.height};transform();}).observe(canvas);
+// Focus or find-in-page can still scroll a clipped box in some browsers; the camera assumes it never scrolls.
+canvas.addEventListener('scroll',()=>{canvas.scrollLeft=0;canvas.scrollTop=0;});
 
 $('isolate').addEventListener('click',()=>{if(selected===null)return;isolated=!isolated;render();center(selected,.95);});
 $('fit-selection').addEventListener('click',()=>{if(family)fit(family.all);});
