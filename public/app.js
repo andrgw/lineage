@@ -21,6 +21,12 @@ let camera = {x: 0, y: 0, scale: 0.85}, miniBounds, miniWindow;
 let editorMounted = false, editorSource = globalThis.LINEAGE_SOURCE || null;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
+function closeIcon() {
+  const icon = svgEl('svg', {class:'icon', viewBox:'0 0 16 16', 'aria-hidden':'true'});
+  icon.append(svgEl('path', {d:'m4 4 8 8M12 4l-8 8'}));
+  return icon;
+}
+
 function graphFromSource(source) {
   const idBySource = new Map(source.members.map((member, i) => [member.id, i + 1]));
   return {
@@ -85,7 +91,7 @@ function render() {
   points = Lineage.layout(visible);
   world.replaceChildren(); nodeElements = new Map(); edgeElements = [];
   const defs = svgEl('defs'), grad = svgEl('linearGradient', {id:'both'});
-  grad.append(svgEl('stop', {offset:'50%', 'stop-color':'#466ec3'}), svgEl('stop', {offset:'50%', 'stop-color':'#bf6470'})); defs.append(grad); world.append(defs);
+  grad.append(svgEl('stop', {offset:'50%', class:'both-president'}), svgEl('stop', {offset:'50%', class:'both-sensei'})); defs.append(grad); world.append(defs);
   const bounds = Lineage.bounds(visibleIds, points);
   // Size the SVG to the map; the camera moves it with a CSS transform (see applyCamera).
   graphSvg.setAttribute('width', Math.ceil(bounds.x + bounds.w + 60));
@@ -117,9 +123,11 @@ function render() {
       if(current<0 || `${lines[current]} ${word}`.trim().length>23) lines.push(word);
       else lines[current]+=` ${word}`;
     }
-    const startY=-(lines.length-1)*8+5;
+    const rowCount=lines.length+(roleClass?1:0);
+    const startY=-(rowCount-1)*8+5;
     lines.forEach((line,i)=>name.append(svgEl('tspan',{x:0,dy:i===0?startY:16},line)));
     g.append(name);
+    if(roleClass) g.append(svgEl('text',{x:0,y:startY+lines.length*16,'text-anchor':'middle',class:'role','aria-hidden':'true'},roleClass==='both'?'President & Sensei':roleLabel));
     g.addEventListener('click',()=>{ if(!suppressClick) select(n.id); });
     g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();select(n.id);}});
     nodeLayer.append(g); nodeElements.set(n.id,g);
@@ -257,7 +265,8 @@ function renderDetails(member) {
   const heading = el('div', {class:'details-heading'});
   const title = el('div');
   title.append(el('span', {class:'eyebrow'}, `${member.class_name.toUpperCase()} CLASS`), el('h2', {}, member.display_name));
-  const close = el('button', {class:'details-close', type:'button', 'aria-label':'Close member details'}, '×');
+  const close = el('button', {class:'details-close icon-button', type:'button', 'aria-label':'Close member details'});
+  close.append(closeIcon());
   close.addEventListener('click', () => aside.classList.remove('open'));
   heading.append(title, close);
   const badges = el('div', {class:'badges'});
@@ -382,6 +391,11 @@ canvas.addEventListener('keydown',e=>{
 new ResizeObserver(([entry])=>{viewport={width:entry.contentRect.width,height:entry.contentRect.height};transform();}).observe(canvas);
 // Focus or find-in-page can still scroll a clipped box in some browsers; the camera assumes it never scrolls.
 canvas.addEventListener('scroll',()=>{canvas.scrollLeft=0;canvas.scrollTop=0;});
+// Overlays sit below the header and map header, whose heights vary when they wrap on narrow screens.
+const barHeights=new ResizeObserver(entries=>{
+  for(const entry of entries) document.documentElement.style.setProperty(entry.target.matches('header')?'--header-h':'--map-header-h',`${entry.borderBoxSize[0].blockSize}px`);
+});
+barHeights.observe(document.querySelector('header'));barHeights.observe(document.querySelector('.map-header'));
 
 $('isolate').addEventListener('click',()=>{if(selected===null)return;isolated=!isolated;render();center(selected,.95);});
 $('fit-selection').addEventListener('click',()=>{if(family)fit(family.all);});
@@ -420,7 +434,7 @@ function setTheme(theme) {
   const light = theme === 'light';
   $('theme-toggle').setAttribute('aria-pressed', String(light));
   $('theme-toggle').title = `Switch to ${light ? 'dark' : 'light'} mode`;
-  $('theme-toggle').innerHTML = `${light ? '◐' : '☼'} <span>${light ? 'Dark mode' : 'Light mode'}</span>`;
+  $('theme-toggle').querySelector('span').textContent = light ? 'Dark mode' : 'Light mode';
 }
 $('theme-toggle').addEventListener('click',()=>setTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'));
 try {if(globalThis.LINEAGE_DATA)load(globalThis.LINEAGE_DATA);else{$('empty').hidden=false;$('status').textContent='No graph loaded · your data stays on this device.';}}

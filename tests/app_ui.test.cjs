@@ -34,3 +34,14 @@ test('map cards avoid per-node filters and group opacity', () => {
   assert.doesNotMatch(css, /\.card[^}]*filter:/);
   assert.doesNotMatch(css, /\.node\.dim\s*\{[^}]*\bopacity:/);
 });
+
+test('legend entries and controls keep their names and order', () => {
+  const legend = [...html.match(/<div class="legend">(.*?)<\/div>/)[1].matchAll(/<\/i>([^<]+)<\/span>/g)].map(m => m[1]);
+  assert.deepEqual(legend, ['Brother', 'President', 'Sensei', 'President &amp; Sensei', 'Big–Little relationship']);
+  const labels = ['Stanford Lambdas', 'THETA CHAPTER / LINEAGE EXPLORER', 'Edit lineage', 'Open graph', 'Light mode',
+    'THETA CHAPTER', 'Lineage.', 'Full overview', 'Recent classes', 'PLEDGE CLASSES', 'Reset', 'LINEAGE MAP',
+    'Isolate lineage', 'Fit lineage', 'Fit view', 'YOU ARE HERE', 'LINEAGE DETAILS', 'Explore a lineage'];
+  const positions = labels.map(label => html.indexOf(`>${label}<`));
+  labels.forEach((label, i) => assert.ok(positions[i] > 0, `${label} is missing`));
+  assert.deepEqual([...positions].sort((a, b) => a - b), positions);
+});
