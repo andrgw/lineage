@@ -18,54 +18,49 @@
 </head>
 <body>
   <header>
-    <a class="brand" href="index.html"><span class="crest">ΛΦΕ</span><span>Stanford Lambdas<small>THETA CHAPTER / LINEAGE EXPLORER</small></span></a>
+    <div class="brand"><span class="crest">ΛΦΕ</span><span>Stanford Lambdas</span></div>
     <div class="search-wrap">
       <label class="sr-only" for="member-search">Search members or classes</label>
-      <span class="search-icon" aria-hidden="true">⌕</span>
+      <svg class="icon search-icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg>
       <input id="member-search" type="search" placeholder="Search a name or class…" autocomplete="off" aria-controls="search-results" aria-expanded="false">
       <div id="search-results" class="results" role="listbox" aria-label="Matching members" hidden></div>
     </div>
-    <button id="editor-toggle" type="button" aria-expanded="false" aria-controls="editor-panel">Edit lineage</button>
-    <label class="import-button">Open graph<input id="import" type="file" accept=".json,application/json" class="sr-only"></label>
-    <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" title="Switch to light mode">☼ <span>Light mode</span></button>
+    <button id="editor-toggle" type="button" aria-expanded="false" aria-controls="editor-panel">Edit Lineage</button>
+    <label class="import-button">Open Graph<input id="import" type="file" accept=".json,application/json" class="sr-only"></label>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" title="Switch to light mode"><svg class="icon icon-sun" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1"/></svg><svg class="icon icon-moon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7Z"/></svg><span>Light Mode</span></button>
   </header>
   <div class="workspace">
-    <aside class="browse">
-      <div class="browse-heading"><span class="eyebrow">THETA CHAPTER</span><h1>Lineage.</h1><p id="summary">Open a graph to explore its classes.</p></div>
-      <div class="view-buttons"><button id="overview" disabled>↗ Full overview</button><button id="recent" disabled>↓ Recent classes</button></div>
-      <div class="class-heading"><span class="eyebrow">PLEDGE CLASSES</span><button id="clear" class="text-button" disabled>Reset</button></div>
+    <aside id="browse" class="browse">
+      <div class="browse-heading"><h1>Theta Chapter Lineage</h1><p id="summary">Open a graph to explore its classes.</p></div>
+      <div class="view-buttons"><button id="overview" disabled>Full Overview</button><button id="recent" disabled>Recent Classes</button></div>
+      <div class="class-heading"><span class="eyebrow">Pledge Classes</span><button id="clear" class="text-button" disabled>Reset</button></div>
       <nav id="classes" aria-label="Pledge classes"></nav>
-      <div class="legend"><span><i class="node-swatch"></i>Brother</span><span><i class="node-swatch president-swatch"></i>President</span><span><i class="node-swatch sensei-swatch"></i>Sensei</span><span><i class="node-swatch both-swatch"></i>President &amp; Sensei</span><span><i class="edge-swatch"></i>Big–Little relationship</span></div>
+      <div class="legend"><span><i class="node-swatch"></i>Brother</span><span><i class="node-swatch president-swatch"></i>President</span><span><i class="node-swatch sensei-swatch"></i>Sensei</span><span><i class="node-swatch both-swatch"></i>President &amp; Sensei</span><span><i class="edge-swatch"></i>Big–Little Relationship</span></div>
     </aside>
     <main>
-      <div class="map-header"><div><span class="eyebrow">LINEAGE MAP</span><h2 id="view-title">Explore the connections</h2></div><div class="view-actions"><button id="isolate" disabled aria-pressed="false">Isolate lineage</button><button id="fit-selection" disabled>Fit lineage</button></div></div>
+      <div class="map-header"><div><span class="eyebrow">Lineage Map</span><h2 id="view-title">Explore the Connections</h2></div><div class="view-actions"><button id="browse-toggle" class="browse-toggle" type="button" aria-expanded="false" aria-controls="browse"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h10"/></svg>Pledge Classes</button><button id="isolate" disabled aria-pressed="false">Isolate Lineage</button><button id="fit-selection" disabled>Fit Lineage</button></div></div>
       <div id="canvas" tabindex="0" aria-label="Interactive lineage map. Drag to pan. Use plus and minus to zoom, or arrow keys to pan.">
         <svg id="graph" aria-label="Member relationship graph by pledge class"><g id="world"></g></svg>
         <div id="empty" hidden>
           <div class="empty-content">
-            <svg class="lineage-mark" viewBox="0 0 420 180" aria-hidden="true">
-              <path d="M85 42 C85 78 145 65 145 105 M210 42 C210 78 145 65 145 105 M145 105 C145 137 210 128 210 154 M335 42 C335 85 270 72 270 112 M270 112 C270 140 210 128 210 154" />
-              <g><rect x="45" y="22" width="80" height="38" rx="10"/><rect x="170" y="22" width="80" height="38" rx="10"/><rect x="295" y="22" width="80" height="38" rx="10"/><rect x="105" y="87" width="80" height="38" rx="10"/><rect x="230" y="94" width="80" height="38" rx="10"/><rect x="170" y="136" width="80" height="38" rx="10"/></g>
-              <circle cx="85" cy="41" r="4"/><circle cx="210" cy="41" r="4"/><circle cx="335" cy="41" r="4"/><circle cx="145" cy="106" r="4"/><circle cx="270" cy="113" r="4"/><circle cx="210" cy="155" r="4"/>
-            </svg>
-            <span class="eyebrow">THETA CHAPTER · LINEAGE EXPLORER</span>
-            <h2>Your lineage, thoughtfully connected.</h2>
+            <span class="eyebrow">Theta Chapter · Lineage Explorer</span>
+            <h2>Your Lineage, Thoughtfully Connected.</h2>
             <p>Open a graph file from your device to explore member names, pledge classes, and Big–Little connections. Profile details are not displayed.</p>
-            <button id="empty-import" class="primary-button">Choose a local graph <span aria-hidden="true">↗</span></button>
-            <div class="privacy-note"><span aria-hidden="true">◈</span><span><strong>Your graph stays on your device.</strong><br>Names, connections, and class labels appear; contact and profile details stay off the map.</span></div>
+            <button id="empty-import" class="primary-button">Choose a Local Graph</button>
+            <p class="privacy-note">Your graph stays on your device.</p>
           </div>
         </div>
-        <div class="map-tools"><button id="zoom-out" aria-label="Zoom out" disabled>−</button><button id="zoom-level" title="Return to readable size" disabled>100%</button><button id="zoom-in" aria-label="Zoom in" disabled>+</button><span></span><button id="fit" title="Fit visible members" disabled>Fit view</button></div>
-        <div class="minimap"><span>YOU ARE HERE</span><svg id="mini" viewBox="0 0 200 150" role="button" tabindex="0" aria-label="Overview map. Click to navigate; press Enter to fit the map."></svg></div>
+        <div class="map-tools"><button id="zoom-out" aria-label="Zoom out" disabled>−</button><button id="zoom-level" title="Return to readable size" disabled>100%</button><button id="zoom-in" aria-label="Zoom in" disabled>+</button><span class="divider" aria-hidden="true"></span><button id="fit" title="Fit visible members" disabled>Fit View</button></div>
+        <div class="minimap"><span>You Are Here</span><svg id="mini" viewBox="0 0 200 150" role="button" tabindex="0" aria-label="Overview map. Click to navigate; press Enter to fit the map."></svg></div>
       </div>
-      <footer><span id="status" role="status" aria-live="polite">Loading local graph…</span><span>Drag to pan · Scroll to move · Ctrl/⌘ + scroll to zoom</span></footer>
+      <footer><span id="status" role="status" aria-live="polite">Loading local graph…</span><span>Drag or Scroll to Move · Pinch or Ctrl/⌘ + Scroll to Zoom</span></footer>
     </main>
     <aside id="details" aria-label="Selected member lineage" aria-live="polite">
-      <div class="details-empty"><span class="eyebrow">LINEAGE DETAILS</span><h2>Explore a lineage</h2><p>Search for a member or select a node to see their class, leadership role, Bigs, Littles, and connected lineage.</p></div>
+      <div class="details-empty"><span class="eyebrow">Lineage Details</span><h2>Explore a Lineage</h2><p>Search for a member or select a node to see their class, leadership role, Bigs, Littles, and connected lineage.</p></div>
     </aside>
   </div>
   <section id="editor-panel" class="editor-panel" aria-label="Local lineage editor" hidden>
-    <div class="editor-panel__heading"><div><span class="eyebrow">LOCAL CONTRIBUTOR TOOL</span><h2>Edit lineage</h2></div><button id="editor-close" type="button" aria-label="Close lineage editor">×</button></div>
+    <div class="editor-panel__heading"><div><span class="eyebrow">Local Contributor Tool</span><h2>Edit Lineage</h2></div><button id="editor-close" class="icon-button" type="button" aria-label="Close lineage editor"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg></button></div>
     <p class="editor-panel__intro">Edits stay in this browser. Download the sanitized JSON and submit it in a pull request for review.</p>
     <div id="editor-root"></div>
   </section>

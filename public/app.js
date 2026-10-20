@@ -21,6 +21,12 @@ let camera = {x: 0, y: 0, scale: 0.85}, miniBounds, miniWindow;
 let editorMounted = false, editorSource = globalThis.LINEAGE_SOURCE || null;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
+function closeIcon() {
+  const icon = svgEl('svg', {class:'icon', viewBox:'0 0 16 16', 'aria-hidden':'true'});
+  icon.append(svgEl('path', {d:'m4 4 8 8M12 4l-8 8'}));
+  return icon;
+}
+
 function graphFromSource(source) {
   const idBySource = new Map(source.members.map((member, i) => [member.id, i + 1]));
   return {
@@ -66,7 +72,7 @@ function load(raw) {
   closeSearch();
   showEmptyDetails();
   $('empty').hidden = true;
-  $('summary').textContent = `${new Set(graph.nodes.map(n => n.rank)).size} pledge classes`;
+  $('summary').textContent = `${new Set(graph.nodes.map(n => n.rank)).size} Pledge Classes`;
   $('classes').replaceChildren();
   const classes = [...new Map(graph.nodes.map(n => [n.rank, n.class_name])).entries()].sort((a,b) => a[0]-b[0]);
   for (const [rank, label] of classes) {
@@ -85,7 +91,7 @@ function render() {
   points = Lineage.layout(visible);
   world.replaceChildren(); nodeElements = new Map(); edgeElements = [];
   const defs = svgEl('defs'), grad = svgEl('linearGradient', {id:'both'});
-  grad.append(svgEl('stop', {offset:'50%', 'stop-color':'#466ec3'}), svgEl('stop', {offset:'50%', 'stop-color':'#bf6470'})); defs.append(grad); world.append(defs);
+  grad.append(svgEl('stop', {offset:'50%', class:'both-president'}), svgEl('stop', {offset:'50%', class:'both-sensei'})); defs.append(grad); world.append(defs);
   const bounds = Lineage.bounds(visibleIds, points);
   // Size the SVG to the map; the camera moves it with a CSS transform (see applyCamera).
   graphSvg.setAttribute('width', Math.ceil(bounds.x + bounds.w + 60));
@@ -95,7 +101,7 @@ function render() {
     const y = 90 + rank * Lineage.ROW;
     if (rank % 2 === 0) world.append(svgEl('rect', {x:0,y:y-Lineage.ROW/2,width:bounds.x+bounds.w+60,height:Lineage.ROW,class:'band'}));
     // Repeat class labels across wide rows so a class remains identifiable while panning.
-    for (let x = 30; x < bounds.x + bounds.w; x += 1100) world.append(svgEl('text', {x,y:y-49,class:'class-label'}, name.toUpperCase()));
+    for (let x = 30; x < bounds.x + bounds.w; x += 1100) world.append(svgEl('text', {x,y:y-49,class:'class-label'}, name));
   }
   const edgeLayer=svgEl('g'), nodeLayer=svgEl('g'); world.append(edgeLayer,nodeLayer);
   for (const edge of graph.edges) {
@@ -117,9 +123,11 @@ function render() {
       if(current<0 || `${lines[current]} ${word}`.trim().length>23) lines.push(word);
       else lines[current]+=` ${word}`;
     }
-    const startY=-(lines.length-1)*8+5;
+    const rowCount=lines.length+(roleClass?1:0);
+    const startY=-(rowCount-1)*8+5;
     lines.forEach((line,i)=>name.append(svgEl('tspan',{x:0,dy:i===0?startY:16},line)));
     g.append(name);
+    if(roleClass) g.append(svgEl('text',{x:0,y:startY+lines.length*16,'text-anchor':'middle',class:'role','aria-hidden':'true'},roleClass==='both'?'President & Sensei':roleLabel));
     g.addEventListener('click',()=>{ if(!suppressClick) select(n.id); });
     g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();select(n.id);}});
     nodeLayer.append(g); nodeElements.set(n.id,g);
@@ -182,7 +190,7 @@ function updateStyles() {
   }
   $('isolate').disabled=selected===null; $('fit-selection').disabled=selected===null;
   $('isolate').setAttribute('aria-pressed',String(isolated));
-  $('isolate').textContent=isolated?'Show full map':'Isolate lineage';
+  $('isolate').textContent=isolated?'Show Full Map':'Isolate Lineage';
   document.querySelectorAll('#classes button').forEach(b=>{b.classList.toggle('active',Number(b.dataset.rank)===activeClass);b.setAttribute('aria-pressed',String(Number(b.dataset.rank)===activeClass));});
 }
 
@@ -190,7 +198,7 @@ function select(id) {
   selected=id; family=index.family(id); activeClass=null;
   if(isolated) render(); else updateStyles();
   const n=index.byId.get(id);
-  $('view-title').textContent=`${n.class_name} class · lineage highlighted`;
+  $('view-title').textContent=`${n.class_name} Class · Lineage Highlighted`;
   $('status').textContent='Connected relationships highlighted.';
   renderDetails(n);
   center(id,Math.max(camera.scale,.9));
@@ -199,8 +207,8 @@ function select(id) {
 function reset() {
   if(!graph)return;
   selected=null;family=null;isolated=false;activeClass=null;
-  $('view-title').textContent='Explore the connections';
-  $('status').textContent='Relationship map.';
+  $('view-title').textContent='Explore the Connections';
+  $('status').textContent='';
   showEmptyDetails();
   render();
 }
@@ -226,7 +234,7 @@ function searchMembers() {
   } else {
     for (const n of matches.slice(0, 30)) {
       const result = el('button', {class:'result', type:'button', role:'option'});
-      result.append(el('strong', {}, n.display_name), el('span', {}, `${n.class_name} class`));
+      result.append(el('strong', {}, n.display_name), el('span', {}, `${n.class_name} Class`));
       result.addEventListener('click', () => {
         closeSearch();
         select(n.id);
@@ -246,7 +254,7 @@ function showEmptyDetails() {
   aside.replaceChildren();
   aside.append(el('div', {class:'details-empty'}, ''));
   const content = aside.firstElementChild;
-  content.append(el('span', {class:'eyebrow'}, 'LINEAGE DETAILS'), el('h2', {}, 'Explore a lineage'),
+  content.append(el('span', {class:'eyebrow'}, 'Lineage Details'), el('h2', {}, 'Explore a Lineage'),
     el('p', {}, graph ? 'Search for a member or select a node to see their class, leadership role, Bigs, Littles, and connected lineage.' : 'Load the graph to explore member relationships.'));
 }
 
@@ -256,8 +264,9 @@ function renderDetails(member) {
   aside.replaceChildren();
   const heading = el('div', {class:'details-heading'});
   const title = el('div');
-  title.append(el('span', {class:'eyebrow'}, `${member.class_name.toUpperCase()} CLASS`), el('h2', {}, member.display_name));
-  const close = el('button', {class:'details-close', type:'button', 'aria-label':'Close member details'}, '×');
+  title.append(el('span', {class:'eyebrow'}, `${member.class_name} Class`), el('h2', {}, member.display_name));
+  const close = el('button', {class:'details-close icon-button', type:'button', 'aria-label':'Close member details'});
+  close.append(closeIcon());
   close.addEventListener('click', () => aside.classList.remove('open'));
   heading.append(title, close);
   const badges = el('div', {class:'badges'});
@@ -269,13 +278,15 @@ function renderDetails(member) {
 
   const addSection = (title, ids, emptyText) => {
     const section = el('section', {class:'lineage-section'});
-    section.append(el('h3', {}, `${title} (${ids.length})`));
+    const heading = el('h3', {}, title);
+    heading.append(el('span', {class:'count'}, ` (${ids.length})`));
+    section.append(heading);
     if (!ids.length) section.append(el('p', {class:'lineage-empty'}, emptyText));
     for (const id of ids) {
       const related = index.byId.get(id);
       if (!related) continue;
       const button = el('button', {class:'member-link', type:'button'});
-      button.append(el('span', {}, related.display_name), el('small', {}, `${related.class_name} class`));
+      button.append(el('span', {}, related.display_name), el('small', {}, `${related.class_name} Class`));
       button.addEventListener('click', () => select(id));
       section.append(button);
     }
@@ -290,7 +301,7 @@ function renderDetails(member) {
 function jumpClass(rank) {
   reset();activeClass=rank;updateStyles();
   const group=graph.nodes.filter(n=>n.rank===rank).sort((a,b)=>a.x-b.x);
-  $('view-title').textContent=group[0].class_name+' class';
+  $('view-title').textContent=group[0].class_name+' Class';
   $('status').textContent='Class highlighted · select a member to trace their connections';
   center(group[Math.floor(group.length/2)].id,.85);
 }
@@ -300,9 +311,11 @@ function recent() {
   const nodes=graph.nodes.filter(n=>n.rank>=maxRank-3).sort((a,b)=>a.x-b.x);
   const mid=nodes[Math.floor(nodes.length/2)];
   camera.scale=.85;camera.x=canvas.clientWidth/2-points.get(mid.id).x*camera.scale;
-  camera.y=canvas.clientHeight/2-(90+(maxRank-2)*Lineage.ROW)*camera.scale;
-  $('view-title').textContent='Recent generations'; transform();
-  const last=$('classes').lastElementChild;if(last)last.scrollIntoView({block:'nearest'});
+  // Put the newest class just above the bottom edge, so taller screens show more recent classes.
+  camera.y=canvas.clientHeight-96-(90+maxRank*Lineage.ROW+Lineage.CARD_H/2)*camera.scale;
+  $('view-title').textContent='Recent Generations'; transform();
+  // Show the newest classes in the list. Only the list scrolls, so short screens keep the sidebar title in view.
+  $('classes').scrollTop=$('classes').scrollHeight;
 }
 function center(id,scale=camera.scale) {
   const p=points.get(id);if(!p)return;
@@ -382,12 +395,17 @@ canvas.addEventListener('keydown',e=>{
 new ResizeObserver(([entry])=>{viewport={width:entry.contentRect.width,height:entry.contentRect.height};transform();}).observe(canvas);
 // Focus or find-in-page can still scroll a clipped box in some browsers; the camera assumes it never scrolls.
 canvas.addEventListener('scroll',()=>{canvas.scrollLeft=0;canvas.scrollTop=0;});
+// Overlays sit below the header and map header, whose heights vary when they wrap on narrow screens.
+const barHeights=new ResizeObserver(entries=>{
+  for(const entry of entries) document.documentElement.style.setProperty(entry.target.matches('header')?'--header-h':'--map-header-h',`${entry.borderBoxSize[0].blockSize}px`);
+});
+barHeights.observe(document.querySelector('header'));barHeights.observe(document.querySelector('.map-header'));
 
 $('isolate').addEventListener('click',()=>{if(selected===null)return;isolated=!isolated;render();center(selected,.95);});
 $('fit-selection').addEventListener('click',()=>{if(family)fit(family.all);});
 $('clear').addEventListener('click',reset);
 $('recent').addEventListener('click',recent);
-$('overview').addEventListener('click',()=>{reset();fit();$('view-title').textContent='The full lineage';});
+$('overview').addEventListener('click',()=>{reset();fit();$('view-title').textContent='The Full Lineage';});
 $('zoom-in').addEventListener('click',()=>zoom(camera.scale*1.25));
 $('zoom-out').addEventListener('click',()=>zoom(camera.scale/1.25));
 $('zoom-level').addEventListener('click',()=>zoom(1));
@@ -402,6 +420,12 @@ $('member-search').addEventListener('keydown',e=>{
   }
 });
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('.search-wrap'))closeSearch();});
+// On phones the class list is a drawer over the map. Picking anything in it, tapping the map or pressing Escape closes it.
+function setBrowse(open){$('browse').classList.toggle('open',open);$('browse-toggle').setAttribute('aria-expanded',String(open));if(open)$('overview').focus({preventScroll:true});}
+$('browse-toggle').addEventListener('click',()=>setBrowse(!$('browse').classList.contains('open')));
+$('browse').addEventListener('click',e=>{if(e.target.closest('button'))setBrowse(false);});
+canvas.addEventListener('pointerdown',()=>setBrowse(false));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')setBrowse(false);});
 $('editor-toggle').addEventListener('click',()=>{
   const panel=$('editor-panel'), open=panel.hidden;
   if(open) mountEditor();
@@ -420,7 +444,7 @@ function setTheme(theme) {
   const light = theme === 'light';
   $('theme-toggle').setAttribute('aria-pressed', String(light));
   $('theme-toggle').title = `Switch to ${light ? 'dark' : 'light'} mode`;
-  $('theme-toggle').innerHTML = `${light ? '◐' : '☼'} <span>${light ? 'Dark mode' : 'Light mode'}</span>`;
+  $('theme-toggle').querySelector('span').textContent = light ? 'Dark Mode' : 'Light Mode';
 }
 $('theme-toggle').addEventListener('click',()=>setTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'));
 try {if(globalThis.LINEAGE_DATA)load(globalThis.LINEAGE_DATA);else{$('empty').hidden=false;$('status').textContent='No graph loaded · your data stays on this device.';}}

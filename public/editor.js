@@ -111,14 +111,14 @@
       return node;
     };
     const rootEl = el('section', {className: 'lineage-editor', 'aria-label': 'Lineage editor'});
-    const title = el('h2', {}, 'Edit lineage');
+    const title = el('h2', {}, 'Edit Lineage');
     const intro = el('p', {className: 'lineage-editor__notice'}, 'Changes stay in this browser until you download the sanitized JSON and submit it in a pull request.');
     const status = el('p', {className: 'lineage-editor__status', role: 'status', 'aria-live': 'polite'});
     const form = el('form', {className: 'lineage-editor__member-form'});
-    const nameInput = el('input', {name: 'name', required: 'required', maxlength: '120', placeholder: 'Full name', 'aria-label': 'Member name'});
+    const nameInput = el('input', {name: 'name', required: 'required', maxlength: '120', placeholder: 'Full Name', 'aria-label': 'Member name'});
     const classSelect = el('select', {name: 'class', required: 'required', 'aria-label': 'Class'});
     source.classes.forEach(className => classSelect.append(el('option', {value: className}, className)));
-    const rolesLabel = el('span', {className: 'lineage-editor__label'}, 'Leadership roles');
+    const rolesLabel = el('span', {className: 'lineage-editor__label'}, 'Leadership Roles');
     const roleControls = el('div', {className: 'lineage-editor__roles'});
     ['president', 'sensei'].forEach(role => {
       const label = el('label');
@@ -126,21 +126,21 @@
       label.append(checkbox, doc.createTextNode(role === 'president' ? ' President' : ' Sensei'));
       roleControls.append(label);
     });
-    const addMemberButton = el('button', {type: 'submit'}, 'Add member');
+    const addMemberButton = el('button', {type: 'submit'}, 'Add Member');
     form.append(nameInput, classSelect, rolesLabel, roleControls, addMemberButton);
 
     const relationships = el('section', {className: 'lineage-editor__relationships'});
-    relationships.append(el('h3', {}, 'Big → Little relationship'));
+    relationships.append(el('h3', {}, 'Big → Little Relationship'));
     const bigInput = el('input', {type: 'search', placeholder: 'Search Big Brother by name', 'aria-label': 'Search Big Brother'});
     const bigResults = el('div', {className: 'lineage-editor__results', role: 'listbox', 'aria-label': 'Big Brother search results'});
     const littleInput = el('input', {type: 'search', placeholder: 'Search Little Brother by name', 'aria-label': 'Search Little Brother'});
     const littleResults = el('div', {className: 'lineage-editor__results', role: 'listbox', 'aria-label': 'Little Brother search results'});
     const chosen = el('p', {className: 'lineage-editor__chosen'});
-    const addRelationship = el('button', {type: 'button', disabled: 'disabled'}, 'Add relationship');
+    const addRelationship = el('button', {type: 'button', disabled: 'disabled'}, 'Add Relationship');
     relationships.append(bigInput, bigResults, littleInput, littleResults, chosen, addRelationship);
 
     const edgeSection = el('section', {className: 'lineage-editor__edge-list'});
-    edgeSection.append(el('h3', {}, 'Recorded relationships'));
+    edgeSection.append(el('h3', {}, 'Recorded Relationships'));
     const edgesList = el('ul');
     edgeSection.append(edgesList);
     const exportButton = el('button', {type: 'button', className: 'lineage-editor__export'}, 'Download lineage.json for PR');
