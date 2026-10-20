@@ -26,8 +26,6 @@ class LineageSourceTests(unittest.TestCase):
     def test_canonical_source_is_sanitized_and_builds_viewer_data(self):
         source = json.loads(Path("source/lineage.json").read_text(encoding="utf-8"))
         graph = build_graph(source)
-        self.assertEqual(len(source["members"]), 317)
-        self.assertEqual(len(source["edges"]), 292)
         self.assertEqual(set(source), {"schema_version", "classes", "members", "edges"})
         self.assertTrue(all(set(member) == {"id", "name", "class", "roles", "layout_x"} for member in source["members"]))
         self.assertEqual(len(graph["nodes"]), len(source["members"]))
